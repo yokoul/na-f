@@ -126,7 +126,7 @@ function drawCube(x, y, size, fillCol) {
     } else if (nos == 1) {
         stroke(fillCol);
     } else if (nos == 2) {
-        stroke(255);
+        stroke(255, random(120, 200));
     }
     // top 
     fill(fillCol);
@@ -207,7 +207,7 @@ function drawCone(x, y, size, fillCol) {
     } else if (nos == 1) {
         stroke(fillCol);
     } else if (nos == 2) {
-        stroke(255);
+        stroke(255, random(120, 200));
     }
 
     fill(fillCol);
@@ -247,7 +247,7 @@ function drawPyramid(x, y, size, fillCol) {
     } else if (nos == 1) {
         stroke(fillCol);
     } else if (nos == 2) {
-        stroke(255);
+        stroke(255, random(120, 200));
     }
 
     // Top
@@ -382,7 +382,7 @@ function drawCubeB(x, y, size, noiseValue, fillCol) {
     } else if (nos == 1) {
         stroke(fillCol);
     } else if (nos == 2) {
-        stroke(255);
+        stroke(255, random(120, 200));
     }
 
     // top 
@@ -407,7 +407,7 @@ function drawCubeB(x, y, size, noiseValue, fillCol) {
         } else if (nos == 1) {
             stroke(fillCol);
         } else if (nos == 2) {
-            stroke(255);
+            stroke(255, random(120, 200));
         }
         if (nosh === true) {
             strokeWeight(0.035 * m);
@@ -512,6 +512,49 @@ function drawCubesC() {
 
                     if (ii % 2 === 0) {
                         y += offsetY;
+                        ws = 1;
+                    }
+                    let cubeColor = color(random(col1));
+                    cubeColor.setAlpha(80);
+                    isBgColorDark = isColorDark(cubeColor.levels);
+
+                    drawCubeC(x, y, size, ws, cubeColor);
+                }
+            }
+        }
+    }
+    applyMonochromaticGrain(gS);
+}
+
+function drawCubesDestructC() {
+    noiseSeedValue += 0.1;
+    let size = 2;
+    let clusterSize = random(5, 8);
+    let rwis = (wisW - bd2) / (sizeMod * size);
+    let offsetX, offsetY;
+
+    for (let i = 0; i < cubesCols; i += clusterSize) {
+        for (let j = 0; j < cubesRows - 1; j += clusterSize) {
+            if (Math.random() < 0.6) { 
+                continue;
+            }
+
+            clusterSize = random(3, 5);
+            let ws = 0;
+            offsetX = random(0.1, 0.25) * wisW; 
+            offsetY = random(0.1, 0.25) * wisH; 
+
+            for (let ii = i; ii < i + clusterSize && ii < rwis; ii++) {
+                for (let jj = j; jj < j + clusterSize && jj < rwis; jj++) {
+                    if (Math.random() < 0.33) { 
+                        continue;
+                    }
+
+                    let x = ii * size * sizeMod + offsetX;
+                    let y = jj * size * sizeMod + offsetY;
+
+                    if (ii % 2 === 0) {
+                        y += size / 2 * sizeMod;
                         ws = 1;
                     }
                     let cubeColor = color(random(col1));

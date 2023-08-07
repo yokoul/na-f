@@ -13,8 +13,8 @@ function gradBg(numColors, ...colors) {
 
     let bezierGradient = chroma.bezier(colors);
 
-    for (let y = 0; y < wisH; y++) {
-        let t = y / wisH;
+    for (let y = 0; y < wisH * pD; y++) {
+        let t = y / (wisH * pD);
         let rA = random(0.01, 0.4);
         let color = bezierGradient(t).alpha(rA);
         stroke(color.hex());
@@ -30,8 +30,8 @@ function gradDoors(g, numColors, ...colors) {
 
     let bezierGradient = chroma.bezier(colors);
 
-    for (let y = 0; y < wisH; y++) {
-        let t = y / wisH;
+    for (let y = 0; y < wisH * pD; y++) {
+        let t = y / (wisH * pD);
         let rA = random(0.7, 1);
         let color = bezierGradient(t).alpha(rA);
         g.stroke(color.hex());

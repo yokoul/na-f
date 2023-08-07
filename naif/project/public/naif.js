@@ -1,10 +1,21 @@
+// FX Features //
+/* 
+$fx.features({
+    // feature can only be "low", "medium" or "high"
+    Intensity: getFeatureString(fxrand()),
+});
+*/
+  
+
 // VARIABLES //
-let seed = fxrand() * 10000000;
-let sayit = fxrand() * 10000001;
+let seed = fxrand() * 888786858483828180;
+//console.log(seed);
+let sayit = fxrand();
 let currentState = 'loading';
 let loopCount = 0;
 let noiseSeedValue = 0;
-let col1, col2, col3, col4, col5;
+let col1, col2, col3, col4, col5, doorContent, rows, cols, skyX, skyY, loader, font;
+let showLoader = false;
 let cool1 = "https://coolors.co/c2efb3-97abb1-892f65-735f3d-594a26".split("/").pop().split("-").map((a) => "#" + a);
 let cool11 = "https://coolors.co/f1fbee-c5d0d3-c9be9d-b2986c-9d8243".split("/").pop().split("-").map((a) => "#" + a);
 let cool2 = "https://coolors.co/db2b39-29335c-f3a712-f0cea0-534d41".split("/").pop().split("-").map((a) => "#" + a);
@@ -19,7 +30,6 @@ let cool51 = "https://coolors.co/fdfffc-235789-c1292e-f1d302-161925".split("/").
 let cool6 = "https://coolors.co/272932-4d7ea8-828489-9e90a2-b6c2d9".split("/").pop().split("-").map((a) => "#" + a);
 let cool61 = "https://coolors.co/8d91a5-739cbf-abacb0-bbb1be-d7ddea".split("/").pop().split("-").map((a) => "#" + a);
 
-let doorContent, rows, cols, skyX, skyY;
 let doorW = 80; //80
 let doorH = 140; //140
 let doorBd = 2;
@@ -76,6 +86,19 @@ let clouds = [];
 let doors = [];
 let doorContents = [];
 
+function preload() {
+    exo_black = loadFont('fonts/Exo-Black.ttf');
+    exo_bold = loadFont('fonts/Exo-Bold.ttf');
+    exo_regular = loadFont('fonts/Exo-Regular.ttf');
+    exo_semibold = loadFont('fonts/Exo-SemiBold.ttf');
+    exo_thin = loadFont('fonts/Exo-Thin.ttf');
+    exo_extra_light = loadFont('fonts/Exo-ExtraLight.ttf');
+    exo_light = loadFont('fonts/Exo-Light.ttf');
+    exo_medium = loadFont('fonts/Exo-Medium.ttf');
+    exo_extra_bold = loadFont('fonts/Exo-ExtraBold.ttf');
+}
+let fontPts = [];
+
 
 function setup() {
     $fx.rand.reset();
@@ -105,6 +128,8 @@ function setup() {
     p5grain.setup({ random: fxrand });
     pixelDensity(pD);
     setParams(m);
+
+    loader = createGraphics(wisW, wisH, P2D);
 
     col1 = random([cool1, cool2, cool3]);
     col2 = random([cool11, cool21, cool31]);
@@ -195,11 +220,14 @@ function draw() {
 
     if (currentState === 'loading') {
         drawL();
+        if (showLoader) {
+            image(loader, 0, 0);
+        }
     } else if (currentState === 'drawing') {
 
         rndDevi = random();
         if (rndDevi > 0.7) {
-            deviation = random(40, 55);
+            deviation = random(40, 65);
         } else if (rndDevi > 0.55 < 0.7) {
             deviation = random(0, 15);
         } else if (rndDevi < 0.25 > 0.55) {
@@ -208,12 +236,14 @@ function draw() {
             deviation = 0;
         }
 
+        let rdnDrawStr = random();
+
         let doorC1 = color(random(col2));
         doorC1.setAlpha(230);
         let doorC2 = color(random(col1));
         doorC2.setAlpha(210);
         let rndDgrad = random();
-        if (rndDgrad < 0.9) {
+        if (rndDgrad < 0.85) {
             doorsGrad(doorContent, 0, 0, doorContent.width, doorContent.height, doorC1, doorC2, rndDgrad < 0.75 ? "X" : "Y");
         } else {
             background(20);
@@ -228,36 +258,39 @@ function draw() {
         c2.setAlpha(230); //160);
 
         if (bd > 0) {
-            drawBd(int(random(1, 3)));
+            drawBd(2);
         }
 
         let rdmbgn = random();
         let rdmbgc = random();
         if (drawBGCubes == true) {
-            if (rdmbgn >= 0 && rdmbgn < 0.12) {
-                bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.75 ? "X" : "Y");
+            if (rdmbgn >= 0 && rdmbgn < 0.125) {
+                bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.5 ? "X" : "Y");
                 drawCubes();
-            } else if (rdmbgn >= 0.12 && rdmbgn < 0.24) {
+            } else if (rdmbgn >= 0.125 && rdmbgn < 0.25) {
                 gradBg(4, random(col4), random(col3), random(col5), random(col4));
                 drawCubesB();
-            } else if (rdmbgn >= 0.24 && rdmbgn < 0.36) {
-                bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.25 ? "X" : "Y");
+            } else if (rdmbgn >= 0.25 && rdmbgn < 0.375) {
+                bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.5 ? "X" : "Y");
                 drawCubesAllB();
-            } else if (rdmbgn >= 0.36 && rdmbgn < 0.48) {
+            } else if (rdmbgn >= 0.375 && rdmbgn < 0.5) {
                 bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.5 ? "X" : "Y");
                 drawCubesRand();
-            } else if (rdmbgn >= 0.48 && rdmbgn < 0.60) {
+            } else if (rdmbgn >= 0.5 && rdmbgn < 0.625) {
                 gradBg(4, random(col4), random(col3), random(col3), random(col4));
                 drawCubesAllC();
-            } else if (rdmbgn >= 0.60 && rdmbgn < 0.72) {
+            } else if (rdmbgn >= 0.625 && rdmbgn < 0.75) {
                 gradBg(4, random(col4), random(col3), random(col4), random(col5));
                 drawCubesC();
-            } else if (rdmbgn >= 0.72 && rdmbgn < 0.84) {
+            } else if (rdmbgn >= 0.75 && rdmbgn < 0.86) {
                 gradBg(7, random(col1), random(col2), random(col3), random(col4), random(col3), random(col2), random(col1));
                 drawCubesAll();
-            } else if (rdmbgn >= 0.84 && rdmbgn < 0.87) {
+            } else if (rdmbgn >= 0.86 && rdmbgn < 0.9) {
                 bgGrad(0, 0, wisW, wisH, c1, c2, "R");
                 drawBub();
+            } else if (rdmbgn >= 0.9 && rdmbgn < 0.96) {
+                bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.5 ? "X" : "R");
+                drawCubesDestructC();
             } else {
                 background(random() < 0.5 ? 20 : 235);
             }
@@ -294,22 +327,25 @@ function draw() {
             if (door instanceof Door || door instanceof MultiDoor) {
                 if (drawStr == true && deviation >= 20) {
                     if (isBgColorDark) {
-                        door.drawStruct([250, 180], random(4, 7) * m);
-                        door.drawDoor([250, 180], random(4, 7) * m);
+                        door.drawStruct([250, 230], random(4, 7) * m);
+                        door.drawDoor([250, 230], random(4, 7) * m);
                     } else {
-                        door.drawStruct([60, 180], random(3, 6) * m);
-                        door.drawDoor([60, 180], random(3, 6) * m);
+                        door.drawStruct([60, 230], random(3, 6) * m);
+                        door.drawDoor([60, 230], random(3, 6) * m);
                     }
                 }
                 
 
                 let content = new DoorContent(doorContent, door.x, door.y, color(random(col3)));
-                content.moreSun(random(5, 25), random(col3), random(col4));
-                content.moreMoon(random(2, 4), random(col5), random(col5));
-                if (random() < 0.1) {
-                    content.moreBirdsA(int(random(25, 55)), 2, 7);
+                content.moreHit(random(5, 25), random(col3), random(col4));
+                content.moreTouch(random(2, 4), random(col2), random(col5));
+                if (random() > 0.93) {
+                    content.moreCross(random(5, 25), random(8, 12), random(col3));
+                }
+                if (random() < 0.15) {
+                    content.moreBirdsRemind(int(random(25, 55)), 2, 7);
                 } else {
-                    content.moreBirdsB(int(random(15, 25)));
+                    content.moreBirdsActual(int(random(15, 25)));
                 }
 
                 content.moreCircles(int(random(35, 75)));
@@ -326,18 +362,27 @@ function draw() {
                     doorContent.loadPixels();
                     morePoint(3, 3, 10, 200, 2, 6); //grS, floop, nPl, nPh, pSs, pSb
                 }
-
+            
                 door.copyContent();
 
-                if (drawStr == true && deviation < 20) {
+                if (drawStr == true && deviation < 20 && rdnDrawStr < 0.5) {
                     if (isBgColorDark) {
-                        door.drawStruct([240, 150], random(1, 4) * m);
-                        door.drawDoor([240, 150], random(1, 4) * m);
+                        door.drawStruct([240, 220], random(1, 4) * m);
+                        door.drawDoor([240, 220], random(1, 4) * m);
                     } else {
-                        door.drawStruct([80, 170], random(1, 4) * m);
-                        door.drawDoor([80, 170], random(1, 4) * m);
+                        door.drawStruct([80, 220], random(1, 4) * m);
+                        door.drawDoor([80, 220], random(1, 4) * m);
+                    }
+                } else if (drawStr == true && deviation < 20 && rdnDrawStr > 0.5) {
+                    if (isBgColorDark) {
+                        door.drawStructInv([240, 220], random(1, 4) * m);
+                        door.drawDoor([240, 220], random(1, 4) * m);
+                    } else {
+                        door.drawStructInv([80, 220], random(1, 4) * m);
+                        door.drawDoor([80, 220], random(1, 4) * m);
                     }
                 }
+
                 let rdmctx = random();
                 if (rdmctx >= 0.074 && rdmctx < 0.087) {
                     if (isBgColorDark) {
@@ -441,6 +486,17 @@ class Door {
         pop();
     }
 
+    drawStructInv(color, strokeW) {
+        push();
+        stroke(color);
+        strokeWeight(strokeW);
+        rndBend(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, deviation);
+        rndBend(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation);
+        rndBend(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation);
+        rndBend(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + doorH / 1.75 , deviation);
+        pop();
+    }
+
     drawDoorShdw(color) {
         let shdwA = noise(this.y * 0.1);
         push();
@@ -450,7 +506,7 @@ class Door {
         strokeWeight(doorBd);
         beginShape();
         stroke(random(0, 20), random(30, 50));
-        drawingContext.setLineDash([0 * m, 2 * m, 3 * m]);
+        drawingContext.setLineDash([0, 2 * m, 3 * m]);
         vertex(-doorW / 2, 0);
         rndBendVertex(-doorW / 2, 0, doorW / 2, 0, deviation);
         vertex(doorW / 2, 0);
@@ -491,6 +547,9 @@ class Door {
         push();
         let doorWb = this.w;
         let doorHb = this.h;
+        doorContent.blendMode(SOFT_LIGHT);
+        doorContent.globalAlpha=0.5
+		doorContent.filter="blur(10px)"
         copy(doorContent, int(this.x) - int(doorW), int(this.y - doorH), int(doorW), int(doorH), int(this.x - doorW / 2), int(this.y - doorH), int(doorW), int(doorH));
         pop();
     }
@@ -572,13 +631,28 @@ class MultiDoor {
 
         push();
         stroke(color);
-        strokeWeight(2);
+        strokeWeight(strokeW);
         rndBend(this.x - doorWb / 2, this.y - doorHb, this.x - doorWb / 2 + depth, this.y - doorHb - depth, deviation);
         rndBend(this.x + doorWb / 2, this.y - doorHb, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation);
         rndBend(this.x - doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation);
         rndBend(this.x + doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, doorH + depth, deviation);
         pop();
     }
+
+    drawStructInv(color, strokeW) {
+        let doorWb = this.w;
+        let doorHb = this.h;
+
+        push();
+        stroke(color);
+        strokeWeight(strokeW);
+        rndBend(this.x - doorWb / 2, this.y - doorHb, this.x - doorWb / 2 + depth, this.y - doorHb - depth, deviation);
+        rndBend(this.x + doorWb / 2, this.y - doorHb, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation);
+        rndBend(this.x - doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation);
+        rndBend(this.x + doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, doorHb + doorHb / 1.75 , deviation);
+        pop();
+    }
+    
 
     drawDoorShdw(color) {
         let shdwA = noise(this.y * 0.1);
@@ -592,7 +666,7 @@ class MultiDoor {
         strokeWeight(doorBd);
         beginShape();
         stroke(random(0, 20), random(30, 50));
-        drawingContext.setLineDash([0, 2, 3]);
+        drawingContext.setLineDash([0, 2 * m, 3 * m]);
         vertex(-doorWb / 2, 0);
         rndBendVertex(-doorWb / 2, 0, doorWb / 2, 0, deviation);
         vertex(doorWb / 2, 0);
@@ -617,7 +691,7 @@ class MultiDoor {
         strokeWeight(doorBd);
         fill(random(40, 80), random(45, 65));
         stroke(random(40, 80), random(45, 65));
-        drawingContext.setLineDash([0 * m, 2 * m, 3 * m]);
+        drawingContext.setLineDash([0, 2 * m, 3 * m]);
         beginShape();
         vertex(-doorWb / 2, 0);
         rndBendVertex(-doorWb / 2, 0, doorWb / 2, 0, deviation);
@@ -636,6 +710,9 @@ class MultiDoor {
         push();
         let doorWb = this.w;
         let doorHb = this.h;
+        doorContent.blendMode(MULTIPLY);
+        doorContent.globalAlpha=0.5
+		doorContent.filter="blur(15px)"
         copy(doorContent, this.x - int(doorWb), int(this.y - doorHb), int(doorWb), int(doorHb), int(this.x - doorWb / 2), int(this.y - doorHb), int(doorWb), int(doorHb));
         pop();
     }
@@ -651,6 +728,9 @@ class DoorContent {
 
     moreCircles(numCircles) {
         this.g.push();
+        this.g.blendMode(SCREEN);
+        this.g.globalAlpha=0.5
+		this.g.filter="blur(15px)"
         this.g.noFill();
         this.g.stroke(this.color);
         this.g.strokeWeight(0.5 * m);
@@ -662,8 +742,11 @@ class DoorContent {
         this.g.pop();
     }
 
-    moreBirdsA(numBirds, minCurve, maxCurve) {
+    moreBirdsRemind(numBirds, minCurve, maxCurve) {
         this.g.push();
+        this.g.blendMode(MULTIPLY);
+        this.g.globalAlpha=0.5
+		this.g.filter="blur(15px)"
         this.g.noFill();
         for (let i = 0; i < numBirds; i++) {
             let x = random(100, wisW - 100) * m;
@@ -679,8 +762,11 @@ class DoorContent {
         this.g.pop();
     }
 
-    moreBirdsB(numBirds) {
+    moreBirdsActual(numBirds) {
         this.g.push();
+        this.g.blendMode(SCREEN);
+        this.g.globalAlpha=0.5
+		this.g.filter="blur(15px)"
         for (let i = 0; i < numBirds; i++) {
             let x = random(100, wisW - 100) * m;
             let y = random(100, wisH - 100) * m;
@@ -731,10 +817,10 @@ class DoorContent {
         this.g.pop();
     }
 
-    moreSun(radius, cola, colb) {
+    moreHit(radius, cola, colb) {
         this.g.push();
-        let from = color(cola); //this.color;
-        let to = color(colb); //this.g.color(random(140, 255), random(120, 190), random(50, 220), random(120, 220));
+        let from = color(cola);
+        let to = color(colb);
         this.g.noStroke();
         for (let r = radius; r > 0; --r) {
             let inter = map(r, 0, radius, 0, 1);
@@ -745,10 +831,10 @@ class DoorContent {
         this.g.pop();
     }
 
-    moreMoon(radius, cola, colb) {
+    moreTouch(radius, cola, colb) {
         this.g.push();
-        let from = color(cola); //this.color;
-        let to = color(colb); //this.g.color(random(140, 255), random(120, 190), random(50, 220), random(120, 220));
+        let from = color(cola);
+        let to = color(colb);
         this.g.noStroke();
         for (let r = radius; r > 0; --r) {
             let inter = map(r, 0, radius, 0, 1);
@@ -768,6 +854,25 @@ class DoorContent {
         }
         this.g.pop();
     }
+    moreCross(size, thick, col) {
+        this.g.push();
+        this.g.strokeWeight(thick);
+        this.g.stroke(col);
+        this.g.noFill();
+        for (let i = 0; i < size; i++) {
+            let x = this.originX + random(-130, 130) * m;
+            let y = this.originY + random(-80, 80) * m;
+            let halfSize = size / 2;
+            let angle = random(TWO_PI);
+            this.g.push();
+            this.g.translate(x, y);
+            this.g.rotate(angle);
+            this.g.line(-halfSize, 0, halfSize, 0);
+            this.g.line(0, -halfSize, 0, halfSize);
+            this.g.pop();
+        }
+        this.g.pop();
+    }    
 }
 
 
@@ -855,140 +960,179 @@ function placeShape(grid, shape, x, y, value) {
 }
 
 function drawL() {
-    background(20);
-    push();
-    translate(wisW / 2, wisH / 2.75);
-    noFill();
-    stroke(255, 210);
-    strokeWeight(2 * m);
-    line(-80 * m / 2, -140 * m, -80 * m / 2 + 60 * m, -140 * m - 60 * m);
-    line(80 * m / 2, -140 * m, 80 * m / 2 + 60 * m, -140 * m - 60 * m);
-    line(-80 * m / 2 + 60 * m, -140 * m - 60 * m, 80 * m / 2 + 60 * m, -140 * m - 60 * m);
-    line(80 * m / 2 + 60 * m, -140 * m - 60 * m, 80 * m / 2 + 60 * m, 140 * m + 60 * m + 60 * m);
-    beginShape();
-    vertex(-80 * m / 2, -140 * m);
-    vertex(80 * m / 2, -140 * m);
-    vertex(80 * m / 2, 0);
-    vertex(-80 * m / 2, 0);
-    endShape(CLOSE);
-    pop();
-    push();
-    noStroke();
-    fill(255, 200);
-    textAlign(CENTER, CENTER);
-    textSize(44 * m);
-    text("naïf", wisW / 2, wisH / 3);
-    pop();
-    push();
-    angleMode(DEGREES);
-//    translate(wisW / 1.81, wisH / 2.8);
-    translate(wisW / 1.65, wisH / 1.66);
-    rotate(-90);
-    noStroke();
-    fill(255, 200);
-    textSize(10 * m);
-    text("# " + $fx.iteration, 0, 0);
-    pop();
-    push();
-    if (sayit < 0.25) {
-        noStroke();
-        fill(255, 200);
-        textAlign(RIGHT, CENTER);
-        textSize(16 * m);
-        textStyle(ITALIC);
-        text("\"Toute connaissance dégénère en probabilité.\"", wisW / 1.89, wisH / 1.9);
-        text("Christian Bobin", wisW / 1.89, wisH / 1.9 + 40);
-    } else if (sayit > 0.25 && sayit <= 0.5) {
-        noStroke();
-        fill(255, 200);
-        textAlign(RIGHT, CENTER);
-        textSize(16 * m);
-        textStyle(ITALIC);
-        text("\"Ce qu'il y a de plus criminel au monde, c'est l'absence de naïveté.", wisW / 1.89, wisH / 1.9);
-        text("\"Elle réduit l'essentiel à des minuties et abolit nos élans.\"", wisW / 1.89, wisH / 1.9 + 25);
-        text("Alexandre Jardin", wisW / 1.89, wisH / 1.9 + 75);
-    } else if (sayit > 0.5 && sayit <= 0.75) {
-        noStroke();
-        fill(255, 200);
-        textAlign(RIGHT, CENTER);
-        textSize(16 * m);
-        textStyle(ITALIC);
-        text("\"Nous étions encore tous les cinq proches des naïvetés ", wisW / 1.89, wisH / 1.9);
-        text("de l'enfance -- de ces naïvetés qui sont peut-être ", wisW / 1.89, wisH / 1.9 + 25);
-        text("la part la plus féconde que la vie nous donne et ensuite nous reprend.\"", wisW / 1.89, wisH / 1.9 + 50);
-        text("Romain Gary", wisW / 1.89, wisH / 1.9 + 100);
-    } else if (sayit > 0.75 && sayit <= 0.9) {
-        noStroke();
-        fill(255, 200);
-        textAlign(RIGHT, CENTER);
-        textSize(16 * m);
-        textStyle(ITALIC);
-        text("\"L'affection et la naïveté muette disent bien plus en disant moins.\"", wisW / 1.89, wisH / 1.9);
-        text("William Shakespeare ", wisW / 1.89, wisH / 1.9 + 50);
-    } else if (sayit > 0.9) {
-        noStroke();
-        fill(255, 200);
-        textAlign(RIGHT, CENTER);
-        textSize(16 * m);
-        textStyle(ITALIC);
-        text("\"Si les hommes ont la naïveté de croire en Dieu, ", wisW / 1.89, wisH / 1.9);
-        text("les chiens ont la naïveté de croire en l’homme.\"", wisW / 1.89, wisH / 1.9 + 25);
-        text("Eric-Emmanuel Schmitt", wisW / 1.89, wisH / 1.9 + 75);
-    }
-    pop();
+loader.background(20);
+loader.push();
+loader.translate(wisW / 2, wisH / 2.75);
+loader.noFill();
+loader.stroke(255, 210);
+loader.strokeWeight(2 * m);
+loader.line(-80 * m / 2, -140 * m, -80 * m / 2 + 60 * m, -140 * m - 60 * m);
+loader.line(80 * m / 2, -140 * m, 80 * m / 2 + 60 * m, -140 * m - 60 * m);
+loader.line(-80 * m / 2 + 60 * m, -140 * m - 60 * m, 80 * m / 2 + 60 * m, -140 * m - 60 * m);
+loader.line(80 * m / 2 + 60 * m, -140 * m - 60 * m, 80 * m / 2 + 60 * m, 140 * m + 60 * m + 60 * m);
+loader.beginShape();
+loader.vertex(-80 * m / 2, -140 * m);
+loader.vertex(80 * m / 2, -140 * m);
+loader.vertex(80 * m / 2, 0);
+loader.vertex(-80 * m / 2, 0);
+loader.endShape(CLOSE);
+loader.pop();
 
-    push();
-    stroke(255, 210);
-    fill(random(col1));
-    rect(wisW / 4, wisH / 1.35, 25 * m);
-    fill(random(col1));
-    rect(wisW / 4 + 25 * m, wisH / 1.35, 25 * m);
-    fill(random(col1));
-    rect(wisW / 4 + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-    fill(random(col1));
-    rect(wisW / 4 + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.push();
+loader.noStroke();
+loader.fill(255, 220);
+loader.textAlign(CENTER, CENTER);
+loader.textSize(40 * m);
+loader.textFont(exo_black);
+loader.text("naïf", wisW / 2, wisH / 3.2);
+loader.textFont(exo_bold);
+loader.textSize(16 * m);
+loader.text("altération", wisW / 2, wisH / 3.2 + 40 * m);
+loader.pop();
 
-    fill(random(col2));
-    rect(wisW / 4 + 100 * m, wisH / 1.35, 25 * m);
-    fill(random(col2));
-    rect(wisW / 4 + 100 * m + 25 * m, wisH / 1.35, 25 * m);
-    fill(random(col2));
-    rect(wisW / 4 + 100 * m, wisH / 1.35 + 25 * m, 25 * m);
-    fill(random(col2));
-    rect(wisW / 4 + 100 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.push();
+loader.angleMode(DEGREES);
+loader.translate(wisW / 1.64, wisH / 1.66);
+loader.rotate(-90);
+loader.noStroke();
+loader.fill(255, 220);
+loader.textFont(exo_regular);
+loader.textSize(14 * m);
+loader.text("# " + $fx.iteration + " de 128", 0, 0);
+loader.pop();
 
-    fill(random(col3));
-    rect(wisW / 4 + 200 * m, wisH / 1.35, 25 * m);
-    fill(random(col3));
-    rect(wisW / 4 + 200 * m + 25 * m, wisH / 1.35, 25 * m);
-    fill(random(col3));
-    rect(wisW / 4 + 200 * m, wisH / 1.35 + 25 * m, 25 * m);
-    fill(random(col3));
-    rect(wisW / 4 + 200 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.push();
+if (sayit < 0.2) {
+    loader.noStroke();
+    loader.fill(255, 220);
+    loader.textAlign(RIGHT, CENTER);
+    loader.textSize(16 * m);
+    loader.textStyle(ITALIC);
+    loader.textFont(exo_medium);
+    loader.text("\"Toute connaissance dégénère en probabilité.\"", wisW / 1.89, wisH / 1.9);
+    loader.text("Christian Bobin", wisW / 1.89, wisH / 1.9 + 40);
+} else if (sayit >= 0.2 && sayit < 0.4) {
+    loader.noStroke();
+    loader.fill(255, 220);
+    loader.textAlign(RIGHT, CENTER);
+    loader.textSize(16 * m);
+    loader.textStyle(ITALIC);
+    loader.textFont(exo_medium);
+    loader.text("\"Ce qu'il y a de plus criminel au monde, c'est l'absence de naïveté.  ", wisW / 1.89, wisH / 1.9);
+    loader.text("\"Elle réduit l'essentiel à des minuties et abolit nos élans.\"", wisW / 1.89, wisH / 1.9 + 25);
+    loader.text("Alexandre Jardin", wisW / 1.89, wisH / 1.9 + 75);
+} else if (sayit >= 0.4 && sayit < 0.5) {
+    loader.noStroke();
+    loader.fill(255, 220);
+    loader.textAlign(RIGHT, CENTER);
+    loader.textSize(16 * m);
+    loader.textStyle(ITALIC);
+    loader.textFont(exo_medium);
+    loader.text("\"Nous étions encore tous les cinq proches des naïvetés  ", wisW / 1.89, wisH / 1.9);
+    loader.text("de l'enfance -- de ces naïvetés qui sont peut-être  ", wisW / 1.89, wisH / 1.9 + 25);
+    loader.text("la part la plus féconde que la vie nous donne et ensuite nous reprend.\"", wisW / 1.89, wisH / 1.9 + 50);
+    loader.text("Romain Gary", wisW / 1.89, wisH / 1.9 + 100);
+} else if (sayit >= 0.5 && sayit < 0.6) {
+    loader.noStroke();
+    loader.fill(255, 220);
+    loader.textAlign(RIGHT, CENTER);
+    loader.textSize(16 * m);
+    loader.textStyle(ITALIC);
+    loader.textFont(exo_medium);
+    loader.text("\"“La même chose souvent est, dans la bouche d'un homme d'esprit,  ", wisW / 1.89, wisH / 1.9);
+    loader.text("une naïveté ou un bon mot, et dans celle du sot, une sottise.\"", wisW / 1.89, wisH / 1.9 + 25);
+    loader.text("Jean de La Bruyère", wisW / 1.89, wisH / 1.9 + 75);
+} else if (sayit >= 0.6 && sayit < 0.7) {
+    loader.noStroke();
+    loader.fill(255, 220);
+    loader.textAlign(RIGHT, CENTER);
+    loader.textSize(16 * m);
+    loader.textStyle(ITALIC);
+    loader.textFont(exo_medium);
+    loader.text("\"“En permettant aux uns de duper les autres,  ", wisW / 1.89, wisH / 1.9);
+    loader.text("la naïveté est un élément trop capital du bonheur humain,  ", wisW / 1.89, wisH / 1.9 + 25);
+    loader.text("pour qu'on ne lui doive pas de l'indulgence.\"", wisW / 1.89, wisH / 1.9 + 50);
+    loader.text("Henry de Montherlant", wisW / 1.89, wisH / 1.9 + 100);
+} else if (sayit >= 0.7 && sayit < 0.8) {
+    loader.noStroke();
+    loader.fill(255, 220);
+    loader.textAlign(RIGHT, CENTER);
+    loader.textSize(16 * m);
+    loader.textStyle(ITALIC);
+    loader.textFont(exo_medium);
+    loader.text("\"L'affection et la naïveté muette disent bien plus en disant moins.\"", wisW / 1.89, wisH / 1.9);
+    loader.text("William Shakespeare ", wisW / 1.89, wisH / 1.9 + 50);
+} else if (sayit >= 0.8 && sayit < 0.9) {
+    loader.noStroke();
+    loader.fill(255, 220);
+    loader.textAlign(RIGHT, CENTER);
+    loader.textSize(16 * m);
+    loader.textStyle(ITALIC);
+    loader.textFont(exo_medium);
+    loader.text("\"Il faut beaucoup de naïveté pour faire de grandes choses.\"", wisW / 1.89, wisH / 1.9);
+    loader.text("René Crevel ", wisW / 1.89, wisH / 1.9 + 50);
+} else {
+    loader.noStroke();
+    loader.fill(255, 220);
+    loader.textAlign(RIGHT, CENTER);
+    loader.textSize(16 * m);
+    loader.textStyle(ITALIC);
+    loader.textFont(exo_medium);
+    loader.text("\"Si les hommes ont la naïveté de croire en Dieu,   ", wisW / 1.89, wisH / 1.9);
+    loader.text("les chiens ont la naïveté de croire en l’homme.\"", wisW / 1.89, wisH / 1.9 + 25);
+    loader.text("Eric-Emmanuel Schmitt", wisW / 1.89, wisH / 1.9 + 75);
+}
+loader.pop();
 
-    fill(random(col4));
-    rect(wisW / 4 + 300 * m, wisH / 1.35, 25 * m);
-    fill(random(col4));
-    rect(wisW / 4 + 300 * m + 25 * m, wisH / 1.35, 25 * m);
-    fill(random(col4));
-    rect(wisW / 4 + 300 * m, wisH / 1.35 + 25 * m, 25 * m);
-    fill(random(col4));
-    rect(wisW / 4 + 300 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.push();
+loader.fill(255, 220);
+loader.fill(random(col1));
+loader.rect(wisW / 4, wisH / 1.35, 25 * m);
+loader.fill(random(col1));
+loader.rect(wisW / 4 + 25 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col1));
+loader.rect(wisW / 4 + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.fill(random(col1));
+loader.rect(wisW / 4 + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
 
-    fill(random(col5));
-    rect(wisW / 4 + 400 * m, wisH / 1.35, 25 * m);
-    fill(random(col5));
-    rect(wisW / 4 + 400 * m + 25 * m, wisH / 1.35, 25 * m);
-    fill(random(col5));
-    rect(wisW / 4 + 400 * m, wisH / 1.35 + 25 * m, 25 * m);
-    fill(random(col5));
-    rect(wisW / 4 + 400 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-    push();
+loader.fill(random(col2));
+loader.rect(wisW / 4 + 100 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col2));
+loader.rect(wisW / 4 + 100 * m + 25 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col2));
+loader.rect(wisW / 4 + 100 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.fill(random(col2));
+loader.rect(wisW / 4 + 100 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
 
-    if (loopCount > 20) {
-        //saveCanvas(`naïf_loader_${$fx.hash}-${$fx.minter}`, 'png');
-    }
-    if (loopCount > 20) {
+loader.fill(random(col3));
+loader.rect(wisW / 4 + 200 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col3));
+loader.rect(wisW / 4 + 200 * m + 25 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col3));
+loader.rect(wisW / 4 + 200 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.fill(random(col3));
+loader.rect(wisW / 4 + 200 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+
+loader.fill(random(col4));
+loader.rect(wisW / 4 + 300 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col4));
+loader.rect(wisW / 4 + 300 * m + 25 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col4));
+loader.rect(wisW / 4 + 300 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.fill(random(col4));
+loader.rect(wisW / 4 + 300 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+
+loader.fill(random(col5));
+loader.rect(wisW / 4 + 400 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col5));
+loader.rect(wisW / 4 + 400 * m + 25 * m, wisH / 1.35, 25 * m);
+loader.fill(random(col5));
+loader.rect(wisW / 4 + 400 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.fill(random(col5));
+loader.rect(wisW / 4 + 400 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+loader.pop();
+showLoader = true;
+    if (loopCount > 15) {
         currentState = 'drawing';
     }
 }
@@ -1006,7 +1150,7 @@ function drawBgContent() {
 }
 
 function drawBd(btype) {
-    if (btype == 1) {
+    if (btype == 0) {
         push();
         noFill();
         let strBdCol = color(random(col2));
@@ -1185,11 +1329,11 @@ function makeNode(parentNode, position, radius, depth) {
 
     this.grow = function () {
         let newRadius = this.radius * 0.9;
-        if (newRadius < minPointSize * 0.5 || this.depth <= -10) return; //if(newRadius < minPointSize || this.depth <= 0) return;
+        if (newRadius < minPointSize * 0.5 || this.depth <= -10) return; 
 
         let angle = random(TWO_PI);
-        let newX = this.position.x + this.radius * 1.5 * cos(angle); //let newX = this.position.x + this.radius * cos(angle);
-        let newY = this.position.y + this.radius * 1.5 * sin(angle); //let newY = this.position.y + this.radius * sin(angle);
+        let newX = this.position.x + this.radius * 1.5 * cos(angle); 
+        let newY = this.position.y + this.radius * 1.5 * sin(angle); 
 
         let newNode = new makeNode(this, { x: newX, y: newY }, newRadius, this.depth - 1);
         let placeable = true;
@@ -1262,11 +1406,17 @@ function makeNode(parentNode, position, radius, depth) {
         }
 
         if (this.parentNode) {
+            rndNodLine = random();
             push();
-            doorContent.stroke(col);
-            doorContent.drawingContext.setLineDash([1 * m, 0 * m, 1 * m]);
-            //doorContent.line(this.position.x, this.position.y, this.parentNode.position.x, this.parentNode.position.y);
-            doorContent.curve(this.position.x, this.position.y, this.position.x + random(-5, 5), this.position.y + random(-5, 5), this.parentNode.position.x + random(-5, 5), this.parentNode.position.y + random(-5, 5), this.parentNode.position.x, this.parentNode.position.y);
+            if (rndNodLine < 0.6) {
+                doorContent.stroke(col);
+                doorContent.drawingContext.setLineDash([1 * m, 0, 1 * m]);
+                doorContent.line(this.position.x, this.position.y, this.parentNode.position.x, this.parentNode.position.y);
+            } else {
+                doorContent.stroke(col);
+                doorContent.drawingContext.setLineDash([1 * m, 0, 1 * m]);
+                doorContent.curve(this.position.x, this.position.y, this.position.x + random(-5, 5), this.position.y + random(-5, 5), this.parentNode.position.x + random(-5, 5), this.parentNode.position.y + random(-5, 5), this.parentNode.position.x, this.parentNode.position.y);
+            }
             pop();
         }
     }
@@ -1294,5 +1444,11 @@ function rndBendVertex(x1, y1, x2, y2, deviation) {
 function keyPressed() {
     if (key == 'S' || key == 's') {
         saveCanvas(`naïf_pixScreen_${$fx.hash}-${$fx.minter}`, 'png');
+    }
+}
+
+function keyTyped() {
+    if (key === 'l' || key === 'L') {
+        showLoader = !showLoader;
     }
 }
