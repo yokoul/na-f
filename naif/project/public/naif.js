@@ -771,8 +771,8 @@ class DoorContent {
 }
 
 
-
 // FUNCTIONS //
+
 function generateGrid(wi, he) {
     let grid = Array(he).fill(0).map(() => Array(wi).fill(0));
 
