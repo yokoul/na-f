@@ -340,8 +340,8 @@ function drawCubesAllB() {
     let rwis = (wisW - bd2) / (sizeMod * size);
     let offsetY = size / 2 * sizeMod;
 
-    for (let i = 0; i < cubesCols; i++) {
-        for (let j = 0; j < cubesRows - 1; j++) {
+    for (let i = 1; i < cubesCols; i++) {
+        for (let j = 0; j < cubesRows - 2; j++) {
             let x = i * size * sizeMod;
             let y = j * size * sizeMod;
 
@@ -497,8 +497,8 @@ function drawCubesC() {
     let rwis = (wisW - bd2) / (sizeMod * size);
     let offsetY = size / 2 * sizeMod;
 
-    for (let i = 0; i < cubesCols; i += clusterSize) {
-        for (let j = 0; j < cubesRows - 1; j += clusterSize) {
+    for (let i = 0; i < cubesCols - 2; i += clusterSize) {
+        for (let j = 0; j < cubesRows - 4; j += clusterSize) {
             if (Math.random() < 0.01) {
                 continue;
             }

@@ -2,7 +2,7 @@
 
 function isColorDark(c) {
     let grayscale = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2];
-    return grayscale < 165; //128;
+    return grayscale < 128;
 }
 
 function gradBg(numColors, ...colors) {

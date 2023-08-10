@@ -1,6 +1,6 @@
 // FX Features //
-// ooLnfXrU9ccej9QRDxmwyARvfYq3BeDh3YB73bm89eW6vjMo99s
-// ooGan3EjG7Xp49k8CpdYAbXRvG6gzw4byBdsP7LXTyM5nUfKw51
+$fx.rand.reset();
+$fx.randminter.reset();
 
 
 // VARIABLES //
@@ -14,8 +14,10 @@ let col1, col2, col3, col4, col5, doorContent, rows, cols, skyX, skyY, loader, f
 let showLoader = false;
 let cool1 = "https://coolors.co/c2efb3-97abb1-892f65-735f3d-594a26".split("/").pop().split("-").map((a) => "#" + a);
 let cool11 = "https://coolors.co/f1fbee-c5d0d3-c9be9d-b2986c-9d8243".split("/").pop().split("-").map((a) => "#" + a);
+let cool12 = "https://coolors.co/palette/f72585-b5179e-7209b7-560bad-480ca8-3a0ca3-3f37c9-4361ee-4895ef-4cc9f0".split("/").pop().split("-").map((a) => "#" + a);
 let cool2 = "https://coolors.co/db2b39-29335c-f3a712-f0cea0-534d41".split("/").pop().split("-").map((a) => "#" + a);
 let cool21 = "https://coolors.co/0081af-00abe7-2dc7ff-ead2ac-eaba6b".split("/").pop().split("-").map((a) => "#" + a);
+let cool22 = "https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8".split("/").pop().split("-").map((a) => "#" + a);
 let cool3 = "https://coolors.co/a63446-fbfef9-0c6291-000004-7e1946".split("/").pop().split("-").map((a) => "#" + a);
 let cool31 = "https://coolors.co/f7b2b7-f7717d-de639a-7f2982-16001e".split("/").pop().split("-").map((a) => "#" + a);
 //ajout du 27.7
@@ -24,7 +26,7 @@ let cool41 = "https://coolors.co/044389-fcff4b-ffad05-7cafc4-5995ed".split("/").
 let cool5 = "https://coolors.co/241023-6b0504-a3320b-d5e68d-47a025".split("/").pop().split("-").map((a) => "#" + a);
 let cool51 = "https://coolors.co/fdfffc-235789-c1292e-f1d302-161925".split("/").pop().split("-").map((a) => "#" + a);
 let cool6 = "https://coolors.co/272932-4d7ea8-828489-9e90a2-b6c2d9".split("/").pop().split("-").map((a) => "#" + a);
-let cool61 = "https://coolors.co/8d91a5-739cbf-abacb0-bbb1be-d7ddea".split("/").pop().split("-").map((a) => "#" + a);
+let cool61 = "https://coolors.co/e08dac-6a7fdb-57e2e5-45cb85-153131".split("/").pop().split("-").map((a) => "#" + a);
 
 let doorW = 80; //80
 let doorH = 140; //140
@@ -74,10 +76,16 @@ let duneH = 75;
 let duneCount = 7;
 let dunes = [];
 
+let stratus = false; //base, evolution
 let cloud;
 let cloudCount = 3;
 let cloudHeight = 230;
 let clouds = [];
+
+let stratusCircles = [];
+let numberOfCircles = 55;
+let riseH = 130;
+let perspectiveFactor = 0.04; 
 
 let doors = [];
 let doorContents = [];
@@ -95,22 +103,8 @@ function preload() {
 }
 let fontPts = [];
 
-function rngDeviaType(value) {
-    if (value < 0.25) {
-        deviation = value * 15; //random(0, 15);
-        return "low";
-    } else if (value < 0.55) {
-        deviation = (value * 30) + 15; //random(5, 35);
-        return "mid";
-    } else if (value < 0.7) {
-        deviation = (value * 40) + 25; //random(40, 65);
-        return "high";
-    } else {
-        deviation = 0;
-        return "none";
-    }
-}
 
+// FUNCTIONS fxFeatures //
 
 function rngBackgroundType(value) {
     if (value >= 0 && value < 0.125) {
@@ -146,19 +140,75 @@ function rngBackgroundAxis(value) {
     }
 }
 
+function rngDeviaType(value) {
+    let deviation;
+
+    if (value >= 0 && value < 0.25) {
+        deviation = value * 60;  //random(0, 15);
+        return "low";
+    } 
+    else if (value >= 0.25 && value < 0.55) {
+        deviation = (value - 0.25) * 100 + 15; //random(15, 45);
+        return "mid";
+    } 
+    else if (value >= 0.55 && value < 0.85) {
+        deviation = (value - 0.55) * 83.33 + 40; //random(40, 65);
+        return "high";
+    } 
+    else {
+        deviation = 0; 
+        return "none";
+    }
+}
+
 $fx.features({
     "border size": $fx.rand() < 0.95 ?'0':'20',
     "node type": Math.floor($fx.rand() * 3),
     "node grid size": Math.floor($fx.rand() * 5) + 2,
     "nos type": Math.floor($fx.rand() * 3),
+    "base model": $fx.rand() < 0.5 ? true : false,
     "cloud count": Math.floor($fx.rand() * 3) + 2,
     "cloud height": Math.floor($fx.rand() * 150) + 190,
     "deviation": rngDeviaType(fxrand()),
     "background type": rngBackgroundType(fxrand()),
     "background axis": rngBackgroundAxis(fxrand()),
+    "number of stratus": Math.floor($fx.rand() * 25) + 50,
+    "rise height": Math.floor($fx.rand() * 50) + 130,
 });
 
+function setParams(m) {
+    /* correcteur dimensionnel */
+    doorW = doorW * m;
+    doorH = doorH * m;
+    doorBd = doorBd * m;
+    shdwL = shdwL * m;
+    shdwA = shdwA * m;
+    gap = gap * m;
+    bd = bd * m;
+    depth = depth * m;
+    padding = padding * m;
+    sizeMod = sizeMod * m;
+    size = size * m;
+    globalPointSize = globalPointSize * m;
+    minPointSize = minPointSize * m;
+    pointSizeDecrement = pointSizeDecrement * m;
+    deviation = deviation * m;
+    duneH = duneH * m;
 
+    /* valeurs aléatoirisée */
+    doorBd = int(random(1, 3) * m);
+    pointGridSize = $fx.getFeature("node grid size"); //floor(random(2, 8));
+    nodeType = $fx.getFeature("node type"); //floor(random(0, 3));
+    nos = $fx.getFeature("nos type"); //floor(random(0, 3));
+    cloudCount = $fx.getFeature("cloud count"); //int(random(2, 4) * m);
+    cloudHeight = $fx.getFeature("cloud height") * m; //int(random(190, 360) * m);
+    bd = $fx.getFeature("border size") * m; //(random() < 0.95 ? 0 : 20) * m;
+    stratus = $fx.getFeature("base model");
+    numberOfCircles = $fx.getFeature("number of stratus");
+    riseH = $fx.getFeature("rise height") * m;
+}
+
+// SETUP //
 
 function setup() {
     $fx.rand.reset();
@@ -185,8 +235,9 @@ function setup() {
     m = min(wisW, wisH) / 1080;
 
     angleMode(DEGREES);
-    p5grain.setup({ random: fxrand });
     pixelDensity(pD);
+
+    p5grain.setup({ random: fxrand });
     setParams(m);
 
     loader = createGraphics(wisW, wisH, P2D);
@@ -196,6 +247,21 @@ function setup() {
     col3 = random([cool4, cool5, cool6]);
     col4 = random([cool41, cool51, cool61]);
     col5 = random([cool1, cool2, cool5, cool6]);
+
+    colr1 = random([cool1]);
+    colr11 = random([cool11]);
+    colr12 = random([cool12]);
+    colr2 = random([cool2]);
+    colr21 = random([cool21]);
+    colr22 = random([cool22]);
+    colr3 = random([cool3]);
+    colr31 = random([cool31]);
+    colr4 = random([cool4]);
+    colr41 = random([cool41]);
+    colr5 = random([cool5]);
+    colr51 = random([cool51]);
+    colr6 = random([cool6]);
+    colr61 = random([cool61]);
 
     let doorC3 = color(random(col3));
     doorC3.setAlpha(220);
@@ -241,19 +307,25 @@ function setup() {
                 //doorContents.push(new DoorContent(x, y, doorC3));
             }
         }
+
         doorContent = createGraphics(wisW, wisH, P2D);
 
-        for (let i = 0; i < cloudCount; i++) {
-            let y = map(i, 0, cloudCount, 0, wisH / 2);
-            let cloud = createCloud(y);
-            clouds.push(cloud);
-        }
-        for (let i = 0; i < duneCount; i++) {
-            let y = map(i, 0, duneCount, wisH / 2, wisH);
-            let dune = createDune(y);
-            dunes.push(dune);
+        if (stratus === true) {
+            initStratus();
+        } else if (stratus === false) {
+            for (let i = 0; i < cloudCount; i++) {
+                let y = map(i, 0, cloudCount, 0, wisH / 2);
+                let cloud = createCloud(y);
+                clouds.push(cloud);
+            }
+            for (let i = 0; i < duneCount; i++) {
+                let y = map(i, 0, duneCount, wisH / 2, wisH);
+                let dune = createDune(y);
+                dunes.push(dune);
+            }
         }
     }
+
 
     for (let [num, group] of groups) {
         let x = (group.minX + group.maxX) / 2;
@@ -269,6 +341,7 @@ function setup() {
         doors.push(new MultiDoor(x, y, w, h, group.color));
         doorContents.push(new DoorContent(x, y, doorC3)); //x, y, color(random(col2))), seed);
     }
+    
 }
 
 
@@ -311,43 +384,9 @@ function draw() {
             drawBd(2);
         }
 
-        // let rdmbgn = random();
-        // let rdmbgc = random();
-        // if (drawBGCubes == true) {
-        //     if (rdmbgn >= 0 && rdmbgn < 0.125) {
-        //         bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.5 ? "X" : "Y");
-        //         drawCubes();
-        //     } else if (rdmbgn >= 0.125 && rdmbgn < 0.25) {
-        //         gradBg(4, random(col4), random(col3), random(col5), random(col4));
-        //         drawCubesB();
-        //     } else if (rdmbgn >= 0.25 && rdmbgn < 0.375) {
-        //         bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.5 ? "X" : "Y");
-        //         drawCubesAllB();
-        //     } else if (rdmbgn >= 0.375 && rdmbgn < 0.5) {
-        //         bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.5 ? "X" : "Y");
-        //         drawCubesRand();
-        //     } else if (rdmbgn >= 0.5 && rdmbgn < 0.625) {
-        //         gradBg(4, random(col4), random(col3), random(col3), random(col4));
-        //         drawCubesAllC();
-        //     } else if (rdmbgn >= 0.625 && rdmbgn < 0.75) {
-        //         gradBg(4, random(col4), random(col3), random(col4), random(col5));
-        //         drawCubesC();
-        //     } else if (rdmbgn >= 0.75 && rdmbgn < 0.86) {
-        //         gradBg(7, random(col1), random(col2), random(col3), random(col4), random(col3), random(col2), random(col1));
-        //         drawCubesAll();
-        //     } else if (rdmbgn >= 0.86 && rdmbgn < 0.9) {
-        //         bgGrad(0, 0, wisW, wisH, c1, c2, "R");
-        //         drawBub();
-        //     } else if (rdmbgn >= 0.9 && rdmbgn < 0.96) {
-        //         bgGrad(0, 0, wisW, wisH, c1, c2, rdmbgc < 0.5 ? "X" : "R");
-        //         drawCubesDestructC();
-        //     } else {
-        //         background(random() < 0.5 ? 20 : 235);
-        //     }
-        // }
-        const backgroundType = $fx.getFeature("background type");
-        const backgroundAxis = $fx.getFeature("background axis");
-        if (drawBGCubes == true) {
+    const backgroundType = $fx.getFeature("background type");
+    const backgroundAxis = $fx.getFeature("background axis");
+    if (drawBGCubes == true) {
         if (backgroundType === "cubik A") {
           bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
           drawCubes();
@@ -379,8 +418,22 @@ function draw() {
           background(random() < 0.5 ? 20 : 235);
         }
       }
-        
 
+      let checkBgColor = get(width/2, height/2);
+      isBgColorDark = isColorDark(checkBgColor);
+
+        
+    if (stratus === true) {
+        if (random() < 0.75) {
+        doorContent.blendMode(SOFT_LIGHT);
+        } else {
+        doorContent.blendMode(HARD_LIGHT);
+        }
+        //doorContent.globalAlpha=0.5
+		doorContent.filter="blur(20px)"
+        drawStratus(doorContent, 13);
+        initRise();
+    } else if (stratus === false) {
         for (let cloud of clouds) {
             for (let pt of cloud) {
                 let h = map(pt.y, pt.cloudY, pt.cloudY + cloudHeight, 255, 50);
@@ -406,6 +459,7 @@ function draw() {
                 doorContent.pop();
             }
         }
+    }
 
         for (let door of doors) {
             if (door instanceof Door || door instanceof MultiDoor) {
@@ -432,7 +486,7 @@ function draw() {
                     content.moreBirdsActual(int(random(15, 25)));
                 }
 
-                content.moreCircles(int(random(35, 75)));
+                content.moreCircles(int(random(20, 40)));
             }
         }
 
@@ -632,9 +686,6 @@ class Door {
         push();
         let doorWb = this.w;
         let doorHb = this.h;
-        doorContent.blendMode(SOFT_LIGHT);
-        doorContent.globalAlpha=0.5
-		doorContent.filter="blur(10px)"
         copy(doorContent, int(this.x) - int(doorW), int(this.y - doorH), int(doorW), int(doorH), int(this.x - doorW / 2), int(this.y - doorH), int(doorW), int(doorH));
         pop();
     }
@@ -643,9 +694,9 @@ class Door {
 class MultiDoor {
     constructor(x, y, w, h, color) {
         this.x = x;
-        this.y = y;
+        this.y = y + 3.5 * m;
         this.w = w;
-        this.h = h;
+        this.h = h - 3.5 * m;
         this.color = color;
         this.g = doorContent;
     }
@@ -795,9 +846,9 @@ class MultiDoor {
         push();
         let doorWb = this.w;
         let doorHb = this.h;
-        doorContent.blendMode(MULTIPLY);
-        doorContent.globalAlpha=0.5
-		doorContent.filter="blur(15px)"
+        // doorContent.blendMode(MULTIPLY);
+        // doorContent.globalAlpha=0.5
+		// doorContent.filter="blur(15px)"
         copy(doorContent, this.x - int(doorWb), int(this.y - doorHb), int(doorWb), int(doorHb), int(this.x - doorWb / 2), int(this.y - doorHb), int(doorWb), int(doorHb));
         pop();
     }
@@ -813,9 +864,9 @@ class DoorContent {
 
     moreCircles(numCircles) {
         this.g.push();
-        this.g.blendMode(SCREEN);
-        this.g.globalAlpha=0.5
-		this.g.filter="blur(15px)"
+        // this.g.blendMode(SCREEN);
+        // this.g.globalAlpha=0.5
+		// this.g.filter="blur(15px)"
         this.g.noFill();
         this.g.stroke(this.color);
         this.g.strokeWeight(0.5 * m);
@@ -829,9 +880,9 @@ class DoorContent {
 
     moreBirdsRemind(numBirds, minCurve, maxCurve) {
         this.g.push();
-        this.g.blendMode(MULTIPLY);
-        this.g.globalAlpha=0.5
-		this.g.filter="blur(15px)"
+        // this.g.blendMode(MULTIPLY);
+        // this.g.globalAlpha=0.5
+		// this.g.filter="blur(15px)"
         this.g.noFill();
         for (let i = 0; i < numBirds; i++) {
             let x = random(100, wisW - 100) * m;
@@ -849,9 +900,9 @@ class DoorContent {
 
     moreBirdsActual(numBirds) {
         this.g.push();
-        this.g.blendMode(SCREEN);
-        this.g.globalAlpha=0.5
-		this.g.filter="blur(15px)"
+        // this.g.blendMode(SCREEN);
+        // this.g.globalAlpha=0.5
+		// this.g.filter="blur(15px)"
         for (let i = 0; i < numBirds; i++) {
             let x = random(100, wisW - 100) * m;
             let y = random(100, wisH - 100) * m;
@@ -988,43 +1039,6 @@ function generateGrid(wi, he) {
     return grid;
 }
 
-function setParams(m) {
-    /* valeurs configurées */
-    doorW = doorW * m;
-    doorH = doorH * m;
-    doorBd = doorBd * m;
-    shdwL = shdwL * m;
-    shdwA = shdwA * m;
-    gap = gap * m;
-    bd = bd * m;
-    depth = depth * m;
-    padding = padding * m;
-    sizeMod = sizeMod * m;
-    size = size * m;
-    globalPointSize = globalPointSize * m;
-    minPointSize = minPointSize * m;
-    pointSizeDecrement = pointSizeDecrement * m;
-    deviation = deviation * m;
-    duneH = duneH * m;
-
-    /* valeurs aléatoirisée */
-    //doorW = int(random(70, 80) * m);
-    //doorH = int(random(120, 150) * m);
-    //shdwL = int(random(50, 70) * m);
-    //shdwA = random(0.4, 0.6) * m;
-    //gap = int(random(40, 70) * m);
-    //sizeMod = floor(random(4, 13)) * m;
-    //cubesRows = floor(90 * (6 / sizeMod));
-    //cubesCols = floor(90 * (6 / sizeMod));
-    doorBd = int(random(1, 3) * m);
-    pointGridSize = $fx.getFeature("node grid size") //floor(random(2, 8));
-    nodeType = $fx.getFeature("node type"); //floor(random(0, 3));
-    nos = $fx.getFeature("nos type"); //floor(random(0, 3));
-    cloudCount = $fx.getFeature("cloud count"); //int(random(2, 4) * m);
-    cloudHeight = $fx.getFeature("cloud height") * m; //int(random(190, 360) * m);
-    bd = $fx.getFeature("border size") * m; //(random() < 0.95 ? 0 : 20) * m;
-}
-
 function canPlaceShape(grid, shape, x, y) {
     for (let i = 0; i < shape.length; i++) {
         for (let j = 0; j < shape[i].length; j++) {
@@ -1070,9 +1084,9 @@ loader.textAlign(CENTER, CENTER);
 loader.textSize(40 * m);
 loader.textFont(exo_black);
 loader.text("naïf", wisW / 2, wisH / 3.2);
-loader.textFont(exo_bold);
-loader.textSize(14 * m);
-loader.text("abstraction", wisW / 2, wisH / 3.2 + 40 * m);
+//loader.textFont(exo_bold);
+//loader.textSize(14 * m);
+//loader.text("abstraction", wisW / 2, wisH / 3.2 + 40 * m);
 loader.pop();
 
 loader.push();
@@ -1173,6 +1187,7 @@ loader.push();
 if (loopCount > 15) {
     loader.ellipseMode(CORNER);
     loader.stroke(20, 220);
+    //loader.fill(random(col1));
     loader.fill(random(col1));
     if (random() < 0.5) {
         loader.rect(wisW / 6, wisH / 1.35, 25 * m);
@@ -1323,9 +1338,6 @@ function stopping() {
     noLoop();
 }
 
-function drawBgContent() {
-}
-
 function drawBd(btype) {
     if (btype == 0) {
         push();
@@ -1415,12 +1427,25 @@ function morePoint(grS, floop, nPl, nPh, pSs, pSb) {
                     let index = 4 * (imgY * d.width + imgX);
                     let col = [d.pixels[index], d.pixels[index + 1], d.pixels[index + 2], d.pixels[index + 3]];
 
+                    // d.push();
+                    // d.stroke(col);
+                    // d.strokeWeight(random(1, 12));
+                    // d.noFill();
+                    // //d.fill(col);
+                    // if (random() < 0.005) {
+                    //     random() < 0.5 ? d.rect(x, y, pointSize * random(2, 10)) : d.triangle(x + random(10, 40), y + random(10, 40), x + pointSize * random(2, 4), y + pointSize, x + pointSize, y + pointSize * random(2, 4));
+                    // } else {
+                    //     random() < 0.15 ? d.circle(x, y, pointSize * random(2, 10)) : d.line(x, y, x + pointSize * random(12, 20), y + pointSize * random(12, 20));
+                    // }
+                    // d.pop(); 
+
                     d.push();
                     d.stroke(col);
-                    d.strokeWeight(random(1.5, 4));
+                    d.strokeWeight(random(1, 8));
                     d.fill(col);
-                    d.line(x, y, x + pointSize * random(12, 20), y + pointSize * random(12, 20));
-                    d.pop();
+                    d.line(x, y, x + pointSize * random(6, 20), y + pointSize * random(6, 20));
+                    d.pop(); 
+
                 }
             }
         }
@@ -1599,6 +1624,131 @@ function makeNode(parentNode, position, radius, depth) {
     }
 }
 
+function initStratus() {
+    for (let i = 0; i < numberOfCircles; i++) {
+      let circleX = random(50, width - 50);
+      let circleY = height / random(3, 5) + random(-120, 80);
+      let r = random(5, 60);
+      stratusCircles.push({ x: circleX, y: circleY, r: r });
+    }
+  }
+  
+  function drawStratus(g, res) {
+    let resolution = res;
+    let field = [];
+    for (let x = 0; x < g.width; x += resolution) {
+      field[x / resolution] = [];
+      for (let y = 0; y < g.height; y += resolution) {
+        field[x / resolution][y / resolution] = densityAtPoint(x, y);
+      }
+    }
+    g.push();
+    g.drawingContext.setLineDash([4, 2, 1, 3, 5]);
+    g.pop();
+  
+    for (let x = 0; x < field.length - 1; x++) {
+      for (let y = 0; y < field[x].length - 1; y++) {
+        let a = createVector(x * resolution, y * resolution);
+        let b = createVector((x + 1) * resolution, y * resolution);
+        let c = createVector((x + 1) * resolution, (y + 1) * resolution);
+        let d = createVector(x * resolution, (y + 1) * resolution);
+  
+        let threshold = 0.05;
+        let corners = [
+          field[x][y] > threshold,
+          field[x + 1][y] > threshold,
+          field[x + 1][y + 1] > threshold,
+          field[x][y + 1] > threshold,
+        ];
+  
+        drawContour(g, corners, a, b, c, d);
+      }
+    }
+    g.push();
+    g.drawingContext.setLineDash([]);
+    g.pop();
+  }
+  
+  function densityAtPoint(x, y) {
+    let density = 0;
+    for (let circle of stratusCircles) {
+      let d = dist(x, y, circle.x, circle.y);
+      density += exp(-0.02 * pow(d - circle.r, 2));
+    }
+    return density;
+  }
+  
+  function drawContour(g, corners, a, b, c, d) {
+    if (corners[0] === corners[1] && corners[1] === corners[2] && corners[2] === corners[3]) {
+      return;
+    }
+  
+    let points = [a, b, c, d];
+  
+    for (let i = 0; i < points.length; i++) {
+      if (corners[i] !== corners[(i + 1) % 4]) {
+        let p1 = points[i];
+        let p2 = points[(i + 1) % 4];
+        let midPoint = createVector((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+        g.push();
+        g.strokeWeight(random(4, 10) * m);
+        g.stroke(random(colr22));
+        g.line(p1.x, p1.y, midPoint.x, midPoint.y);
+        g.pop();
+      }
+    }
+  }
+  
+  function initRise() {
+    let numOfWaves = int(random(12, 18));
+    for (let i = 0; i < numOfWaves; i++) {
+      let rise = createRise(doorContent, doorContent.height / 2 + i * riseH / 2, i);
+      drawRise(doorContent, rise);
+    }
+  }
+  
+  function createRise(g, y, waveIndex) {
+    let points = [];
+    let waveAmp = riseH * random(0.15, 0.55);
+    let waveFreq = TWO_PI / wisW;
+  
+    for (let x = 0; x < wisW; x += 1) {
+      let perspectiveOffset = (wisW / 2 - x) * perspectiveFactor * waveIndex;
+  
+      let yNoise = noise(x * 0.003, y * 0.005) * riseH;
+      let yWave = waveAmp * sin(waveFreq * x);
+      let pt = g.createVector(x, y + yNoise + yWave + perspectiveOffset);
+      points.push(pt);
+    }
+  
+    return points;
+  }
+  
+  function drawRise(g, rise) {
+    let numOfLines = int(random(8, 14));
+    g.push();
+    for (let i = 0; i < numOfLines; i++) {
+      let offset = (riseH / numOfLines) * i;
+  
+      let dashLength = map(i, 0, numOfLines - 1, 0, 15);
+      g.drawingContext.setLineDash([dashLength, dashLength]);
+    
+      
+      g.fill(randm(colr12));
+      //g.noFill();
+      g.stroke(random(colr12));
+      g.strokeWeight(random(0.5, 2.5) * m);
+      g.beginShape();
+      for (let pt of rise) {
+        g.vertex(pt.x, pt.y + offset);
+      }
+      g.endShape();
+      
+    }
+    g.drawingContext.setLineDash([]);
+    g.pop();
+  }
+  
 
 
 function rndBend(startX, startY, endX, endY, deviation) {
