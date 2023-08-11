@@ -29,24 +29,46 @@ for (let i = particules.length - 1; i >= 0; i--) {
   let p = particules[i];
 
   for (let a of attracteurs) {
-		push();
-		noStroke();
-		fill(20, 2);
+    push();
+    noStroke();
+    fill(20, 2);
     ellipse(a.x, a.y, 12, 12);
-		pop();
-  }
+    pop();
 
-  for (let r of repulseurs) {
-		push();
-		noStroke();
-		fill(20, 4);
-    ellipse(r.x, r.y, 16, 16);
-		pop();
-  }
+    // push();
+    // noFill();
+    // stroke(120, 5);
+    // strokeWeight(0.25);
+    // for (let i = 10; i < numCircles; i++) {
+    //                 let radius = Math.pow(1.15, i);
+    //                 drawingContext.setLineDash([4, 3, 5, 2, 3]);
+    //                 circle(a.x, a.y, radius * 1.75);
+    // }
+    // pop();
+}
 
-		for (let p of particules) {
-			p.checkProximity(attracteurs, random(125, 170), color(0, 0, 255, 50), color(255, 255, 0, 50));  // Bleu à Jaune
-			p.checkProximity(repulseurs, random(120, 160), color(0, 255, 0, 50), color(255, 0, 255, 50));  // Vert à Magenta
+for (let r of repulseurs) {
+    push();
+    noStroke();
+    fill(20, 4);
+ellipse(r.x, r.y, 16, 16);
+    pop();
+
+    // push();
+    // noFill();
+    // stroke(255, 255, 0, 5);
+    // strokeWeight(0.25);
+    // for (let i = 10; i < numCircles; i++) {
+    //                 let radius = Math.pow(1.15, i);
+    //                 drawingContext.setLineDash([4, 3, 5, 2, 3]);
+    //                 circle(r.x, r.y, radius * 1.5);
+    // }
+    // pop();
+}
+
+	for (let p of particules) {
+        p.checkProximity(attracteurs, random(125, 170), color(0, 0, 255, 50), color(255, 255, 0, 50));  // Bleu à Jaune
+        p.checkProximity(repulseurs, random(120, 160), color(0, 255, 0, 50), color(255, 0, 255, 50));  // Vert à Magenta
     for (let a of attracteurs) {
       p.attracted(a);
     }
@@ -82,11 +104,11 @@ class Particule {
   }
 
   repulsed(target) {
-    let force = p5.Vector.sub(this.pos, target); // Notez que nous avons inversé l'ordre ici
+    let force = p5.Vector.sub(this.pos, target); 
     let distance = force.mag();
     distance = constrain(distance, 5, 50);
     
-    let strength = 50 / (distance * distance); // La force de répulsion est plus forte lorsque la distance est plus courte
+    let strength = 50 / (distance * distance); 
     force.setMag(strength);
     this.acc.add(force);
 
@@ -108,20 +130,22 @@ class Particule {
     return this.lifespan <= 0;
   }
 
-	checkProximity(targets, proximityThreshold, startCol, endCol) {
-		for (let target of targets) {
-			let d = this.pos.dist(target);
-			if (d < proximityThreshold) {
-				let lerpAmount = map(d, 0, proximityThreshold, 1, 0); // Convertit la distance en une valeur entre 1 et 0
-				this.col = lerpColor(startCol, endCol, lerpAmount);
-			}
-		}
-	}
+    checkProximity(targets, proximityThreshold, startCol, endCol) {
+        for (let target of targets) {
+            let d = this.pos.dist(target);
+            if (d < proximityThreshold) {
+                let lerpAmount = map(d, 0, proximityThreshold, 1, 0); // Convertit la distance en une valeur entre 1 et 0
+                this.col = lerpColor(startCol, endCol, lerpAmount);
+            }
+        }
+    }
 
   show() {
+    push();
     stroke(this.col);
     strokeWeight(0.75);
     point(this.pos.x, this.pos.y);
+    pop();
   }
 }
 

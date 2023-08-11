@@ -5,7 +5,6 @@ $fx.randminter.reset();
 
 // VARIABLES //
 let seed = fxrand() * 888786858483828180;
-//console.log(seed);
 let sayit = fxrand();
 let currentState = 'loading';
 let loopCount = 0;
@@ -20,7 +19,7 @@ let cool21 = "https://coolors.co/0081af-00abe7-2dc7ff-ead2ac-eaba6b".split("/").
 let cool22 = "https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8".split("/").pop().split("-").map((a) => "#" + a);
 let cool3 = "https://coolors.co/a63446-fbfef9-0c6291-000004-7e1946".split("/").pop().split("-").map((a) => "#" + a);
 let cool31 = "https://coolors.co/f7b2b7-f7717d-de639a-7f2982-16001e".split("/").pop().split("-").map((a) => "#" + a);
-//ajout du 27.7
+let cool32 = "https://coolors.co/palette/582f0e-7f4f24-936639-a68a64-b6ad90-c2c5aa-a4ac86-656d4a-414833-333d29".split("/").pop().split("-").map((a) => "#" + a);
 let cool4 = "https://coolors.co/dbd56e-88ab75-2d93ad-7d7c84-de8f6e".split("/").pop().split("-").map((a) => "#" + a);
 let cool41 = "https://coolors.co/044389-fcff4b-ffad05-7cafc4-5995ed".split("/").pop().split("-").map((a) => "#" + a);
 let cool5 = "https://coolors.co/241023-6b0504-a3320b-d5e68d-47a025".split("/").pop().split("-").map((a) => "#" + a);
@@ -55,6 +54,8 @@ let nosh = false; //ajout d'ombre
 let nosColor = false;
 let strokeW = 2;
 
+let rndBendChoose = 0;
+
 let noiseValues = [];
 
 let nodeThis = true;
@@ -86,6 +87,8 @@ let stratusCircles = [];
 let numberOfCircles = 55;
 let riseH = 130;
 let perspectiveFactor = 0.04; 
+
+let particleThis = false;
 
 let doors = [];
 let doorContents = [];
@@ -141,29 +144,32 @@ function rngBackgroundAxis(value) {
 }
 
 function rngDeviaType(value) {
-    let deviation;
-
+    let rngDeviaresult = "";
     if (value >= 0 && value < 0.25) {
         deviation = value * 60;  //random(0, 15);
-        return "low";
+        rngDeviaresult = "low";
     } 
     else if (value >= 0.25 && value < 0.55) {
         deviation = (value - 0.25) * 100 + 15; //random(15, 45);
-        return "mid";
+        rngDeviaresult = "mid";
     } 
     else if (value >= 0.55 && value < 0.85) {
         deviation = (value - 0.55) * 83.33 + 40; //random(40, 65);
-        return "high";
+        rngDeviaresult = "high";
     } 
     else {
         deviation = 0; 
-        return "none";
+        rngDeviaresult = "none";
     }
+
+    return rngDeviaresult;
 }
 
 $fx.features({
-    "border size": $fx.rand() < 0.95 ?'0':'20',
     "node type": Math.floor($fx.rand() * 3),
+    "bend mode": $fx.rand(),
+    "particle mode": $fx.rand() < 0.3 ? true : false,
+    "node mode": $fx.rand() < 0.9 ? true : false,
     "node grid size": Math.floor($fx.rand() * 5) + 2,
     "nos type": Math.floor($fx.rand() * 3),
     "base model": $fx.rand() < 0.5 ? true : false,
@@ -174,7 +180,15 @@ $fx.features({
     "background axis": rngBackgroundAxis(fxrand()),
     "number of stratus": Math.floor($fx.rand() * 25) + 50,
     "rise height": Math.floor($fx.rand() * 50) + 130,
+    "stars location": $fx.rand(),
+    "sun location": $fx.rand(),
+    "moon location": $fx.rand(),
+    "cross location": $fx.rand(),
+    "border size": $fx.rand() < 0.95 ?'0':'20',
 });
+console.log("seed", seed);
+console.log($fx.getFeatures())
+
 
 function setParams(m) {
     /* correcteur dimensionnel */
@@ -204,15 +218,17 @@ function setParams(m) {
     cloudHeight = $fx.getFeature("cloud height") * m; //int(random(190, 360) * m);
     bd = $fx.getFeature("border size") * m; //(random() < 0.95 ? 0 : 20) * m;
     stratus = $fx.getFeature("base model");
+    nodeThis = $fx.getFeature("node mode");
     numberOfCircles = $fx.getFeature("number of stratus");
     riseH = $fx.getFeature("rise height") * m;
+    particleThis = $fx.getFeature("particle mode");
 }
 
 // SETUP //
 
 function setup() {
-    $fx.rand.reset();
-    $fx.randminter.reset();
+    //$fx.rand.reset();
+    //$fx.randminter.reset();
     //seed = fxrand() * 999999999;
     randomSeed(seed);
     noiseSeed(seed);
@@ -242,11 +258,14 @@ function setup() {
 
     loader = createGraphics(wisW, wisH, P2D);
 
+    rndBendChoose = fxrand();
+
     col1 = random([cool1, cool2, cool3]);
     col2 = random([cool11, cool21, cool31]);
     col3 = random([cool4, cool5, cool6]);
     col4 = random([cool41, cool51, cool61]);
     col5 = random([cool1, cool2, cool5, cool6]);
+    col6 = random([cool12, cool32]);
 
     colr1 = random([cool1]);
     colr11 = random([cool11]);
@@ -256,6 +275,7 @@ function setup() {
     colr22 = random([cool22]);
     colr3 = random([cool3]);
     colr31 = random([cool31]);
+    colr32 = random([cool32]);
     colr4 = random([cool4]);
     colr41 = random([cool41]);
     colr5 = random([cool5]);
@@ -339,7 +359,7 @@ function setup() {
         let w = group.maxX - group.minX + doorW;
         let h = group.maxY - group.minY + doorH;
         doors.push(new MultiDoor(x, y, w, h, group.color));
-        doorContents.push(new DoorContent(x, y, doorC3)); //x, y, color(random(col2))), seed);
+        doorContents.push(new DoorContent(doorContent, x, y, doorC3)); //x, y, color(random(col2))), seed);
     }
     
 }
@@ -429,7 +449,7 @@ function draw() {
         } else {
         doorContent.blendMode(HARD_LIGHT);
         }
-        //doorContent.globalAlpha=0.5
+        doorContent.globalAlpha=random();
 		doorContent.filter="blur(20px)"
         drawStratus(doorContent, 13);
         initRise();
@@ -472,11 +492,23 @@ function draw() {
                         door.drawDoor([60, 230], random(3, 6) * m);
                     }
                 }
-                
+                let content = new DoorContent(doorContent, door.x, door.y, color(random(col4)));
+                if (particleThis == true) {
+                    content.createParticles(int(random(550, 900)));
+                    content.moreAttractors(random(7, 16));
+                    content.moreRepulsors(random(4, 8));
+                    content.updateParticles(int(random(400, 900)));
+                    content.showParticles();  
+                }
+            }
+        }
 
+        for (let door of doors) { 
+            if (door instanceof Door || door instanceof MultiDoor) {
                 let content = new DoorContent(doorContent, door.x, door.y, color(random(col3)));
-                content.moreHit(random(5, 25), random(col3), random(col4));
-                content.moreTouch(random(2, 4), random(col2), random(col5));
+                content.moreSun(random(15, 25), random(col3), random(col4));
+                content.moreMoon(random(8, 12), random(col2), random(col5));
+
                 if (random() > 0.93) {
                     content.moreCross(random(5, 25), random(8, 12), random(col3));
                 }
@@ -485,13 +517,9 @@ function draw() {
                 } else {
                     content.moreBirdsActual(int(random(15, 25)));
                 }
-
                 content.moreCircles(int(random(20, 40)));
-            }
-        }
 
-        for (let door of doors) { 
-            if (door instanceof Door || door instanceof MultiDoor) {
+
                 if (drawShdw == true && random() < 0.5) {
                     door.drawDoorShdw([180, 70]);
                 } else {
@@ -613,6 +641,34 @@ class Door {
         }
         pop();
     }
+
+    // // Fonction pour dessiner la structure
+    // drawStruct(color, strokeW) {
+    //     push();
+    //     stroke(color);
+    //     strokeWeight(strokeW);
+
+    //     drawContinuousLine(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, 50);
+    //     drawContinuousLine(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, 50);
+    //     drawContinuousLine(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, 50);
+    //     drawContinuousLine(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + depth, 50);
+
+    //     pop();
+    // }
+
+    // // Fonction pour dessiner la structure inversée
+    // drawStructInv(color, strokeW) {
+    //     push();
+    //     stroke(color);
+    //     strokeWeight(strokeW);
+
+    //     drawContinuousLine(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, 50);
+    //     drawContinuousLine(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, 50);
+    //     drawContinuousLine(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, 50);
+    //     drawContinuousLine(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + doorH / 1.75 , 50);
+
+    //     pop();
+    // }
 
     drawStruct(color, strokeW) {
         push();
@@ -847,8 +903,8 @@ class MultiDoor {
         let doorWb = this.w;
         let doorHb = this.h;
         // doorContent.blendMode(MULTIPLY);
-        // doorContent.globalAlpha=0.5
-		// doorContent.filter="blur(15px)"
+        // doorContent.globalAlpha=0.75
+		// doorContent.filter="blur(12px)"
         copy(doorContent, this.x - int(doorWb), int(this.y - doorHb), int(doorWb), int(doorHb), int(this.x - doorWb / 2), int(this.y - doorHb), int(doorWb), int(doorHb));
         pop();
     }
@@ -856,33 +912,33 @@ class MultiDoor {
 
 class DoorContent {
     constructor(g, originX, originY, color) {
-        this.g = doorContent;
+        this.g = g; //doorContent;
         this.originX = originX;
         this.originY = originY;
         this.color = color;
+
+        this.particles = [];
+        this.attractors = [];
+        this.repulsors = [];
     }
 
     moreCircles(numCircles) {
         this.g.push();
-        // this.g.blendMode(SCREEN);
-        // this.g.globalAlpha=0.5
-		// this.g.filter="blur(15px)"
+        let x = random(this.originX - doorW, this.originX);
+        let y = random(this.originY - doorH, this.originY);
         this.g.noFill();
         this.g.stroke(this.color);
         this.g.strokeWeight(0.5 * m);
         for (let i = 10; i < numCircles; i++) {
             let radius = Math.pow(1.15, i);
             this.g.drawingContext.setLineDash([4 * m, 3 * m, 5 * m, 2 * m, 3 * m]);
-            this.g.circle(this.originX, this.originY, radius * 2);
+            this.g.circle(x, y, radius * 2);
         }
         this.g.pop();
     }
 
     moreBirdsRemind(numBirds, minCurve, maxCurve) {
         this.g.push();
-        // this.g.blendMode(MULTIPLY);
-        // this.g.globalAlpha=0.5
-		// this.g.filter="blur(15px)"
         this.g.noFill();
         for (let i = 0; i < numBirds; i++) {
             let x = random(100, wisW - 100) * m;
@@ -900,9 +956,6 @@ class DoorContent {
 
     moreBirdsActual(numBirds) {
         this.g.push();
-        // this.g.blendMode(SCREEN);
-        // this.g.globalAlpha=0.5
-		// this.g.filter="blur(15px)"
         for (let i = 0; i < numBirds; i++) {
             let x = random(100, wisW - 100) * m;
             let y = random(100, wisH - 100) * m;
@@ -953,43 +1006,6 @@ class DoorContent {
         this.g.pop();
     }
 
-    moreHit(radius, cola, colb) {
-        this.g.push();
-        let from = color(cola);
-        let to = color(colb);
-        this.g.noStroke();
-        for (let r = radius; r > 0; --r) {
-            let inter = map(r, 0, radius, 0, 1);
-            let c = this.g.lerpColor(from, to, inter);
-            this.g.fill(c);
-            this.g.circle(this.originX + random(-130, 130) * m, this.originY + random(-80, 80) * m, r * 4);
-        }
-        this.g.pop();
-    }
-
-    moreTouch(radius, cola, colb) {
-        this.g.push();
-        let from = color(cola);
-        let to = color(colb);
-        this.g.noStroke();
-        for (let r = radius; r > 0; --r) {
-            let inter = map(r, 0, radius, 0, 1);
-            let c = this.g.lerpColor(from, to, inter);
-            this.g.fill(c);
-            this.g.circle(this.originX - (doorW / random(1, 3) * m), this.originY - (doorH / random(1, 3) * m), r * 2);
-        }
-
-        for (let i = 0; i < 6; i++) {
-            let angle = random(TWO_PI);
-            let distance = random(radius * 0.5);
-            let x = this.originX + cos(angle) * distance;
-            let y = this.originY + sin(angle) * distance;
-            let craterRadius = random(5, 10);
-            this.g.fill(0, 0, 100);
-            this.g.circle(x + random(-doorW, doorW), y + random(-doorH, doorH), craterRadius * 2);
-        }
-        this.g.pop();
-    }
     moreCross(size, thick, col) {
         this.g.push();
         this.g.strokeWeight(thick);
@@ -1008,8 +1024,271 @@ class DoorContent {
             this.g.pop();
         }
         this.g.pop();
-    }    
+    }
+
+    moreSun(radius, cola, colb) {
+        this.g.push();
+        let from = color(cola);
+        let to = color(colb);
+        this.g.noStroke();
+        for (let r = radius; r > 0; --r) {
+            let inter = map(r, 0, radius, 0, 1);
+            let c = this.g.lerpColor(from, to, inter);
+            this.g.fill(c);
+            this.g.circle(this.originX + random(-130, 130) * m, this.originY + random(-80, 80) * m, r * 4);
+        }
+        this.g.pop();
+    }
+
+    moreMoon(radius, cola, colb) {
+        this.g.push();
+        let from = color(cola);
+        let to = color(colb);
+        this.g.noStroke();
+        for (let r = radius; r > 0; --r) {
+            let inter = map(r, 0, radius, 0, 1);
+            let c = this.g.lerpColor(from, to, inter);
+            this.g.fill(c);
+            let x = this.originX - (doorW / random(1, 3) * m);
+            let y = this.originY - (doorH / random(1, 3) * m);
+            this.g.circle(x, y, r * 2);
+        }
+
+        for (let i = 0; i < 6; i++) {
+            let angle = random(TWO_PI);
+            let distance = random(radius * 0.5);
+            let x = this.originX + cos(angle) * distance;
+            let y = this.originY + sin(angle) * distance;
+            let craterRadius = random(5, 10);
+            this.g.fill(0, 0, 100);
+            this.g.circle(x + random(-doorW, doorW), y + random(-doorH, doorH), craterRadius * 2);
+        }
+        this.g.pop();
+    }
+
+    moreAttractors(radius) {
+        this.g.push();
+        for (let r = radius; r > 0; --r) {
+            let x = this.originX + (($fx.getFeature("sun location") -130) * 260) * m;
+            let y = this.originY + (($fx.getFeature("sun location") -80) * 160) * m;
+            this.attractors.push(createVector(x, y));
+        }
+        this.g.pop();
+    }
+
+    moreRepulsors(radius) {
+        this.g.push();
+        for (let r = radius; r > 0; --r) {
+            let x = this.originX - (doorW / ($fx.getFeature("moon location") * 4) * m);
+            let y = this.originY - (doorH / ($fx.getFeature("moon location") * 4) * m);
+            this.repulsors.push(createVector(x, y));
+        }
+        this.g.pop();
+    }
+
+    createParticles(n) {
+        for (let i = 0; i < n; i++) {
+            this.particles.push(new Particle(random(this.originX - (doorW * 2), this.originX), random(this.originY - (doorH * 2), this.originY)));
+            //this.particles.push(new Particle(random(width), random(height)));
+        }
+    }
+
+    showParticles() {
+        this.g.push();
+        for (let p of this.particles) {
+            p.show(this.g);  
+        }
+        this.g.pop();
+    }
+
+    updateParticles(n) {
+        for (let it = 0; it < n; it++) {
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+                let p = this.particles[i];
+                p.checkProximity(this.attractors, random(125, 170), color(random(col3)), color(random(col4)));//color(0, 0, 255, 50), color(255, 255, 0, 50));  // Bleu à Jaune
+                p.checkProximity(this.repulsors, random(120, 160), color(random(col4)), color(random(col3))); //color(0, 255, 0, 50), color(255, 0, 255, 50));  // Vert à Magenta
+        
+    
+                for (let a of this.attractors) {
+                    p.attracted(a);
+                }
+
+                for (let r of this.repulsors) {
+                    p.repulsed(r);
+                }
+
+                p.update();
+    
+                if (p.isDead()) {
+                    this.particles.splice(i, 1);
+                    this.particles.push(new Particle(random(this.originX - (doorW * 2), this.originX), random(this.originY - (doorH * 2), this.originY)));
+                    //this.particles.push(new Particle(random(width), random(height)));
+                }
+            }
+        }
+    }
 }
+
+class Particle {
+    constructor(x, y) {
+        this.position = createVector(x, y);
+        this.velocity = createVector(random(-1, 1), random(-1, 1));
+        this.acceleration = createVector();
+        this.lifespan = 255;
+        this.col = color(random(col2)); //color(0, 0, 255, 50);  
+        this.prevPosition = this.position.copy();
+        this.path = []; 
+    }
+
+    applyForce(force) {
+        this.acceleration.add(force);
+    }
+
+    attracted(target) {
+        let force = p5.Vector.sub(target, this.position);
+        force.setMag(0.5); 
+        this.applyForce(force);
+    }
+
+    repulsed(target) {
+        let force = p5.Vector.sub(this.position, target);
+        force.setMag(0.5); 
+        this.applyForce(force);
+
+        let distance = force.mag();
+        distance = constrain(distance, 5, 50);
+        let strength = 50 / (distance * distance);
+        let rotation = force.copy();
+        rotation.rotate(HALF_PI);
+        rotation.setMag(strength * 0.5); 
+        this.acceleration.add(rotation);
+    }
+
+    update() {
+        this.velocity.add(this.acceleration);
+        this.position.add(this.velocity);
+        this.prevPosition = this.position.copy();
+        this.acceleration.mult(0); 
+        this.lifespan -= 2;
+
+        this.path.push(this.position.copy());
+
+        if (this.path.length > 500) {
+            this.path.splice(0, 1);
+        }
+
+    }
+
+    isDead() {
+        return this.lifespan <= 0;
+    }
+
+    checkProximity(targets, proximityThreshold, startCol, endCol) {
+        for (let target of targets) {
+            let d = this.position.dist(target);
+            if (d < proximityThreshold) {
+                let lerpAmount = map(d, 0, proximityThreshold, 1, 0);
+                this.col = lerpColor(startCol, endCol, lerpAmount);
+            }
+        }
+    }
+
+    show(g) {
+        let strokeSize = map(this.lifespan, 0, 255, 0, 4);
+        push();
+        g.noFill();
+        this.col.setAlpha(30);
+        g.stroke(this.col); //255, this.lifespan);
+        g.strokeWeight(strokeSize * m);
+        g.point(this.position.x, this.position.y);
+        g.beginShape();
+        g.strokeWeight(strokeSize * m);
+        for (let point of this.path) {
+            g.vertex(point.x, point.y);
+        }
+        g.endShape();
+        pop();
+
+    }
+}
+
+class buggedParticle {
+    constructor(x, y) {
+        this.pos = createVector(x, y);
+        this.prevPos = this.pos.copy();
+        this.vel = createVector();
+        this.acc = createVector();
+        this.maxForce = 0.5;
+        this.maxSpeed = 3;
+        this.lifespan = 250;
+        this.path = []; 
+    }
+
+    applyForce(force) {
+        this.acc.add(force); 
+    }
+
+    attracted(target) {
+        let force = p5.Vector.sub(target, this.pos);
+        let distance = force.mag();
+        distance = constrain(distance, 5, 50);
+        force.setMag(0.55 / distance);
+        this.acc.add(force);
+    }
+    
+    repulsed(target) {
+        let force = p5.Vector.sub(this.pos, target); 
+        let distance = force.mag();
+        distance = constrain(distance, 5, 50);
+        
+        let strength = 50 / (distance * distance); 
+        force.setMag(strength);
+        this.acc.add(force);
+
+        let rotation = force.copy();
+        rotation.rotate(HALF_PI);
+        rotation.setMag(strength * 0.5); 
+        this.acc.add(rotation);
+    }
+
+    update() {
+        this.vel.add(this.acc);
+        this.vel.limit(this.maxSpeed);
+        this.prevPos = this.pos.copy();
+        this.pos.add(this.vel);
+        this.acc.mult(0);
+
+        this.path.push(this.pos.copy());
+
+        if (this.path.length > 50000) {
+            this.path.splice(0, 1);
+        }
+
+        this.lifespan -= 2;
+    }
+
+    isDead() {
+        return this.lifespan <= 0;
+    }
+
+    show(g) {
+        g.push();
+        g.noFill();
+        g.stroke(255); 
+        g.beginShape();
+        g.strokeWeight(1 * m);
+        for (let point of this.path) {
+            g.vertex(point.x, point.y);
+        }
+        g.endShape();
+
+        g.stroke(255); //, this.lifespan);
+        g.strokeWeight(2 * m);
+        g.point(this.pos.x, this.pos.y);
+        g.pop();
+    }
+}
+
 
 
 // FUNCTIONS //
@@ -1734,9 +2013,9 @@ function initStratus() {
       g.drawingContext.setLineDash([dashLength, dashLength]);
     
       
-      g.fill(randm(colr12));
+      g.fill(random(col6));
       //g.noFill();
-      g.stroke(random(colr12));
+      g.stroke(random(col6));
       g.strokeWeight(random(0.5, 2.5) * m);
       g.beginShape();
       for (let pt of rise) {
@@ -1750,8 +2029,43 @@ function initStratus() {
   }
   
 
+  function rndBend(startX, startY, endX, endY, deviation) {
+      if ($fx.getFeature("bend mode") >= 0 && $fx.getFeature("bend mode") < 0.33) {
+          rndBendContinuous(startX, startY, endX, endY, deviation);
+      } else if ($fx.getFeature("bend mode") >= 0.33 && $fx.getFeature("bend mode") < 0.66) {
+          rndBendDiscrete(startX, startY, endX, endY, deviation);
+      } else {
+          rndBendHash(startX, startY, endX, endY, deviation);
+      }
+  }
+  
+  function rndBendVertex(x1, y1, x2, y2, deviation) {
+    if ($fx.getFeature("bend mode") >= 0 && $fx.getFeature("bend mode") < 0.33) {
+            rndBendVertexContinuous(x1, y1, x2, y2, deviation);
+        } else if ($fx.getFeature("bend mode") >= 0.33 && $fx.getFeature("bend mode") < 0.66) {
+            rndBendVertexDiscrete(x1, y1, x2, y2, deviation);
+        } else {
+            rndBendVertexHash(x1, y1, x2, y2, deviation);
+        }
+  }
+  
+  function rndBendContinuous(startX, startY, endX, endY, deviation) {
+      
+    deviation *= m;
+    let midX = (startX + endX) / 2;
+    let midY = (startY + endY) / 2;
 
-function rndBend(startX, startY, endX, endY, deviation) {
+    midX += random(-deviation, deviation);
+    midY += random(-deviation, deviation);
+    push();
+    noFill();
+    line(startX, startY, midX, midY);
+    line(midX, midY, endX, endY);
+    pop();
+  }
+  
+  function rndBendDiscrete(startX, startY, endX, endY, deviation) {
+      
     deviation *= m;
     let midX = (startX + endX) / 2;
     let midY = (startY + endY) / 2;
@@ -1759,16 +2073,108 @@ function rndBend(startX, startY, endX, endY, deviation) {
     midX += random(-deviation, deviation);
     midY += random(-deviation, deviation);
 
+    push();
+    noFill();
     line(startX, startY, midX, midY);
     line(midX, midY, endX, endY);
+    pop();
+  }
+  
+  function rndBendVertexContinuous(x1, y1, x2, y2, deviation) {
+      
+      deviation *= m;
+      let midX = (x1 + x2) / 2 + random(-deviation, deviation);
+      let midY = (y1 + y2) / 2 + random(-deviation, deviation);
+      vertex(midX, midY);
+  }
+  
+  function rndBendVertexDiscrete(x1, y1, x2, y2, deviation) {
+      
+      deviation *= m;
+      let midX = (x1 + x2) / 2 + random(-deviation, deviation);
+      let midY = (y1 + y2) / 2 + random(-deviation, deviation);
+      vertex(midX, midY);
+  }
+  
+
+function rndBendHash(startX, startY, endX, endY, deviation) {
+    push();
+    noFill();
+    beginShape();
+    drawContinuousLine(startX, startY, endX, endY, 75, deviation); 
+    endShape();
+    pop();
 }
 
-function rndBendVertex(x1, y1, x2, y2, deviation) {
-    deviation *= m;
-    let midX = (x1 + x2) / 2 + random(-deviation, deviation);
-    let midY = (y1 + y2) / 2 + random(-deviation, deviation);
-    vertex(midX, midY);
+function rndBendVertexHash(x1, y1, x2, y2, deviation) {
+    push();
+    noFill();
+    beginShape();
+    vertex(x1, y1);
+    drawContinuousLine(x1, y1, x2, y2, 75, deviation); 
+    vertex(x2, y2);
+    endShape();
+    pop();
 }
+
+function drawContinuousLine(x1, y1, x2, y2, numPoints, deviation) {
+    deviation *= m;
+    for (let i = 0; i <= numPoints; i++) {
+        let t = i / numPoints;
+        let x = lerp(x1, x2, t);
+        let y = lerp(y1, y2, t);
+        x += random(-deviation, deviation);
+        y += random(-deviation, deviation);
+        vertex(x, y);
+    }
+}
+
+
+// function rndBend(startX, startY, endX, endY, deviation) {
+//     beginShape();
+//     drawContinuousLine(startX, startY, endX, endY, 50, deviation); 
+//     endShape();
+// }
+
+// function rndBendVertex(x1, y1, x2, y2, deviation) {
+//     beginShape();
+//     vertex(x1, y1);
+//     drawContinuousLine(x1, y1, x2, y2, 50, deviation); 
+//     vertex(x2, y2);
+//     endShape();
+// }
+
+// function drawContinuousLine(x1, y1, x2, y2, numPoints, deviation) {
+//     deviation *= m;
+//     for (let i = 0; i <= numPoints; i++) {
+//         let t = i / numPoints;
+//         let x = lerp(x1, x2, t);
+//         let y = lerp(y1, y2, t);
+//         x += random(-deviation, deviation);
+//         y += random(-deviation, deviation);
+//         vertex(x, y);
+//     }
+// }
+
+// function rndBend(startX, startY, endX, endY, deviation) {
+//     deviation *= m;
+//     let midX = (startX + endX) / 2;
+//     let midY = (startY + endY) / 2;
+
+//     midX += random(-deviation, deviation);
+//     midY += random(-deviation, deviation);
+
+//     line(startX, startY, midX, midY);
+//     line(midX, midY, endX, endY);
+// }
+
+// function rndBendVertex(x1, y1, x2, y2, deviation) {
+//     deviation *= m;
+//     let midX = (x1 + x2) / 2 + random(-deviation, deviation);
+//     let midY = (y1 + y2) / 2 + random(-deviation, deviation);
+//     vertex(midX, midY);
+// }
+
 
 function keyPressed() {
     if (key == 'S' || key == 's') {

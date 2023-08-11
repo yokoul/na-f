@@ -1,6 +1,6 @@
 > **⚠️ Disclaimer**: This project is still in development. Some changes will be introduced over the next weeks, so please use this project with caution.
 
-# fx(hash) boilerplate 2.0
+# fx(hash) boilerplate 2.0 --- naïf from yokoul at work on this space
 
 A boilerplate to automate and ease the creation of Generative Tokens on fx(hash) using fx(params).
 
