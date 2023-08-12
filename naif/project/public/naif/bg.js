@@ -93,7 +93,7 @@ function drawCubesRand() {
             if (i % 2 === 0) {
                 y += offsetY;
             }
-
+            let randomChoice = int(random(3));
             let shouldDrawElement = random() < fillRate && (j >= cubesRows * (0 + fillRate));
             let cubeColor = color(random(col1));
             let aR = random(40, 80);
@@ -101,14 +101,14 @@ function drawCubesRand() {
             isBgColorDark = isColorDark(cubeColor.levels);
 
             if (shouldDrawElement) {
-                /*   if (randomChoice === 0) {
-                     drawCube(x, y, size, cubeColor);
-                   } else if (randomChoice === 1) {
-                     drawPyramid(x, y, size, cubeColor);
-                   } else {
-                     drawCone(x, y, size, cubeColor);
-                   } */
-                drawCube(x, y, size, cubeColor);
+                if (randomChoice === 0) {
+                    drawCube(x, y, size, cubeColor);
+                } else if (randomChoice === 1) {
+                    drawPyramid(x, y, size, cubeColor);
+                } else {
+                    drawCone(x, y, size, cubeColor);
+                } 
+                //drawCube(x, y, size, cubeColor);
             }
         }
     }
@@ -588,7 +588,9 @@ function drawCubeC(x, y, size, ws, fillCol) {
         noStroke();
     } else if (nosColor == true) {
         stroke(fillCol);
+        fill(random() < 0.5 ? 20 : 235);
     }
+
 
     let cubeVertices = [];
     if (alterLeft) {
