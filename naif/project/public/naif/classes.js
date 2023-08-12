@@ -170,6 +170,7 @@ class Door {
     }
 }
 
+
 class MultiDoor {
     constructor(x, y, w, h, color) {
         this.x = x;
@@ -333,6 +334,7 @@ class MultiDoor {
     }
 }
 
+
 class DoorContent {
     constructor(g, originX, originY, color) {
         this.g = g; //doorContent;
@@ -397,7 +399,6 @@ class DoorContent {
         }
         this.g.pop();
     }
-
 
     moreDunes(duneH) {
         let waveAmp = duneH * 0.75;
@@ -515,7 +516,34 @@ class DoorContent {
     
         this.g.pop();
     }
-            
+
+    moreBadaBoom(radius, cola, colb, numSegments) {
+        this.g.push();
+        let from = color(cola);
+        let to = color(colb);
+        this.g.noStroke();
+    
+        for (let i = 0; i < numSegments; i++) {
+            let inter = map(i, 0, numSegments - 1, 0, 1);
+            let c = this.g.lerpColor(from, to, inter);
+            this.g.fill(c);
+    
+            let angleStart = map(i, 0, numSegments, 0, TWO_PI);
+            let angleEnd = map(i + 1, 0, numSegments, 0, TWO_PI);
+    
+            this.g.beginShape();
+            this.g.vertex(this.originX, this.originY);
+            for (let angle = angleStart; angle <= angleEnd; angle += 0.1) {
+                let x = this.originX + random(-doorW / 2, doorW) + tan(angle) * radius;
+                let y = this.originY + random(-doorH / 2, doorH) + atan(angle) * radius;
+                this.g.vertex(x, y);
+            }
+            this.g.endShape(CLOSE);
+        }
+    
+        this.g.pop();
+    }
+
     moreAttractors() {
         this.g.push();
             // let x = this.originX + random(-130, 130) * m;

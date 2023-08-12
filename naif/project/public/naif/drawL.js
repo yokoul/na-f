@@ -265,7 +265,7 @@ function drawL() {
     showLoader = true;
 
     if (loopCount > 100) {
-        currentState = 'drawing';
+        currentState = 'drawing-O';
     }
 }
 

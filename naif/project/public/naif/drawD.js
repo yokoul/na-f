@@ -25,82 +25,82 @@ function drawD() {
         drawBd(2);
     }
 
-const backgroundType = $fx.getFeature("background type");
-const backgroundAxis = $fx.getFeature("background axis");
-if (drawBGCubes == true) {
-    if (backgroundType === "cubik A") {
-      bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
-      drawCubes();
-    } else if (backgroundType === "cubik B") {
-      gradBg(4, random(col4), random(col3), random(col5), random(col4));
-      drawCubesB();
-    } else if (backgroundType === "cubik full B") {
-      bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
-      drawCubesAllB();
-    } else if (backgroundType === "cubik alea") {
-      bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
-      drawCubesRand();
-    } else if (backgroundType === "cubik full C") {
-      gradBg(4, random(col4), random(col3), random(col3), random(col4));
-      drawCubesAllC();
-    } else if (backgroundType === "cubik C") {
-      gradBg(4, random(col4), random(col3), random(col4), random(col5));
-      drawCubesC();
-    } else if (backgroundType === "cubik full") {
-      gradBg(7, random(col1), random(col2), random(col3), random(col4), random(col3), random(col2), random(col1));
-      drawCubesAll();
-    } else if (backgroundType === "bubulles") {
-      bgGrad(0, 0, wisW, wisH, c1, c2, "R");
-      drawBub();
-    } else if (backgroundType === "cubik destruct") {
-      bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "R");
-      drawCubesDestructC();
-    } else {
-      background(random() < 0.5 ? 20 : 235);
+    const backgroundType = $fx.getFeature("background type");
+    const backgroundAxis = $fx.getFeature("background axis");
+    if (drawBGCubes == true) {
+        if (backgroundType === "cubik A") {
+            bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
+            drawCubes();
+        } else if (backgroundType === "cubik B") {
+            gradBg(4, random(col4), random(col3), random(col5), random(col4));
+            drawCubesB();
+        } else if (backgroundType === "cubik full B") {
+            bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
+            drawCubesAllB();
+        } else if (backgroundType === "cubik alea") {
+            bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
+            drawCubesRand();
+        } else if (backgroundType === "cubik full C") {
+            gradBg(4, random(col4), random(col3), random(col3), random(col4));
+            drawCubesAllC();
+        } else if (backgroundType === "cubik C") {
+            gradBg(4, random(col4), random(col3), random(col4), random(col5));
+            drawCubesC();
+        } else if (backgroundType === "cubik full") {
+            gradBg(7, random(col1), random(col2), random(col3), random(col4), random(col3), random(col2), random(col1));
+            drawCubesAll();
+        } else if (backgroundType === "bubulles") {
+            bgGrad(0, 0, wisW, wisH, c1, c2, "R");
+            drawBub();
+        } else if (backgroundType === "cubik destruct") {
+            bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "R");
+            drawCubesDestructC();
+        } else {
+            background(random() < 0.5 ? 20 : 235);
+        }
     }
-  }
 
   let checkBgColor = get(width/2, height/2);
   isBgColorDark = isColorDark(checkBgColor);
 
     
-if (stratus === true) {
-    if (random() < 0.75) {
-    doorContent.blendMode(SOFT_LIGHT);
-    } else {
-    doorContent.blendMode(HARD_LIGHT);
-    }
-    doorContent.globalAlpha=random();
-    doorContent.filter="blur(20px)"
-    drawStratus(doorContent, 13);
-    initRise();
-} else if (stratus === false) {
-    for (let cloud of clouds) {
-        for (let pt of cloud) {
-            let h = map(pt.y, pt.cloudY, pt.cloudY + cloudHeight, 255, 50);
-            h = constrain(h, 50, 255);
-            let cloudC1 = color(random(col4));
-            cloudC1.setAlpha(h);
-            doorContent.push();
-            doorContent.stroke(cloudC1);
-            doorContent.strokeWeight(random(0.25, 3) * m);
-            doorContent.point(pt.x, pt.y);
-            doorContent.pop();
+    if (stratus === true) {
+        if (random() < 0.75) {
+        doorContent.blendMode(SOFT_LIGHT);
+        } else {
+        doorContent.blendMode(HARD_LIGHT);
+        }
+        doorContent.globalAlpha=random();
+        doorContent.filter="blur(20px)"
+        drawStratus(doorContent, 13);
+        initRise();
+    } else if (stratus === false) {
+        for (let cloud of clouds) {
+            for (let pt of cloud) {
+                let h = map(pt.y, pt.cloudY, pt.cloudY + cloudHeight, 255, 50);
+                h = constrain(h, 50, 255);
+                let cloudC1 = color(random(col4));
+                cloudC1.setAlpha(h);
+                doorContent.push();
+                doorContent.stroke(cloudC1);
+                doorContent.strokeWeight(random(0.25, 3) * m);
+                doorContent.point(pt.x, pt.y);
+                doorContent.pop();
+            }
+        }
+        for (let dune of dunes) {
+            for (let pt of dune) {
+                let h = map(pt.y, pt.duneY, pt.duneY + duneH, 180, 10);
+                let duneC1 = color(random(col5));
+                duneC1.setAlpha(h);
+                doorContent.push();
+                doorContent.stroke(duneC1);
+                doorContent.strokeWeight(random(0.25, 1.5) * m);
+                doorContent.point(pt.x, pt.y);
+                doorContent.pop();
+            }
         }
     }
-    for (let dune of dunes) {
-        for (let pt of dune) {
-            let h = map(pt.y, pt.duneY, pt.duneY + duneH, 180, 10);
-            let duneC1 = color(random(col5));
-            duneC1.setAlpha(h);
-            doorContent.push();
-            doorContent.stroke(duneC1);
-            doorContent.strokeWeight(random(0.25, 1.5) * m);
-            doorContent.point(pt.x, pt.y);
-            doorContent.pop();
-        }
-    }
-}
 
     for (let door of doors) {
         if (door instanceof Door || door instanceof MultiDoor) {
@@ -200,6 +200,6 @@ if (stratus === true) {
             }
         }
     }
-
-    currentState = 'stopping';
+    showEvolve = true;
+    currentState = 'Looping';
 }

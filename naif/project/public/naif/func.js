@@ -45,7 +45,7 @@ function placeShape(grid, shape, x, y, value) {
 }
 
 function stopping() {
-    saveCanvas(`naïf_pixScreen_${$fx.hash}-${$fx.minter}`, 'png');
+    //saveCanvas(`naïf_pixScreen_${$fx.hash}-${$fx.minter}`, 'png');
     noLoop();
 }
 
@@ -461,6 +461,8 @@ function initStratus() {
   }
   
 
+  // BEND //
+
   function rndBend(startX, startY, endX, endY, deviation) {
       if ($fx.getFeature("bend mode") >= 0 && $fx.getFeature("bend mode") < 0.35) {
           rndBendContinuous(startX, startY, endX, endY, deviation);
@@ -612,6 +614,7 @@ function drawContinuousLine(x1, y1, x2, y2, numPoints, deviation) {
 //     let midY = (y1 + y2) / 2 + random(-deviation, deviation);
 //     vertex(midX, midY);
 // }
+
 
 
 // GRADIENTS //
