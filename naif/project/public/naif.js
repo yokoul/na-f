@@ -9,8 +9,9 @@ let sayit = fxrand();
 let currentState = 'loading';
 let loopCount = 0;
 let noiseSeedValue = 0;
-let col1, col2, col3, col4, col5, doorContent, rows, cols, skyX, skyY, loader, font;
+let col1, col2, col3, col4, col5, doorContent, rows, cols, skyX, skyY, loader, font, startTime, elapsed;
 let showLoader = false;
+let showOriginal = false;
 let cool1 = "https://coolors.co/c2efb3-97abb1-892f65-735f3d-594a26".split("/").pop().split("-").map((a) => "#" + a);
 let cool11 = "https://coolors.co/f1fbee-c5d0d3-c9be9d-b2986c-9d8243".split("/").pop().split("-").map((a) => "#" + a);
 let cool12 = "https://coolors.co/palette/f72585-b5179e-7209b7-560bad-480ca8-3a0ca3-3f37c9-4361ee-4895ef-4cc9f0".split("/").pop().split("-").map((a) => "#" + a);
@@ -170,11 +171,11 @@ function rngDeviaType(value) {
 
 $fx.features({
     "base model": $fx.rand() < 0.5 ? true : false,
+    "particle mode": $fx.rand() < 0.3 ? true : false,
     "node mode": $fx.rand() < 0.9 ? true : false,
     "node type": Math.floor($fx.rand() * 3),
     "node grid size": Math.floor($fx.rand() * 5) + 2,
     "bend mode": $fx.rand(),
-    "particle mode": $fx.rand() < 0.3 ? true : false,
     "deviation": rngDeviaType(fxrand()),
     "nos type": Math.floor($fx.rand() * 3),
     "background type": rngBackgroundType(fxrand()),
@@ -357,6 +358,7 @@ function setup() {
         }
     }
 
+        //setupDrawO(g)
 
     for (let [num, group] of groups) {
         let x = (group.minX + group.maxX) / 2;
@@ -372,32 +374,42 @@ function setup() {
         doors.push(new MultiDoor(x, y, w, h, group.color));
         doorContents.push(new DoorContent(doorContent, x, y, doorC3)); //x, y, color(random(col2))), seed);
     }
-    
+    startTime = millis();
 }
 
 
 // DRAWING //
 function draw() {
     loopCount++;
+    elapsed = millis() - startTime;
     randomSeed(seed);
     noiseSeed(seed);
 
-    if (currentState === 'loading') {
-        drawL();
+    if (currentState === 'loading' && elapsed < 3000) {
+        startTime = millis();
+        drawL(loader);
         if (showLoader) {
             image(loader, 0, 0);
         }
-    } else if (currentState === 'drawing-O') {
-        drawO();
+        if (elapsed > 5000) {
+            currentState = 'drawingO';
+            startTime = millis();
+        }
+    } else if (currentState === 'drawingO' && elapsed < 5000) {
+        drawO(original);
         if (showOriginal) {
+            //image(original, 0, 0);
+            let alpha = map(elapsed, 0, 3000, 255, 0); // Calculer l'opacité pour le fondu
+            image(loader, 0, 0);
+            tint(255, 255, 255, 255 - alpha); // Appliquer l'opacité
             image(original, 0, 0);
+            noTint(); // Enlever l'opacité
         }
-
-    } else if (currentState === 'drawing-D') {
+    } else if (currentState === 'drawingD') {
         drawD();
-        if (showEvolve) {
-            image(evolved, 0, 0);
-        }
+        // if (showEvolve) {
+        //     image(evolved, 0, 0);
+        // }
         
     } else if (currentState === 'looping') {
         

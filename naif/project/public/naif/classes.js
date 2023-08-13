@@ -1,12 +1,12 @@
 // CLASS //
 class Door {
-    constructor(x, y, numDoors = 1, orientation = 'horizontal', color = [0, 0, 0]) {
+    constructor(x, y, numDoors = 1, orientation = 'horizontal', color = [0, 0, 0], g) {
+        this.g = g;
         this.x = x;
         this.y = y;
         this.numDoors = numDoors;
         this.orientation = orientation;
         this.color = color;
-        this.g = doorContent;
     }
 
     drawDoor(color, doorBd) {
@@ -172,13 +172,13 @@ class Door {
 
 
 class MultiDoor {
-    constructor(x, y, w, h, color) {
+    constructor(x, y, w, h, color, g) {
         this.x = x;
         this.y = y + 3.5 * m;
         this.w = w;
         this.h = h - 3.5 * m;
         this.color = color;
-        this.g = doorContent;
+        this.g = g;
     }
 
     drawDoor(color, doorBd) {
