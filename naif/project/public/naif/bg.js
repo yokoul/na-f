@@ -308,7 +308,7 @@ function drawCubesB() {
 
     for (let i = 0; i < cubesCols && i < rwis; i += clusterSize) {
         for (let j = 0; j < cubesRows - 1 && j < rwis; j += clusterSize) {
-            if (random() < 0.02) {
+            if (random() < 0.2) {
                 continue;
             }
 
@@ -535,7 +535,7 @@ function drawCubesDestructC() {
 
     for (let i = 0; i < cubesCols; i += clusterSize) {
         for (let j = 0; j < cubesRows - 1; j += clusterSize) {
-            if (Math.random() < 0.6) { 
+            if (Math.random() < 0.75) { 
                 continue;
             }
 

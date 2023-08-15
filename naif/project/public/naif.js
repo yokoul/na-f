@@ -7,29 +7,30 @@ $fx.randminter.reset();
 let seed = fxrand() * 888786858483828180;
 let sayit = fxrand();
 let currentState = 'loading';
+let showEvolving = false;
 let loopCount = 0;
 let noiseSeedValue = 0;
-let col1, col2, col3, col4, col5, doorContent, rows, cols, skyX, skyY, loader, font, startTime, elapsed;
-let showLoader = false;
-let showOriginal = false;
-let cool1 = "https://coolors.co/c2efb3-97abb1-892f65-735f3d-594a26".split("/").pop().split("-").map((a) => "#" + a);
-let cool11 = "https://coolors.co/f1fbee-c5d0d3-c9be9d-b2986c-9d8243".split("/").pop().split("-").map((a) => "#" + a);
-let cool12 = "https://coolors.co/palette/f72585-b5179e-7209b7-560bad-480ca8-3a0ca3-3f37c9-4361ee-4895ef-4cc9f0".split("/").pop().split("-").map((a) => "#" + a);
-let cool2 = "https://coolors.co/db2b39-29335c-f3a712-f0cea0-534d41".split("/").pop().split("-").map((a) => "#" + a);
-let cool21 = "https://coolors.co/0081af-00abe7-2dc7ff-ead2ac-eaba6b".split("/").pop().split("-").map((a) => "#" + a);
-let cool22 = "https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8".split("/").pop().split("-").map((a) => "#" + a);
-let cool3 = "https://coolors.co/a63446-fbfef9-0c6291-000004-7e1946".split("/").pop().split("-").map((a) => "#" + a);
-let cool31 = "https://coolors.co/f7b2b7-f7717d-de639a-7f2982-16001e".split("/").pop().split("-").map((a) => "#" + a);
-let cool32 = "https://coolors.co/palette/582f0e-7f4f24-936639-a68a64-b6ad90-c2c5aa-a4ac86-656d4a-414833-333d29".split("/").pop().split("-").map((a) => "#" + a);
-let cool4 = "https://coolors.co/dbd56e-88ab75-2d93ad-7d7c84-de8f6e".split("/").pop().split("-").map((a) => "#" + a);
-let cool41 = "https://coolors.co/044389-fcff4b-ffad05-7cafc4-5995ed".split("/").pop().split("-").map((a) => "#" + a);
-let cool42 = "https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529".split("/").pop().split("-").map((a) => "#" + a);
-let cool5 = "https://coolors.co/241023-6b0504-a3320b-d5e68d-47a025".split("/").pop().split("-").map((a) => "#" + a);
-let cool51 = "https://coolors.co/fdfffc-235789-c1292e-f1d302-161925".split("/").pop().split("-").map((a) => "#" + a);
-let cool52 = "https://coolors.co/palette/10451d-155d27-1a7431-208b3a-25a244-2dc653-4ad66d-6ede8a-92e6a7-b7efc5".split("/").pop().split("-").map((a) => "#" + a);
-let cool6 = "https://coolors.co/272932-4d7ea8-828489-9e90a2-b6c2d9".split("/").pop().split("-").map((a) => "#" + a);
-let cool61 = "https://coolors.co/e08dac-6a7fdb-57e2e5-45cb85-153131".split("/").pop().split("-").map((a) => "#" + a);
-let cool62 = "https://coolors.co/palette/eae4e9-fff1e6-fde2e4-fad2e1-e2ece9-bee1e6-f0efeb-dfe7fd-cddafd".split("/").pop().split("-").map((a) => "#" + a);
+let col1, col2, col3, col4, col5, doorContent, rows, cols, skyX, skyY, loader, font, startTime, elapsed, light, heavy;
+let cool1 = "https://coolors.co/c2efb3-97abb1-892f65-633d73-4331a0".split("/").pop().split("-").map((a) => "#" + a); //green to brown
+let cool11 = "https://coolors.co/f1fbee-c5d0d3-c9be9d-b2986c-9d8243".split("/").pop().split("-").map((a) => "#" + a); //grey to brown
+let cool12 = "https://coolors.co/palette/f72585-b5179e-7209b7-560bad-480ca8-3a0ca3-3f37c9-4361ee-4895ef-4cc9f0".split("/").pop().split("-").map((a) => "#" + a); //pink to blue
+let cool2 = "https://coolors.co/db2b39-29335c-f3a712-f0cea0-534d41".split("/").pop().split("-").map((a) => "#" + a); //red to yellow
+let cool21 = "https://coolors.co/0081af-00abe7-2dc7ff-ead2ac-eaba6b".split("/").pop().split("-").map((a) => "#" + a); //blue
+let cool22 = "https://coolors.co/palette/03045e-023e8a-0077b6-0096c7-00b4d8-48cae4-90e0ef-ade8f4-caf0f8".split("/").pop().split("-").map((a) => "#" + a); //blue
+let cool3 = "https://coolors.co/a63446-fbfef9-0c6291-000004-7e1946".split("/").pop().split("-").map((a) => "#" + a); //red to blue
+let cool31 = "https://coolors.co/f7b2b7-f7717d-de639a-7f2982-16001e".split("/").pop().split("-").map((a) => "#" + a); //pink
+let cool32 = "https://coolors.co/palette/582f0e-7f4f24-936639-a68a64-b6ad90-c2c5aa-a4ac86-656d4a-414833-333d29".split("/").pop().split("-").map((a) => "#" + a); //brown
+let cool4 = "https://coolors.co/dbd56e-88ab75-2d93ad-7d7c84-de8f6e".split("/").pop().split("-").map((a) => "#" + a); //yellow to red
+let cool41 = "https://coolors.co/044389-fcff4b-ffad05-7cafc4-5995ed".split("/").pop().split("-").map((a) => "#" + a); //blue
+let cool42 = "https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529".split("/").pop().split("-").map((a) => "#" + a); //grey
+let cool5 = "https://coolors.co/241023-6b0504-a3320b-d5e68d-47a025".split("/").pop().split("-").map((a) => "#" + a); //red to green
+let cool51 = "https://coolors.co/fdfffc-235789-c1292e-f1d302-161925".split("/").pop().split("-").map((a) => "#" + a); //red
+let cool52 = "https://coolors.co/palette/10451d-155d27-1a7431-208b3a-25a244-2dc653-4ad66d-6ede8a-92e6a7-b7efc5".split("/").pop().split("-").map((a) => "#" + a); //green
+let cool6 = "https://coolors.co/272932-4d7ea8-828489-9e90a2-b6c2d9".split("/").pop().split("-").map((a) => "#" + a); //grey to blue
+let cool61 = "https://coolors.co/e08dac-6a7fdb-57e2e5-45cb85-153131".split("/").pop().split("-").map((a) => "#" + a); //pink to green
+let cool62 = "https://coolors.co/palette/eae4e9-fff1e6-fde2e4-fad2e1-e2ece9-bee1e6-f0efeb-dfe7fd-cddafd".split("/").pop().split("-").map((a) => "#" + a); //white to purple
+let cool7 = "https://coolors.co/palette/ff595e99-ffca3a98-8ac92687-1982c467-6a4c9359".split("/").pop().split("-").map((a) => "#" + a); //red, yellow, green, blue, purple
+let cool8 = "https://coolors.co/000000-202020-404040-808080-c0c0c0-e0e0e0-ffffff".split("/").pop().split("-").map((a) => "#" + a); //black to white
 
 let doorW = 80; //80
 let doorH = 140; //140
@@ -81,7 +82,7 @@ let duneH = 75;
 let duneCount = 7;
 let dunes = [];
 
-let stratus = false; //base, evolution
+let stratus = "light";
 let cloud;
 let cloudCount = 3;
 let cloudHeight = 230;
@@ -115,7 +116,7 @@ let fontPts = [];
 
 function rngBackgroundType(value) {
     if (value >= 0 && value < 0.125) {
-        return "cubik A";
+        return "amplify";
     } else if (value >= 0.125 && value < 0.25) {
         return "cubik B";
     } else if (value >= 0.25 && value < 0.375) {
@@ -129,7 +130,7 @@ function rngBackgroundType(value) {
     } else if (value >= 0.75 && value < 0.86) {
         return "cubik full";
     } else if (value >= 0.86 && value < 0.9) {
-        return "bubulles";
+        return "amplify more";
     } else if (value >= 0.9 && value < 0.96) {
         return "cubik destruct";
     } else {
@@ -170,7 +171,7 @@ function rngDeviaType(value) {
 }
 
 $fx.features({
-    "base model": $fx.rand() < 0.5 ? true : false,
+    "land model": $fx.rand() < 0.5 ? "light" : "heavy",
     "particle mode": $fx.rand() < 0.3 ? true : false,
     "node mode": $fx.rand() < 0.9 ? true : false,
     "node type": Math.floor($fx.rand() * 3),
@@ -191,8 +192,6 @@ $fx.features({
     "moon location": $fx.rand(),
     "cross location": $fx.rand(),
 });
-console.log("seed", seed);
-console.log($fx.getFeatures())
 
 
 function setParams(m) {
@@ -222,7 +221,7 @@ function setParams(m) {
     cloudCount = $fx.getFeature("cloud count"); //int(random(2, 4) * m);
     cloudHeight = $fx.getFeature("cloud height") * m; //int(random(190, 360) * m);
     bd = $fx.getFeature("border size") * m; //(random() < 0.95 ? 0 : 20) * m;
-    stratus = $fx.getFeature("base model");
+    stratus = $fx.getFeature("land model");
     nodeThis = $fx.getFeature("node mode");
     numberOfCircles = $fx.getFeature("number of stratus");
     riseH = $fx.getFeature("rise height") * m;
@@ -233,7 +232,7 @@ function setParams(m) {
 
 // SETUP //
 
-function setup() {
+async function setup() {
     //$fx.rand.reset();
     //$fx.randminter.reset();
     //seed = fxrand() * 999999999;
@@ -266,6 +265,8 @@ function setup() {
     loader = createGraphics(wisW, wisH, P2D);
     original = createGraphics(wisW, wisH, P2D);
     evolved = createGraphics(wisW, wisH, P2D);
+    bg = createGraphics(wisW, wisH, P2D);
+    doorContent = createGraphics(wisW, wisH, P2D);
 
     rndBendChoose = fxrand();
 
@@ -294,9 +295,27 @@ function setup() {
     colr6 = random([cool6]);
     colr61 = random([cool61]);
     colr62 = random([cool62]);
+    colr7 = random([cool7]);
 
     let doorC3 = color(random(col3));
     doorC3.setAlpha(220);
+    let bgCol = color(random(col3));
+    bgCol.setAlpha(220);
+
+    if (stratus === light) {
+        initStratus();
+    } else if (stratus === heavy) {
+        for (let i = 0; i < cloudCount; i++) {
+            let y = map(i, 0, cloudCount, 0, wisH / 2);
+            let cloud = createCloud(y);
+            clouds.push(cloud);
+        }
+        for (let i = 0; i < duneCount; i++) {
+            let y = map(i, 0, duneCount, wisH / 2, wisH);
+            let dune = createDune(y);
+            dunes.push(dune);
+        }
+    }
 
     let groups = new Map();
 
@@ -309,8 +328,7 @@ function setup() {
                 let y = i * (doorH + gap) + doorH + gap + (height - (grid.length * (doorH + gap))) / 2;
                 
                 if (num === 0) {
-                    doors.push(new Door(x, y, 1, 'vertical', [60, 200]));
-                    //doorContents.push(new DoorContent(x, y, color(random(col2))));
+                    doors.push(new Door(x, y, 1, 'vertical', [60, 200], bg));
                     continue;
                 }
             }
@@ -327,7 +345,8 @@ function setup() {
                     maxX: x,
                     maxY: y,
                     doors: 1,
-                    color: [60, 200]
+                    color: [60, 200],
+                    g: bg
                 });
             } else {
                 let group = groups.get(num);
@@ -336,85 +355,101 @@ function setup() {
                 group.maxX = max(group.maxX, x);
                 group.maxY = max(group.maxY, y);
                 group.doors++;
-                //doorContents.push(new DoorContent(x, y, doorC3));
-            }
-        }
-
-        doorContent = createGraphics(wisW, wisH, P2D);
-
-        if (stratus === true) {
-            initStratus();
-        } else if (stratus === false) {
-            for (let i = 0; i < cloudCount; i++) {
-                let y = map(i, 0, cloudCount, 0, wisH / 2);
-                let cloud = createCloud(y);
-                clouds.push(cloud);
-            }
-            for (let i = 0; i < duneCount; i++) {
-                let y = map(i, 0, duneCount, wisH / 2, wisH);
-                let dune = createDune(y);
-                dunes.push(dune);
             }
         }
     }
 
-        //setupDrawO(g)
-
     for (let [num, group] of groups) {
+        let g = bg;
         let x = (group.minX + group.maxX) / 2;
         let diffY = group.maxY - group.minY;
         let y;
         if (diffY > doorH) {
-            y = (group.minY + group.maxY) / 2 + doorH / 1.5;
+            y = (group.minY + group.maxY) / 2 + doorH / 1.4;
+            // y = (group.minY + group.maxY) / 2 + ((doorH + gap) / 2);
         } else {
             y = (group.minY + group.maxY) / 2;
         }
         let w = group.maxX - group.minX + doorW;
         let h = group.maxY - group.minY + doorH;
-        doors.push(new MultiDoor(x, y, w, h, group.color));
-        doorContents.push(new DoorContent(doorContent, x, y, doorC3)); //x, y, color(random(col2))), seed);
+        doors.push(new MultiDoor(x, y, w, h, group.color, bg));
+        push(new DoorContent(x, y, bgCol, doorContent));
     }
+    
     startTime = millis();
 }
 
 
 // DRAWING //
-function draw() {
+async function draw() {
     loopCount++;
-    elapsed = millis() - startTime;
+    let elapsed = millis() - startTime;
     randomSeed(seed);
     noiseSeed(seed);
 
-    if (currentState === 'loading' && elapsed < 3000) {
-        startTime = millis();
+    if (currentState === 'loading') {
         drawL(loader);
         if (showLoader) {
             image(loader, 0, 0);
+            if (elapsed > 4000) {
+                currentState = 'original';
+                startTime = millis(); 
+            }
         }
-        if (elapsed > 5000) {
-            currentState = 'drawingO';
-            startTime = millis();
-        }
-    } else if (currentState === 'drawingO' && elapsed < 5000) {
+    } else if (currentState === 'original') {
         drawO(original);
         if (showOriginal) {
-            //image(original, 0, 0);
-            let alpha = map(elapsed, 0, 3000, 255, 0); // Calculer l'opacité pour le fondu
+            // image(original, 0, 0);
+            let alpha = map(elapsed, 0, 750, 255, 0);
             image(loader, 0, 0);
-            tint(255, 255, 255, 255 - alpha); // Appliquer l'opacité
+            tint(255, 255, 255, 255 - alpha);
             image(original, 0, 0);
-            noTint(); // Enlever l'opacité
+            noTint();
+            loader.reset();
+            if (elapsed > 800) {
+                currentState = 'evolving';
+                startTime = millis(); 
+            }
         }
-    } else if (currentState === 'drawingD') {
-        drawD();
-        // if (showEvolve) {
-        //     image(evolved, 0, 0);
-        // }
-        
-    } else if (currentState === 'looping') {
-        
+    // } else if (currentState === 'evolving') {
+    //     drawD(bg);
+    //     if (showEvolving) {
+    //         // image(bg, 0, 0);
+    //         let alpha = map(elapsed, 0, 750, 255, 0);
+    //         image(original, 0, 0);
+    //         tint(255 - alpha, 255 - alpha, 255 - alpha, 255 - alpha);
+    //         image(bg, 0, 0);
+    //         noTint();
+    //         loader.reset();
+    //         if (elapsed > 800) {
+    //             currentState = 'stopping';
+    //             startTime = millis(); 
+    //         }
+    //     }
+    } else if (currentState === 'evolving') {
+        let drawonetime = false;
+        if (drawonetime === false) {
+        drawD(bg);
+        // image(bg, 0, 0);
+        drawonetime = true;
+        }
+        tint(0, 0);
+        image(original, 0, 0);
 
+        if (showEvolving) {
+            // await sleep(1);
+            noTint();
+            image(bg, 0, 0);                
+            // if (elapsed >= 1000) {
+                currentState = 'stopping';
+                // startTime = millis(); 
+            // }
+        }
+    } else if (currentState === 'stopping') {
+        stopping();
     }
-   // stopping();
 }
 
+console.log("seed", seed);
+console.log($fx.getFeatures())
+console.log("currentState", currentState);

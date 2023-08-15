@@ -10,22 +10,21 @@ class Door {
     }
 
     drawDoor(color, doorBd) {
-        push();
-        translate(this.x, this.y);
-        noFill();
-        stroke(color);
-        strokeWeight(doorBd);
-
         let w = (this.orientation == 'horizontal') ? doorW * this.numDoors + gap * (this.numDoors - 1) : doorW;
         let h = (this.orientation == 'vertical') ? doorH * this.numDoors + gap * (this.numDoors - 1) : doorH;
 
-        beginShape();
-        vertex(-doorW / 2, -doorH);
-        vertex(doorW / 2, -doorH);
-        vertex(doorW / 2, 0);
-        vertex(-doorW / 2, 0);
-        endShape(CLOSE);
-        pop();
+        this.g.push();
+        this.g.translate(this.x, this.y);
+        this.g.noFill();
+        this.g.stroke(color);
+        this.g.strokeWeight(doorBd);
+        this.g.beginShape();
+        this.g.vertex(-doorW / 2, -doorH);
+        this.g.vertex(doorW / 2, -doorH);
+        this.g.vertex(doorW / 2, 0);
+        this.g.vertex(-doorW / 2, 0);
+        this.g.endShape(CLOSE);
+        this.g.pop();
     }
 
     drawCtx(col1, col2, doorBd) {
@@ -33,140 +32,116 @@ class Door {
         let cadrPr = random(-30, 30) * m;
         let cadrPh = random(-30, 30) * m;
 
-        push();
-        translate(this.x, this.y);
-        stroke(col1);
-        strokeWeight(doorBd / 2);
-        fill(col2);
+        this.g.push();
+        this.g.translate(this.x, this.y);
+        this.g.stroke(col1);
+        this.g.strokeWeight(doorBd / 2);
+        this.g.fill(col2);
         if (random() < 0.5) {
-            beginShape();
-            vertex(-doorW / 2, -doorH);
-            vertex(-doorW / 2 - cadrPl, -doorH - cadrPl);
-            vertex(-doorW / 2 - cadrPl, 0 - cadrPl);
-            vertex(-doorW / 2, 0);
-            endShape(CLOSE);
+            this.g.beginShape();
+            this.g.vertex(-doorW / 2, -doorH);
+            this.g.vertex(-doorW / 2 - cadrPl, -doorH - cadrPl);
+            this.g.vertex(-doorW / 2 - cadrPl, 0 - cadrPl);
+            this.g.vertex(-doorW / 2, 0);
+            this.g.endShape(CLOSE);
         }
         if (random() < 0.5) {
-            beginShape();
-            vertex(doorW / 2, -doorH);
-            vertex(doorW / 2 + cadrPr, -doorH - cadrPr);
-            vertex(doorW / 2 + cadrPr, 0 - cadrPr);
-            vertex(doorW / 2, 0);
-            endShape(CLOSE);
+            this.g.beginShape();
+            this.g.vertex(doorW / 2, -doorH);
+            this.g.vertex(doorW / 2 + cadrPr, -doorH - cadrPr);
+            this.g.vertex(doorW / 2 + cadrPr, 0 - cadrPr);
+            this.g.vertex(doorW / 2, 0);
+            this.g.endShape(CLOSE);
         }
         if (random() < 0.15) {
-            beginShape();
-            vertex(-doorW / 2, -doorH);
-            vertex(-doorW / 2 - cadrPh, -doorH - cadrPh);
-            vertex(doorW / 2 + cadrPh, -doorH - cadrPh);
-            vertex(doorW / 2, -doorH);
-            endShape(CLOSE);
+            this.g.beginShape();
+            this.g.vertex(-doorW / 2, -doorH);
+            this.g.vertex(-doorW / 2 - cadrPh, -doorH - cadrPh);
+            this.g.vertex(doorW / 2 + cadrPh, -doorH - cadrPh);
+            this.g.vertex(doorW / 2, -doorH);
+            this.g.endShape(CLOSE);
         }
-        pop();
+        this.g.pop();
     }
 
-    // // Fonction pour dessiner la structure
-    // drawStruct(color, strokeW) {
-    //     push();
-    //     stroke(color);
-    //     strokeWeight(strokeW);
-
-    //     drawContinuousLine(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, 50);
-    //     drawContinuousLine(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, 50);
-    //     drawContinuousLine(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, 50);
-    //     drawContinuousLine(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + depth, 50);
-
-    //     pop();
-    // }
-
-    // // Fonction pour dessiner la structure inversée
-    // drawStructInv(color, strokeW) {
-    //     push();
-    //     stroke(color);
-    //     strokeWeight(strokeW);
-
-    //     drawContinuousLine(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, 50);
-    //     drawContinuousLine(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, 50);
-    //     drawContinuousLine(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, 50);
-    //     drawContinuousLine(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + doorH / 1.75 , 50);
-
-    //     pop();
-    // }
-
     drawStruct(color, strokeW) {
-        push();
-        stroke(color);
-        strokeWeight(strokeW);
-        rndBend(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, deviation);
-        rndBend(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation);
-        rndBend(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation);
-        rndBend(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + depth, deviation);
-        pop();
+        this.g.push();
+        this.g.stroke(color);
+        this.g.strokeWeight(strokeW);
+        rndBend(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, deviation, this.g);
+        rndBend(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation, this.g);
+        rndBend(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation, this.g);
+        rndBend(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + depth, deviation, this.g);
+        this.g.pop();
     }
 
     drawStructInv(color, strokeW) {
-        push();
-        stroke(color);
-        strokeWeight(strokeW);
-        rndBend(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, deviation);
-        rndBend(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation);
-        rndBend(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation);
-        rndBend(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + doorH / 1.75 , deviation);
-        pop();
+        this.g.push();
+        this.g.stroke(color);
+        this.g.strokeWeight(strokeW);
+        rndBend(this.x - doorW / 2, this.y - doorH, this.x - doorW / 2 + depth, this.y - doorH - depth, deviation, this.g);
+        rndBend(this.x + doorW / 2, this.y - doorH, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation, this.g);
+        rndBend(this.x - doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, this.y - doorH - depth, deviation, this.g);
+        rndBend(this.x + doorW / 2 + depth, this.y - doorH - depth, this.x + doorW / 2 + depth, doorH + doorH / 1.75 , deviation, this.g);
+        this.g.pop();
     }
 
     drawDoorShdw(color) {
         let shdwA = noise(this.y * 0.1);
-        push();
-        translate(this.x, this.y);
-        noFill();
-        stroke(color);
-        strokeWeight(doorBd);
-        beginShape();
-        stroke(random(0, 20), random(30, 50));
-        drawingContext.setLineDash([0, 2 * m, 3 * m]);
-        vertex(-doorW / 2, 0);
-        rndBendVertex(-doorW / 2, 0, doorW / 2, 0, deviation);
-        vertex(doorW / 2, 0);
-        rndBendVertex(doorW / 2, 0, doorW / 2 - shdwL * shdwA, shdwL / 2, deviation);
-        vertex(doorW / 2 - shdwL * shdwA, shdwL / 2);
-        rndBendVertex(doorW / 2 - shdwL * shdwA, shdwL / 2, -doorW / 2 - shdwL * shdwA, shdwL / 2, deviation);
-        vertex(-doorW / 2 - shdwL * shdwA, shdwL / 2);
-        rndBendVertex(-doorW / 2 - shdwL * shdwA, shdwL / 2, -doorW / 2, 0, deviation);
-        vertex(-doorW / 2, 0);
-        endShape(CLOSE);
-        pop();
+        this.g.push();
+        this.g.translate(this.x, this.y);
+        this.g.noFill();
+        this.g.stroke(color);
+        this.g.strokeWeight(doorBd);
+        this.g.beginShape();
+        this.g.stroke(random(0, 20), random(30, 50));
+        this.g.drawingContext.setLineDash([0, 2 * m, 3 * m]);
+        this.g.vertex(-doorW / 2, 0);
+        rndBendVertex(-doorW / 2, 0, doorW / 2, 0, deviation, this.g);
+        this.g.vertex(doorW / 2, 0);
+        rndBendVertex(doorW / 2, 0, doorW / 2 - shdwL * shdwA, shdwL / 2, deviation, this.g);
+        this.g.vertex(doorW / 2 - shdwL * shdwA, shdwL / 2);
+        rndBendVertex(doorW / 2 - shdwL * shdwA, shdwL / 2, -doorW / 2 - shdwL * shdwA, shdwL / 2, deviation, this.g);
+        this.g.vertex(-doorW / 2 - shdwL * shdwA, shdwL / 2);
+        rndBendVertex(-doorW / 2 - shdwL * shdwA, shdwL / 2, -doorW / 2, 0, deviation, this.g);
+        this.g.vertex(-doorW / 2, 0);
+        this.g.endShape(CLOSE);
+        this.g.pop();
     }
 
     drawDoorShdwInv(color) {
         let shdwA = noise(this.y * 0.1);
-        push();
-        translate(this.x, this.y);
-        stroke(color);
-        strokeWeight(doorBd);
-        fill(random(40, 80), random(45, 65));
-        stroke(random(40, 80), random(45, 65));
-        drawingContext.setLineDash([0 * m, 2 * m, 3 * m]);
-        beginShape();
-        vertex(-doorW / 2, 0);
-        rndBendVertex(-doorW / 2, 0, doorW / 2, 0, deviation);
-        vertex(doorW / 2, 0);
-        rndBendVertex(doorW / 2, 0, doorW / 2 - shdwL * shdwA, -shdwL / 2, deviation);
-        vertex(doorW / 2 - shdwL * shdwA, -shdwL / 2);
-        rndBendVertex(doorW / 2 - shdwL * shdwA, -shdwL / 2, -doorW / 2 - shdwL * shdwA, -shdwL / 2, deviation);
-        vertex(-doorW / 2 - shdwL * shdwA, -shdwL / 2);
-        rndBendVertex(-doorW / 2 - shdwL * shdwA, -shdwL / 2, -doorW / 2, 0, deviation);
-        vertex(-doorW / 2, 0);
-        endShape(CLOSE);
-        pop();
+        this.g.push();
+        this.g.translate(this.x, this.y);
+        this.g.stroke(color);
+        this.g.strokeWeight(doorBd);
+        this.g.fill(random(40, 80), random(45, 65));
+        this.g.stroke(random(40, 80), random(45, 65));
+        this.g.drawingContext.setLineDash([0 * m, 2 * m, 3 * m]);
+        this.g.beginShape();
+        this.g.vertex(-doorW / 2, 0);
+        rndBendVertex(-doorW / 2, 0, doorW / 2, 0, deviation, this.g);
+        this.g.vertex(doorW / 2, 0);
+        rndBendVertex(doorW / 2, 0, doorW / 2 - shdwL * shdwA, -shdwL / 2, deviation, this.g);
+        this.g.vertex(doorW / 2 - shdwL * shdwA, -shdwL / 2);
+        rndBendVertex(doorW / 2 - shdwL * shdwA, -shdwL / 2, -doorW / 2 - shdwL * shdwA, -shdwL / 2, deviation, this.g);
+        this.g.vertex(-doorW / 2 - shdwL * shdwA, -shdwL / 2);
+        rndBendVertex(-doorW / 2 - shdwL * shdwA, -shdwL / 2, -doorW / 2, 0, deviation, this.g);
+        this.g.vertex(-doorW / 2, 0);
+        this.g.endShape(CLOSE);
+        this.g.pop();
     }
 
-    copyContent() {
-        push();
-        let doorWb = this.w;
-        let doorHb = this.h;
-        copy(doorContent, int(this.x) - int(doorW), int(this.y - doorH), int(doorW), int(doorH), int(this.x - doorW / 2), int(this.y - doorH), int(doorW), int(doorH));
-        pop();
+    copyContent(g) {
+        this.g = g;
+        this.g.push();
+        if (random() < 0.92) {
+        this.g.blendMode(BLEND);
+        } else {
+        this.g.blendMode(HARD_LIGHT);
+        }
+        this.g.copy(doorContent, int(this.x) - int(doorW), int(this.y - doorH), int(doorW), int(doorH), int(this.x - doorW / 2), int(this.y - doorH), int(doorW), int(doorH));
+        this.g.pop();
     }
 }
 
@@ -174,31 +149,29 @@ class Door {
 class MultiDoor {
     constructor(x, y, w, h, color, g) {
         this.x = x;
-        this.y = y + 3.5 * m;
+        this.y = y; // + 3.5 * m;
         this.w = w;
-        this.h = h - 3.5 * m;
+        this.h = h; // - 3.5 * m;
         this.color = color;
         this.g = g;
     }
 
     drawDoor(color, doorBd) {
-        push();
-        translate(this.x, this.y);
-        noFill();
-        stroke(color);
-        strokeWeight(doorBd);
-
         let doorWb = this.w;
         let doorHb = this.h;
 
-        beginShape();
-        vertex(-doorWb / 2, -doorHb);
-        vertex(doorWb / 2, -doorHb);
-        vertex(doorWb / 2, 0);
-        vertex(-doorWb / 2, 0);
-        endShape(CLOSE);
-
-        pop();
+        this.g.push();
+        this.g.translate(this.x, this.y);
+        this.g.noFill();
+        this.g.stroke(color);
+        this.g.strokeWeight(doorBd);
+        this.g.beginShape();
+        this.g.vertex(-doorWb / 2, -doorHb);
+        this.g.vertex(doorWb / 2, -doorHb);
+        this.g.vertex(doorWb / 2, 0);
+        this.g.vertex(-doorWb / 2, 0);
+        this.g.endShape(CLOSE);
+        this.g.pop();
     }
 
     drawCtx(col1, col2, doorBd) {
@@ -209,64 +182,64 @@ class MultiDoor {
         let doorWb = this.w;
         let doorHb = this.h;
 
-        push();
-        translate(this.x, this.y);
-        stroke(col1);
-        strokeWeight(doorBd / 2);
-        fill(col2);
+        this.g.push();
+        this.g.translate(this.x, this.y);
+        this.g.stroke(col1);
+        this.g.strokeWeight(doorBd / 2);
+        this.g.fill(col2);
         if (random() < 0.5) {
-            beginShape();
-            vertex(-doorWb / 2, -doorHb);
-            vertex(-doorWb / 2 - cadrPl, -doorHb - cadrPl);
-            vertex(-doorWb / 2 - cadrPl, 0 - cadrPl);
-            vertex(-doorWb / 2, 0);
-            endShape(CLOSE);
+            this.g.beginShape();
+            this.g.vertex(-doorWb / 2, -doorHb);
+            this.g.vertex(-doorWb / 2 - cadrPl, -doorHb - cadrPl);
+            this.g.vertex(-doorWb / 2 - cadrPl, 0 - cadrPl);
+            this.g.vertex(-doorWb / 2, 0);
+            this.g.endShape(CLOSE);
         }
         if (random() < 0.5) {
-            beginShape();
-            vertex(doorWb / 2, -doorHb);
-            vertex(doorWb / 2 + cadrPr, -doorHb - cadrPr);
-            vertex(doorWb / 2 + cadrPr, 0 - cadrPr);
-            vertex(doorWb / 2, 0);
-            endShape(CLOSE);
+            this.g.beginShape();
+            this.g.vertex(doorWb / 2, -doorHb);
+            this.g.vertex(doorWb / 2 + cadrPr, -doorHb - cadrPr);
+            this.g.vertex(doorWb / 2 + cadrPr, 0 - cadrPr);
+            this.g.vertex(doorWb / 2, 0);
+            this.g.endShape(CLOSE);
         }
         if (random() < 0.15) {
-            beginShape();
-            vertex(-doorWb / 2, -doorHb);
-            vertex(-doorWb / 2 - cadrPh, -doorHb - cadrPh);
-            vertex(doorWb / 2 + cadrPh, -doorHb - cadrPh);
-            vertex(doorWb / 2, -doorHb);
-            endShape(CLOSE);
+            this.g.beginShape();
+            this.g.vertex(-doorWb / 2, -doorHb);
+            this.g.vertex(-doorWb / 2 - cadrPh, -doorHb - cadrPh);
+            this.g.vertex(doorWb / 2 + cadrPh, -doorHb - cadrPh);
+            this.g.vertex(doorWb / 2, -doorHb);
+            this.g.endShape(CLOSE);
         }
-        pop();
+        this.g.pop();
     }
 
     drawStruct(color, strokeW) {
         let doorWb = this.w;
         let doorHb = this.h;
 
-        push();
-        stroke(color);
-        strokeWeight(strokeW);
-        rndBend(this.x - doorWb / 2, this.y - doorHb, this.x - doorWb / 2 + depth, this.y - doorHb - depth, deviation);
-        rndBend(this.x + doorWb / 2, this.y - doorHb, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation);
-        rndBend(this.x - doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation);
-        rndBend(this.x + doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, doorH + depth, deviation);
-        pop();
+        this.g.push();
+        this.g.stroke(color);
+        this.g.strokeWeight(strokeW);
+        rndBend(this.x - doorWb / 2, this.y - doorHb, this.x - doorWb / 2 + depth, this.y - doorHb - depth, deviation, this.g);
+        rndBend(this.x + doorWb / 2, this.y - doorHb, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation, this.g);
+        rndBend(this.x - doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation, this.g);
+        rndBend(this.x + doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, doorH + depth, deviation, this.g);
+        this.g.pop();
     }
 
     drawStructInv(color, strokeW) {
         let doorWb = this.w;
         let doorHb = this.h;
 
-        push();
-        stroke(color);
-        strokeWeight(strokeW);
-        rndBend(this.x - doorWb / 2, this.y - doorHb, this.x - doorWb / 2 + depth, this.y - doorHb - depth, deviation);
-        rndBend(this.x + doorWb / 2, this.y - doorHb, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation);
-        rndBend(this.x - doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation);
-        rndBend(this.x + doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, doorHb + doorHb / 1.75 , deviation);
-        pop();
+        this.g.push();
+        this.g.stroke(color);
+        this.g.strokeWeight(strokeW);
+        rndBend(this.x - doorWb / 2, this.y - doorHb, this.x - doorWb / 2 + depth, this.y - doorHb - depth, deviation, this.g);
+        rndBend(this.x + doorWb / 2, this.y - doorHb, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation, this.g);
+        rndBend(this.x - doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, this.y - doorHb - depth, deviation, this.g);
+        rndBend(this.x + doorWb / 2 + depth, this.y - doorHb - depth, this.x + doorWb / 2 + depth, doorHb + doorHb / 1.75 , deviation, this.g);
+        this.g.pop();
     }
     
 
@@ -275,25 +248,25 @@ class MultiDoor {
         let doorWb = this.w;
         let doorHb = this.h;
 
-        push();
-        translate(this.x, this.y);
-        noFill();
-        stroke(color);
-        strokeWeight(doorBd);
-        beginShape();
-        stroke(random(0, 20), random(30, 50));
-        drawingContext.setLineDash([0, 2 * m, 3 * m]);
-        vertex(-doorWb / 2, 0);
-        rndBendVertex(-doorWb / 2, 0, doorWb / 2, 0, deviation);
-        vertex(doorWb / 2, 0);
-        rndBendVertex(doorWb / 2, 0, doorWb / 2 - shdwL * shdwA, shdwL / 2, deviation);
-        vertex(doorWb / 2 - shdwL * shdwA, shdwL / 2);
-        rndBendVertex(doorWb / 2 - shdwL * shdwA, shdwL / 2, -doorWb / 2 - shdwL * shdwA, shdwL / 2, deviation);
-        vertex(-doorWb / 2 - shdwL * shdwA, shdwL / 2);
-        rndBendVertex(-doorWb / 2 - shdwL * shdwA, shdwL / 2, -doorWb / 2, 0, deviation);
-        vertex(-doorWb / 2, 0);
-        endShape(CLOSE);
-        pop();
+        this.g.push();
+        this.g.translate(this.x, this.y);
+        this.g.noFill();
+        this.g.stroke(color);
+        this.g.strokeWeight(doorBd);
+        this.g.beginShape();
+        this.g.stroke(random(0, 20), random(30, 50));
+        this.g.drawingContext.setLineDash([0, 2 * m, 3 * m]);
+        this.g.vertex(-doorWb / 2, 0);
+        rndBendVertex(-doorWb / 2, 0, doorWb / 2, 0, deviation, this.g);
+        this.g.vertex(doorWb / 2, 0);
+        rndBendVertex(doorWb / 2, 0, doorWb / 2 - shdwL * shdwA, shdwL / 2, deviation, this.g);
+        this.g.vertex(doorWb / 2 - shdwL * shdwA, shdwL / 2);
+        rndBendVertex(doorWb / 2 - shdwL * shdwA, shdwL / 2, -doorWb / 2 - shdwL * shdwA, shdwL / 2, deviation, this.g);
+        this.g.vertex(-doorWb / 2 - shdwL * shdwA, shdwL / 2);
+        rndBendVertex(-doorWb / 2 - shdwL * shdwA, shdwL / 2, -doorWb / 2, 0, deviation, this.g);
+        this.g.vertex(-doorWb / 2, 0);
+        this.g.endShape(CLOSE);
+        this.g.pop();
     }
 
     drawDoorShdwInv(color) {
@@ -301,46 +274,49 @@ class MultiDoor {
         let doorWb = this.w;
         let doorHb = this.h;
 
-        push();
-        translate(this.x, this.y);
-        stroke(color);
-        strokeWeight(doorBd);
-        fill(random(40, 80), random(45, 65));
-        stroke(random(40, 80), random(45, 65));
-        drawingContext.setLineDash([0, 2 * m, 3 * m]);
-        beginShape();
-        vertex(-doorWb / 2, 0);
-        rndBendVertex(-doorWb / 2, 0, doorWb / 2, 0, deviation);
-        vertex(doorWb / 2, 0);
-        rndBendVertex(doorWb / 2, 0, doorWb / 2 - shdwL * shdwA, -shdwL / 2, deviation);
-        vertex(doorWb / 2 - shdwL * shdwA, -shdwL / 2);
-        rndBendVertex(doorWb / 2 - shdwL * shdwA, -shdwL / 2, -doorWb / 2 - shdwL * shdwA, -shdwL / 2, deviation);
-        vertex(-doorWb / 2 - shdwL * shdwA, -shdwL / 2);
-        rndBendVertex(-doorWb / 2 - shdwL * shdwA, -shdwL / 2, -doorWb / 2, 0, deviation);
-        vertex(-doorWb / 2, 0);
-        endShape(CLOSE);
-        pop();
+        this.g.push();
+        this.g.translate(this.x, this.y);
+        this.g.stroke(color);
+        this.g.strokeWeight(doorBd);
+        this.g.fill(random(40, 80), random(45, 65));
+        this.g.stroke(random(40, 80), random(45, 65));
+        this.g.drawingContext.setLineDash([0, 2 * m, 3 * m]);
+        this.g.beginShape();
+        this.g.vertex(-doorWb / 2, 0);
+        rndBendVertex(-doorWb / 2, 0, doorWb / 2, 0, deviation, this.g);
+        this.g.vertex(doorWb / 2, 0);
+        rndBendVertex(doorWb / 2, 0, doorWb / 2 - shdwL * shdwA, -shdwL / 2, deviation, this.g);
+        this.g.vertex(doorWb / 2 - shdwL * shdwA, -shdwL / 2);
+        rndBendVertex(doorWb / 2 - shdwL * shdwA, -shdwL / 2, -doorWb / 2 - shdwL * shdwA, -shdwL / 2, deviation, this.g);
+        this.g.vertex(-doorWb / 2 - shdwL * shdwA, -shdwL / 2);
+        rndBendVertex(-doorWb / 2 - shdwL * shdwA, -shdwL / 2, -doorWb / 2, 0, deviation, this.g);
+        this.g.vertex(-doorWb / 2, 0);
+        this.g.endShape(CLOSE);
+        this.g.pop();
     }
 
-    copyContent() {
-        push();
+    copyContent(g) {
+        this.g = g;
+        this.g.push();
         let doorWb = this.w;
         let doorHb = this.h;
-        // doorContent.blendMode(MULTIPLY);
-        // doorContent.globalAlpha=0.75
-		// doorContent.filter="blur(12px)"
-        copy(doorContent, this.x - int(doorWb), int(this.y - doorHb), int(doorWb), int(doorHb), int(this.x - doorWb / 2), int(this.y - doorHb), int(doorWb), int(doorHb));
-        pop();
+        if (random() < 0.92) {
+            this.g.blendMode(BLEND);
+            } else {
+            this.g.blendMode(OVERLAY);
+            }
+        this.g.copy(doorContent, this.x - int(doorWb), int(this.y - doorHb), int(doorWb), int(doorHb), int(this.x - doorWb / 2), int(this.y - doorHb), int(doorWb), int(doorHb));
+        this.g.pop();
     }
 }
 
 
 class DoorContent {
-    constructor(g, originX, originY, color) {
-        this.g = g; //doorContent;
+    constructor(originX, originY, color, g) {
         this.originX = originX;
         this.originY = originY;
         this.color = color;
+        this.g = g;
 
         this.particles = [];
         this.attractors = [];
@@ -348,9 +324,10 @@ class DoorContent {
     }
 
     moreCircles(numCircles) {
-        this.g.push();
         let x = random(this.originX - doorW, this.originX);
         let y = random(this.originY - doorH, this.originY);
+
+        this.g.push();
         this.g.noFill();
         this.g.stroke(this.color);
         this.g.strokeWeight(0.5 * m);
@@ -366,8 +343,8 @@ class DoorContent {
         this.g.push();
         this.g.noFill();
         for (let i = 0; i < numBirds; i++) {
-            let x = random(100, wisW - 100) * m;
-            let y = random(100, wisH - 100) * m;
+            let x = random(100, this.g.wisW - 100) * m;
+            let y = random(100, this.g.wisH - 100) * m;
             let curve = random(minCurve, maxCurve) * m;
             this.g.stroke(this.color);
             this.g.beginShape();
@@ -382,8 +359,8 @@ class DoorContent {
     moreBirdsActual(numBirds) {
         this.g.push();
         for (let i = 0; i < numBirds; i++) {
-            let x = random(100, wisW - 100) * m;
-            let y = random(100, wisH - 100) * m;
+            let x = random(100, this.g.wisW - 100) * m;
+            let y = random(100, this.g.wisH - 100) * m;
             let c = random(4, 7) * m;
             let d = random(2, 4) * m;
             let e = random(2, 6) + (y - x) + (x - y) * m;
@@ -402,16 +379,17 @@ class DoorContent {
 
     moreDunes(duneH) {
         let waveAmp = duneH * 0.75;
-        let waveFreq = TWO_PI / wisW;
+        let waveFreq = TWO_PI / this.g.wisW;
         let phase = 0;
         let y = this.originY;
 
         this.g.push();
         this.g.stroke(255, 160);
         this.g.strokeWeight(random(0.25, 1.5) * m);
+        this.g.noFill();
 
         let points = [];
-        for (let x = 0; x < wisW; x += 1) {
+        for (let x = 0; x < this.g.wisW; x += 1) {
             for (let yOff = 0; yOff < duneH; yOff += 1) {
                 let yNoise = noise(x * 0.003, (y + yOff) * 0.005) * duneH;
                 let yWave = waveAmp * sin(waveFreq * x + phase);
@@ -491,9 +469,10 @@ class DoorContent {
     }
 
     moreBoom(radius, cola, colb, numSegments) {
-        this.g.push();
         let from = color(cola);
         let to = color(colb);
+
+        this.g.push();
         this.g.noStroke();
     
         for (let i = 0; i < numSegments; i++) {
@@ -518,9 +497,10 @@ class DoorContent {
     }
 
     moreBadaBoom(radius, cola, colb, numSegments) {
-        this.g.push();
         let from = color(cola);
         let to = color(colb);
+
+        this.g.push();
         this.g.noStroke();
     
         for (let i = 0; i < numSegments; i++) {
@@ -545,29 +525,31 @@ class DoorContent {
     }
 
     moreAttractors() {
+        // let x = this.originX + random(-130, 130) * m;
+        // let y = this.originY + random(-80, 80) * m;
+        let x = random(300, doorContent.width - 300);
+        let y = random(300, doorContent.height - 300);
+
         this.g.push();
-            // let x = this.originX + random(-130, 130) * m;
-            // let y = this.originY + random(-80, 80) * m;
-            let x = random(300, doorContent.width - 300);
-            let y = random(300, doorContent.height - 300);
-            this.attractors.push(createVector(x, y));
+        this.attractors.push(createVector(x, y));
         this.g.pop();
     }
 
     moreRepulsors() {
+        // let x = this.originX - (doorW / int(random(1, 3)) * m);
+        // let y = this.originY - (doorH / int(random(1, 3)) * m);
+        let x = random(300, doorContent.width - 300);
+        let y = random(300, doorContent.height - 300);
+
         this.g.push();
-            // let x = this.originX - (doorW / int(random(1, 3)) * m);
-            // let y = this.originY - (doorH / int(random(1, 3)) * m);
-            let x = random(300, doorContent.width - 300);
-            let y = random(300, doorContent.height - 300);
-            this.repulsors.push(createVector(x, y));
+        this.repulsors.push(createVector(x, y));
         this.g.pop();
     }
 
     createParticles(n) {
         for (let i = 0; i < n; i++) {
             // this.particles.push(new Particle(random(this.originX - doorW, this.originX), random(this.originY - doorH, this.originY)));
-            this.particles.push(new Particle(random(150, doorContent.width - 150), random(150, doorContent.height - 150)));
+            this.particles.push(new Particle(random(150, doorContent.width - 150), random(150, doorContent.height - 150, doorContent)));
         }
     }
 
@@ -602,7 +584,7 @@ class DoorContent {
                 if (p.isDead()) {
                     this.particles.splice(i, 1);
                     // this.particles.push(new Particle(random(this.originX - doorW, this.originX), random(this.originY - doorH, this.originY)));
-                    this.particles.push(new Particle(random(150, doorContent.width - 150), random(150, doorContent.height - 150)));
+                    this.particles.push(new Particle(random(150, doorContent.width - 150), random(150, doorContent.height - 150), doorContent));
                 }
             }
         }
@@ -610,13 +592,14 @@ class DoorContent {
 }
 
 class Particle {
-    constructor(x, y) {
+    constructor(x, y, g) {
         this.position = createVector(x, y);
         this.velocity = createVector(random(-1, 1), random(-1, 1));
         this.acceleration = createVector();
         this.lifespan = 255;
         this.col = color(235); //color(colr52);  //color(random(col6)); 
         this.prevPosition = this.position.copy();
+        this.g = g;
         this.path = []; 
     }
 
@@ -672,99 +655,20 @@ class Particle {
 
     show(g) {
         let strokeSize =  map(this.lifespan, 0, 255, 0, 3);
-        g.push();
-        g.noFill();
         let bobTheColor = this.col;
         bobTheColor.setAlpha(60);
-        g.stroke(bobTheColor); //255, this.lifespan);
-        //g.fill(255, this.lifespan);
-        g.strokeWeight(strokeSize * m);
-        g.point(this.position.x, this.position.y);
-        g.beginShape();
-        g.strokeWeight(strokeSize * m);
-        for (let point of this.path) {
-            g.vertex(point.x, point.y);
-        }
-        g.endShape();
-        g.pop();
 
+        this.g.push();
+        this.g.noFill();
+        this.g.stroke(bobTheColor); //255, this.lifespan);
+        this.g.strokeWeight(strokeSize * m);
+        this.g.point(this.position.x, this.position.y);
+        this.g.beginShape();
+        this.g.strokeWeight(strokeSize * m);
+        for (let point of this.path) {
+            this.g.vertex(point.x, point.y);
+        }
+        this.g.endShape();
+        this.g.pop();
     }
 }
-
-// class buggedParticle {
-//     constructor(x, y) {
-//         this.pos = createVector(x, y);
-//         this.prevPos = this.pos.copy();
-//         this.vel = createVector();
-//         this.acc = createVector();
-//         this.maxForce = 0.5;
-//         this.maxSpeed = 3;
-//         this.lifespan = 250;
-//         this.path = []; 
-//     }
-
-//     applyForce(force) {
-//         this.acc.add(force); 
-//     }
-
-//     attracted(target) {
-//         let force = p5.Vector.sub(target, this.pos);
-//         let distance = force.mag();
-//         distance = constrain(distance, 5, 50);
-//         force.setMag(0.55 / distance);
-//         this.acc.add(force);
-//     }
-    
-//     repulsed(target) {
-//         let force = p5.Vector.sub(this.pos, target); 
-//         let distance = force.mag();
-//         distance = constrain(distance, 5, 50);
-        
-//         let strength = 50 / (distance * distance); 
-//         force.setMag(strength);
-//         this.acc.add(force);
-
-//         let rotation = force.copy();
-//         rotation.rotate(HALF_PI);
-//         rotation.setMag(strength * 0.5); 
-//         this.acc.add(rotation);
-//     }
-
-//     update() {
-//         this.vel.add(this.acc);
-//         this.vel.limit(this.maxSpeed);
-//         this.prevPos = this.pos.copy();
-//         this.pos.add(this.vel);
-//         this.acc.mult(0);
-
-//         this.path.push(this.pos.copy());
-
-//         if (this.path.length > 50000) {
-//             this.path.splice(0, 1);
-//         }
-
-//         this.lifespan -= 2;
-//     }
-
-//     isDead() {
-//         return this.lifespan <= 0;
-//     }
-
-//     show(g) {
-//         g.push();
-//         g.noFill();
-//         g.stroke(255); 
-//         g.beginShape();
-//         g.strokeWeight(1 * m);
-//         for (let point of this.path) {
-//             g.vertex(point.x, point.y);
-//         }
-//         g.endShape();
-
-//         g.stroke(255); //, this.lifespan);
-//         g.strokeWeight(2 * m);
-//         g.point(this.pos.x, this.pos.y);
-//         g.pop();
-//     }
-// }
-

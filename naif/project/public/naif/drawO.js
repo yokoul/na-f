@@ -1,10 +1,11 @@
+let showOriginal = false;
 let doorWO = 80;
 let doorHO = 140;
 let shdwLO = 60;
 let shdwAO = 0.5;
 let gapO = 60; 
-let rowsO = 0;
-let colsO = 0;
+let rowsO = 4;
+let colsO = 6;
 let depthO = 60;
 let paddingO = 25;
 let borderO = 20;
@@ -12,11 +13,47 @@ let bdinO = 15;
 let bdoutO = 7.5;
 
 
-function drawO(g) {
+function drawCirclesO(g, originX, originY, numCircles) {
+    x = originX + random(-paddingO, paddingO);
+    y = originY + random(-paddingO, paddingO);
+    g.push();
+    g.stroke(255);
+        for (let i = 12; i < numCircles; i++) {
+            let radius = Math.pow(1.15, i);
+            if (i === 12 || i === 13 && random() < 0.5) {
+                g.strokeWeight(2);
+                g.fill(255);
+                g.circle(x, y, radius * 2);
+            } else {
+                g.noFill();
+                g.strokeWeight(random(0.5, 1));
+                g.drawingContext.setLineDash([4, 3, 5, 2, 6, 4, 2, 5, 3, 3]);
+                g.circle(x, y, radius * 2);
+            }
+        }
+    g.pop();
+    }
 
-    // Déterminer le nombre de lignes et de colonnes en fonction de la taille de l'écran, du paddingO et de l'ombre
-    rowsO = floor((wisW - 2 * (borderO + paddingO) - shdwLO) / (doorHO + gapO));
-    colsO = floor((wisH - 2 * (borderO + paddingO)) / (doorWO + gapO));
+function drawBirdsO(g, numBirds, originX, originY, minCurve, maxCurve, color) {
+    g.push();
+    g.noFill();
+    g.stroke(color);
+    for (let i = 0; i < numBirds; i++) {
+        let x = random(-doorWO/2.2, doorWO/2.2);
+        let y = random(-doorHO, 0);
+        let curve = random(minCurve, maxCurve);
+
+        g.stroke(255);
+        g.beginShape();
+        g.vertex(x + curve, y + curve);
+        g.vertex(x, y);
+        g.vertex(x - curve, y + curve);
+        g.endShape();
+    }
+    g.pop();
+}
+
+function drawO(g) {
 
     // Calculer la largeur et la hauteur totales de la grille
     let totalWidth = colsO * (doorWO + gapO);
@@ -34,13 +71,15 @@ function drawO(g) {
     g.rect(0, 0, wisW, wisH);
     g.pop();
 
-    g.noStroke();
+
     
     for (let i = 0; i < rowsO; i++) {
         for (let j = 0; j < colsO; j++) {
-            let x = j * (doorWO + gapO) + doorWO / 2 + (gapO / 2) + offsetX;
-            let y = i * (doorHO + gapO) + doorHO / 2 + gapO + offsetY;
-            y += i * gapO / 2;
+            let x = j * (doorW + gap) + gap + (width - (grid[0].length * (doorW + gap))) / 2;
+            let y = i * (doorH + gap) + doorH + gap + (height - (grid.length * (doorH + gap))) / 2;
+            // let x = j * (doorWO + gapO) + doorWO / 2 + (gapO / 2) + offsetX + (borderO / 2);
+            // let y = i * (doorHO + gapO) + doorHO / 2 + gapO + offsetY + borderO;
+            // y += i * gapO / 2;
 
             // Poteau
             g.push();
@@ -65,9 +104,11 @@ function drawO(g) {
 
     for (let i = 0; i < rowsO; i++) {
         for (let j = 0; j < colsO; j++) {
-            let x = j * (doorWO + gapO) + doorWO / 2 + (gapO / 2) + offsetX;
-            let y = i * (doorHO + gapO) + doorHO / 2 + gapO + offsetY;
-            y += i * gapO / 2;
+            let x = j * (doorW + gap) + gap + (width - (grid[0].length * (doorW + gap))) / 2;
+            let y = i * (doorH + gap) + doorH + gap + (height - (grid.length * (doorH + gap))) / 2;
+            // let x = j * (doorWO + gapO) + doorWO / 2 + (gapO / 2) + offsetX;
+            // let y = i * (doorHO + gapO) + doorHO / 2 + gapO + offsetY;
+            // y += i * gapO / 2;
             // Ajout du volume
             g.push();
             g.stroke(180);
@@ -82,9 +123,8 @@ function drawO(g) {
             g.push();
             sa = shdwAO + ((j + 0.25) * 1.15);
             g.translate(x, y);
-            //drawDunesO(original, -doorWO/2, doorHO, 7);
             drawBirdsO(original, 12 - j * 2, 0, 0, 5, 10, color(0));
-            drawCirclesO(original, i*i*20, j*j*6, 35);
+            drawCirclesO(original, i*i*20, j*j*6, random(25, 35));
             g.fill(20);
             g.beginShape();
             g.vertex(-doorWO / 2, 0);
@@ -96,12 +136,12 @@ function drawO(g) {
         }
     }
 
-    g.applyMonochromaticGrain(gS);
+    g.applyMonochromaticGrain(gS * 3);
     g.push();
     g.noFill();
-    g.stroke(0);
-    g.strokeWeight(borderO);
-    g.rect(borderO / 2, borderO / 2, width - borderO, height - borderO);
+    // g.stroke(0);
+    // g.strokeWeight(borderO);
+    // g.rect(borderO / 2, borderO / 2, width - borderO, height - borderO);
     g.stroke(255);
     g.strokeWeight(1);
     g.rect(bdinO / 2, bdinO / 2, width - bdinO, height - bdinO);
@@ -111,41 +151,5 @@ function drawO(g) {
     g.pop();
 
     showOriginal = true;
-    currentState = 'drawingD';
 }
 
-function drawCirclesO(g, originX, originY, numCircles) {
-    g.push();
-    g.noFill();
-    g.stroke(255);
-        for (let i = 10; i < numCircles; i++) {
-            let radius = Math.pow(1.15, i);
-            g.drawingContext.setLineDash([4, 3, 5, 2, 6, 4, 2, 5, 3, 3]);
-            g.circle(originX, originY, radius * 2);
-        }
-    g.pop();
-    }
-
-function drawBirdsO(g, numBirds, originX, originY, minCurve, maxCurve, color) {
-    g.push();
-    g.noFill();
-    g.stroke(color);
-    for (let i = 0; i < numBirds; i++) {
-        let x = random(-doorWO/2.2, doorWO/2.2);
-        let y = random(-doorHO, 0);
-        let curve = random(minCurve, maxCurve);
-
-        g.stroke(255);
-        g.beginShape();
-        g.vertex(x + curve, y + curve);
-        g.vertex(x, y);
-        g.vertex(x - curve, y + curve);
-        g.endShape();
-    }
-    g.pop();
-
-    if (loopCount > 1200) {
-        currentState = 'drawingO';
-    }
-
-}

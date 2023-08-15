@@ -49,71 +49,110 @@ function stopping() {
     noLoop();
 }
 
-function drawBd(btype) {
+function structbg(g) {
+    let clr1 = random() > 0.5 ? 0 : 255;
+    let clr2 = random() > 0.5 ? 0 : 255;
+    let clr3 = random() > 0.5 ? 0 : 255;
+    bg.background(clr1, clr2, clr3, 255);
+
+    for (let i = 0; i < 25; i++) {
+        for (let door of doors) {
+            if (door instanceof Door || door instanceof MultiDoor) {
+                if (random() > 0.5) {
+                    if (isBgColorDark) {
+                        door.drawStruct(color(random(col1)), random(1, 60) * m);
+                        g.blendMode(SOFT_LIGHT);
+                        g.globalAlpha=0.005;
+                        // g.filter="blur(280px)"
+                        // g.filter="GRAY";
+                        door.drawDoor(color(random(col1)), random(1, 60) * m);
+                        g.blendMode(SOFT_LIGHT);
+                        g.globalAlpha=0.005;
+                        // g.filter="blur(280px)"
+                        // g.filter="GRAY";
+                    } else {
+                        door.drawStruct(color(random(col1)), random(1, 80) * m);
+                        g.blendMode(SOFT_LIGHT);
+                        g.globalAlpha=0.005;
+                        // g.filter="blur(280px)"
+                        // g.filter="GRAY";
+                        door.drawDoor(color(random(col1)), random(1, 80) * m);
+                        g.blendMode(HARD_LIGHT);
+                        g.globalAlpha=0.005;
+                        // g.filter="blur(250px)"
+                        // g.filter="GRAY";
+                    }
+                }
+            }
+        }
+    }
+}
+
+function drawBd(btype, g) {
     if (btype == 0) {
-        push();
-        noFill();
+        g.push();
+        g.noFill();
         let strBdCol = color(random(col2));
         strBdCol.setAlpha(random(65, 80));
-        stroke(strBdCol);
-        strokeWeight(bd);
-        rect(bd / 2, bd / 2, wisW - bd, wisH - bd);
-        pop();
+        g.stroke(strBdCol);
+        g.strokeWeight(bd);
+        g.rect(bd / 2, bd / 2, wisW - bd, wisH - bd);
+        g.pop();
     }
     if (btype == 2) {
         let lineLength, lineWeight;
         let lineDensity = 0.5;
-        push();
-        noFill();
+        g.push();
+        g.noFill();
         let strBdCol = color(random(col2));
         strBdCol.setAlpha(random(65, 80));
-        stroke(strBdCol);
+        g.stroke(strBdCol);
 
         for (let x = 0; x < wisW; x += lineDensity) {
             lineLength = random(bd / 2, bd2 * 2);
             lineWeight = random(0.25, 2.5);
-            strokeWeight(lineWeight * m);
-            line(x, 0, x, lineLength);
-            line(x, wisH, x, wisH - lineLength);
+            g.strokeWeight(lineWeight * m);
+            g.line(x, 0, x, lineLength);
+            g.line(x, wisH, x, wisH - lineLength);
         }
         for (let y = 0; y < wisH; y += lineDensity) {
             lineLength = random(bd / 2, bd2 * 2);
             lineWeight = random(0.5, 2.5);
-            strokeWeight(lineWeight * m);
-            line(0, y, lineLength, y);
-            line(wisW, y, wisW - lineLength, y);
+            g.strokeWeight(lineWeight * m);
+            g.line(0, y, lineLength, y);
+            g.line(wisW, y, wisW - lineLength, y);
         }
-        pop();
+        g.pop();
     }
     if (btype == 3) {
-        push();
-        noFill();
+        g.push();
+        g.noFill();
         let strBdCol = color(random(col2));
         strBdCol.setAlpha(random(65, 80));
-        stroke(strBdCol);
-        strokeWeight(bd * ar * 1.3 * m);
-        line(0, bd / 2, wisW + bd, bd / 2);
-        line(bd / 2, 0, bd / 2, wisH + bd);
-        line(0, wisH - bd / 2, wisW, wisH - bd / 2);
-        line(wisW - bd / 2, 0, wisW - bd / 2, wisH);
+        g.stroke(strBdCol);
+        g.strokeWeight(bd * ar * 1.3 * m);
+        g.line(0, bd / 2, wisW + bd, bd / 2);
+        g.line(bd / 2, 0, bd / 2, wisH + bd);
+        g.line(0, wisH - bd / 2, wisW, wisH - bd / 2);
+        g.line(wisW - bd / 2, 0, wisW - bd / 2, wisH);
 
-        fill(random(col2));
+        g.fill(random(col2));
         for (let i = 0; i < wisW; i += random(bd, bd2)) {
-            square(+i * 2, 0, random(bd, bd2));
-            square(+i * 2, wisH, -random(bd, bd2));
+            g.square(+i * 2, 0, random(bd, bd2));
+            g.square(+i * 2, wisH, -random(bd, bd2));
         }
         for (let i = 0; i < wisH; i += random(bd, bd2)) {
-            square(0, +i * 2, random(bd, bd2));
-            square(wisW, +i * 2, -random(bd, bd2));
+            g.square(0, +i * 2, random(bd, bd2));
+            g.square(wisW, +i * 2, -random(bd, bd2));
         }
-        pop();
+        g.pop();
     }
 }
 
-function morePoint(grS, floop, nPl, nPh, pSs, pSb) {
+function morePoint(grS, floop, nPl, nPh, pSs, pSb, g) {
     let gridSize = grS;
     let f = 0;
-    let d = doorContent;
+    let d = g;
 
     let cellWidth = doorContent.width / gridSize;
     let cellHeight = doorContent.height / gridSize;

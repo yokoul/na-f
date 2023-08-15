@@ -46,7 +46,7 @@ let pD = 4;
 let ar = 1;
 
 let drawShdw = true;
-let drawBGCubes = true;
+let drawBGCubes = false;
 let sizeMod = 6; // 6
 let size = 2; // 2
 let cubesRows = 90; //90 pour 1000px
@@ -355,7 +355,7 @@ function setup() {
     let clr1 = random() > 0.5 ? 0 : 255;
     let clr2 = random() > 0.5 ? 0 : 255;
     let clr3 = random() > 0.5 ? 0 : 255;
-    background(clr1, clr2, clr3, 255);
+    bg.background(clr1, clr2, clr3, 255);
 }
 
 
@@ -366,33 +366,7 @@ function draw() {
     //randomSeed(seed);
     //noiseSeed(seed);
 
-    for (let i = 0; i < 25; i++) {
-        for (let door of doors) {
-            if (door instanceof Door || door instanceof MultiDoor) {
-                if (random() > 0.5) {
-                    if (isBgColorDark) {
-                        door.drawStruct(color(random(col1)), random(1, 60) * m);
-                        bg.blendMode(SOFT_LIGHT);
-                        bg.globalAlpha=0.015;
-                        bg.filter="blur(280px)"
-                        door.drawDoor(color(random(col1)), random(1, 60) * m);
-                        bg.blendMode(SOFT_LIGHT);
-                        bg.globalAlpha=0.05;
-                        bg.filter="blur(280px)"
-                    } else {
-                        door.drawStruct(color(random(col1)), random(1, 80) * m);
-                        bg.blendMode(SOFT_LIGHT);
-                        bg.globalAlpha=0.015;
-                        bg.filter="blur(280px)"
-                        door.drawDoor(color(random(col1)), random(1, 80) * m);
-                        bg.blendMode(HARD_LIGHT);
-                        bg.globalAlpha=0.05;
-                        bg.filter="blur(250px)"
-                    }
-                }
-            }
-        }
-    }
+    structbg(bg);
 
     //bg.background(20, 5);
     
@@ -421,7 +395,7 @@ function draw() {
     //         }
     //     }
     // }
-
+    
     image(bg, 0, 0);
     noLoop();
 
@@ -431,3 +405,36 @@ function draw() {
 
 }
 
+function structbg(g) {
+    for (let i = 0; i < 25; i++) {
+        for (let door of doors) {
+            if (door instanceof Door || door instanceof MultiDoor) {
+                if (random() > 0.5) {
+                    if (isBgColorDark) {
+                        door.drawStruct(color(random(col1)), random(1, 60) * m);
+                        g.blendMode(SOFT_LIGHT);
+                        g.globalAlpha=0.005;
+                        // g.filter="blur(280px)"
+                        // g.filter="GRAY";
+                        door.drawDoor(color(random(col1)), random(1, 60) * m);
+                        g.blendMode(SOFT_LIGHT);
+                        g.globalAlpha=0.005;
+                        // g.filter="blur(280px)"
+                        // g.filter="GRAY";
+                    } else {
+                        door.drawStruct(color(random(col1)), random(1, 80) * m);
+                        g.blendMode(SOFT_LIGHT);
+                        g.globalAlpha=0.005;
+                        // g.filter="blur(280px)"
+                        // g.filter="GRAY";
+                        door.drawDoor(color(random(col1)), random(1, 80) * m);
+                        g.blendMode(HARD_LIGHT);
+                        g.globalAlpha=0.005;
+                        // g.filter="blur(250px)"
+                        // g.filter="GRAY";
+                    }
+                }
+            }
+        }
+    }
+}

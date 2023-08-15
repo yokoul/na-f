@@ -1,3 +1,5 @@
+let showLoader = false;
+
 function drawL(g) {
     g.background(20);
     g.push();
@@ -24,9 +26,6 @@ function drawL(g) {
     g.textSize(40 * m);
     g.textFont(exo_black);
     g.text("naïf", wisW / 2, wisH / 3.2);
-    //g.textFont(exo_bold);
-    //g.textSize(14 * m);
-    //g.text("abstraction", wisW / 2, wisH / 3.2 + 40 * m);
     g.pop();
 
     g.push();
@@ -37,7 +36,7 @@ function drawL(g) {
     g.fill(255, 220);
     g.textFont(exo_regular);
     g.textSize(14 * m);
-    g.text("# " + $fx.iteration + " de 128", 0, 0);
+    g.text("# " + $fx.iteration + " de 200", 0, 0);
     g.pop();
 
     g.push();
@@ -264,9 +263,10 @@ function drawL(g) {
     }
     showLoader = true;
 
-    if (loopCount > 100) {
-        currentState = "showLoader";
-        // currentState = 'drawingO';
-    }
+    // if (loopCount > 100) {
+    //     currentState = "showLoader";
+    //     console.log("currentState = " + currentState);
+    //     currentState = 'drawingO';
+    // }
 }
 
