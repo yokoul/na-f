@@ -53,9 +53,7 @@ async function drawD(g) {
                 isBgColorDark = isColorDark(checkBgColor);
         
                 structbg(bg);
-            }            
-            // bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
-            // drawCubesAllB();
+            }
         } else if (backgroundType === "cubik alea") { //NOT WORKING
             if (random() < 0.25) {
                 bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
@@ -66,9 +64,7 @@ async function drawD(g) {
                 isBgColorDark = isColorDark(checkBgColor);
         
                 structbg(bg);
-            }            
-            // bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
-            // drawCubesRand();
+            }
         } else if (backgroundType === "cubik full C") {
             if (random() < 0.25) {
                 gradBg(4, random(col4), random(col3), random(col3), random(col4));
@@ -79,9 +75,7 @@ async function drawD(g) {
                 isBgColorDark = isColorDark(checkBgColor);
         
                 structbg(bg);
-            }            
-            // gradBg(4, random(col4), random(col3), random(col3), random(col4));
-            // drawCubesAllC();
+            }
         } else if (backgroundType === "cubik C") {
             if (random() < 0.25) {
                 gradBg(4, random(col4), random(col3), random(col4), random(col5));
@@ -92,9 +86,7 @@ async function drawD(g) {
                 isBgColorDark = isColorDark(checkBgColor);
         
                 structbg(bg);
-            }            
-            // gradBg(4, random(col4), random(col3), random(col4), random(col5));
-            // drawCubesC();
+            }
         } else if (backgroundType === "cubik full") {
             if (random() < 0.75) {
                 gradBg(7, random(col1), random(col2), random(col3), random(col4), random(col3), random(col2), random(col1));
@@ -105,9 +97,7 @@ async function drawD(g) {
                 isBgColorDark = isColorDark(checkBgColor);
         
                 structbg(bg);
-            }            
-            // gradBg(7, random(col1), random(col2), random(col3), random(col4), random(col3), random(col2), random(col1));
-            // drawCubesAll();
+            }
         } else if (backgroundType === "amplify more") { 
             let checkBgColor = g.get(g.width/2, g.height/2);
             isBgColorDark = isColorDark(checkBgColor);
@@ -122,9 +112,7 @@ async function drawD(g) {
                 isBgColorDark = isColorDark(checkBgColor);
         
                 structbg(bg);
-            }            
-            // bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "R");
-            // drawCubesDestructC();
+            }
         } else {
             background(random() < 0.5 ? 20 : 235);
         }
@@ -136,12 +124,6 @@ async function drawD(g) {
 
         structbg(bg);
     }
-
-    // let checkBgColor = g.get(g.width/2, g.height/2);
-    // isBgColorDark = isColorDark(checkBgColor);
-
-    // doorContent.background(random() < 0.5 ? color(20, 20, 20, 200) : color(235, 235, 235, 200));
-    // structbg(bg);  
     
     if (stratus === true) {
         if (random() < 0.65) {
@@ -193,16 +175,16 @@ async function drawD(g) {
                     door.drawDoor([60, 230], random(3, 6) * m);
                 }
             }
-        //     let content = new DoorContent(door.x, door.y, color(random(col3)), doorContent);
-        //     if (particleThis == true) {
-        //         content.createParticles(250); //int(random(550, 900)));
-        //         content.moreAttractors(random(7, 16));
-        //         content.moreRepulsors(random(4, 8));
-        //         content.updateParticles(250); //int(random(300, 500)));
-        //         content.showParticles();  
-        //         content.updateParticles(250); //int(random(300, 500)));
-        //         content.showParticles();  
-        //     }
+            let content = new DoorContent(door.x, door.y, color(random(col3)), doorContent);
+            if (particleThis == true) {
+                content.createParticles(250); //int(random(550, 900)));
+                content.moreAttractors(random(7, 16));
+                content.moreRepulsors(random(4, 8));
+                content.updateParticles(250); //int(random(300, 500)));
+                content.showParticles();  
+                content.updateParticles(250); //int(random(300, 500)));
+                content.showParticles();  
+            }
         }
     }
 
@@ -283,6 +265,7 @@ async function drawD(g) {
             }
         }
     }
+    bg.applyMonochromaticGrain(gS);
     // await sleep(1);
     showEvolving = true;
 }

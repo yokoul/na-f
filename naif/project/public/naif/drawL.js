@@ -122,145 +122,145 @@ function drawL(g) {
     }
     g.pop();
 
-    g.push();
-    if (loopCount > 15) {
-        g.ellipseMode(CORNER);
-        g.stroke(20, 220);
-        //g.fill(random(col1));
-        g.fill(random(col1));
-        if (random() < 0.5) {
-            g.rect(wisW / 6, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col1));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 25 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 25 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col1));
-        if (random() < 0.5) {
-            g.rect(wisW / 6, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6, wisH / 1.35 + 25 * m, 25 * m);
-        }
-        g.fill(random(col1));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6  + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-    }
-    if (loopCount > 30) {
-        g.stroke(20, 220);
-        g.fill(random(col2));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 100 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 100 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col2));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 100 * m + 25 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 100 * m + 25 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col2));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 100 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 100 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-        g.fill(random(col2));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 100 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 100 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-    }
-    if (loopCount > 45) {
-        g.stroke(20, 220);
-        g.fill(random(col3));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 200 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 200 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col3));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 200 * m + 25 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 200 * m + 25 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col3));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 200 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 200 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-        g.fill(random(col3));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 200 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 200 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-    }
-    if (loopCount > 60) {
-        g.stroke(20, 220);
-        g.fill(random(col4));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 300 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 300 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col4));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 300 * m + 25 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 300 * m + 25 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col4));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 300 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 300 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-        g.fill(random(col4));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 300 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 300 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-    }
-    if (loopCount > 75) {
-        g.stroke(20, 220);
-        g.fill(random(col5));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 400 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 400 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col5));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 400 * m + 25 * m, wisH / 1.35, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 400 * m + 25 * m, wisH / 1.35, 25 * m);
-        }
-        g.fill(random(col5));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 400 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 400 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-        g.fill(random(col5));
-        if (random() < 0.5) {
-            g.rect(wisW / 6 + 400 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        } else {
-            g.ellipse(wisW / 6 + 400 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
-        }
-        g.pop();
-    }
+    // g.push();
+    // if (loopCount > 15) {
+    //     g.ellipseMode(CORNER);
+    //     g.stroke(20, 220);
+    //     //g.fill(random(col1));
+    //     g.fill(random(col1));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col1));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 25 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 25 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col1));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    //     g.fill(random(col1));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6  + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    // }
+    // if (loopCount > 30) {
+    //     g.stroke(20, 220);
+    //     g.fill(random(col2));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 100 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 100 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col2));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 100 * m + 25 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 100 * m + 25 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col2));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 100 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 100 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    //     g.fill(random(col2));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 100 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 100 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    // }
+    // if (loopCount > 45) {
+    //     g.stroke(20, 220);
+    //     g.fill(random(col3));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 200 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 200 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col3));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 200 * m + 25 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 200 * m + 25 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col3));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 200 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 200 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    //     g.fill(random(col3));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 200 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 200 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    // }
+    // if (loopCount > 60) {
+    //     g.stroke(20, 220);
+    //     g.fill(random(col4));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 300 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 300 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col4));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 300 * m + 25 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 300 * m + 25 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col4));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 300 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 300 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    //     g.fill(random(col4));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 300 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 300 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    // }
+    // if (loopCount > 75) {
+    //     g.stroke(20, 220);
+    //     g.fill(random(col5));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 400 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 400 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col5));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 400 * m + 25 * m, wisH / 1.35, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 400 * m + 25 * m, wisH / 1.35, 25 * m);
+    //     }
+    //     g.fill(random(col5));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 400 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 400 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    //     g.fill(random(col5));
+    //     if (random() < 0.5) {
+    //         g.rect(wisW / 6 + 400 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     } else {
+    //         g.ellipse(wisW / 6 + 400 * m + 25 * m, wisH / 1.35 + 25 * m, 25 * m);
+    //     }
+    //     g.pop();
+    // }
     showLoader = true;
 
     // if (loopCount > 100) {

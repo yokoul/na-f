@@ -172,12 +172,12 @@ function rngDeviaType(value) {
 
 $fx.features({
     "land model": $fx.rand() < 0.5 ? "light" : "heavy",
-    "particle mode": $fx.rand() < 0.3 ? true : false,
     "node mode": $fx.rand() < 0.9 ? true : false,
     "node type": Math.floor($fx.rand() * 3),
     "node grid size": Math.floor($fx.rand() * 5) + 2,
     "bend mode": $fx.rand(),
     "deviation": rngDeviaType(fxrand()),
+    "particle mode": $fx.rand() < 0.01 ? true : false,
     "nos type": Math.floor($fx.rand() * 3),
     "background type": rngBackgroundType(fxrand()),
     "background axis": rngBackgroundAxis(fxrand()),
@@ -406,7 +406,7 @@ async function draw() {
             image(original, 0, 0);
             noTint();
             loader.reset();
-            if (elapsed > 800) {
+            if (elapsed > 5000) {
                 currentState = 'evolving';
                 startTime = millis(); 
             }
@@ -430,16 +430,16 @@ async function draw() {
         let drawonetime = false;
         if (drawonetime === false) {
         drawD(bg);
-        // image(bg, 0, 0);
         drawonetime = true;
         }
-        tint(0, 0);
-        image(original, 0, 0);
 
         if (showEvolving) {
             // await sleep(1);
+            image(bg, 0, 0);
+            tint(255, 255, 255, 0);
+
+            image(bg, 0, 0);
             noTint();
-            image(bg, 0, 0);                
             // if (elapsed >= 1000) {
                 currentState = 'stopping';
                 // startTime = millis(); 
