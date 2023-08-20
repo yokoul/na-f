@@ -47,6 +47,7 @@ function placeShape(grid, shape, x, y, value) {
 function stopping() {
     // saveCanvas(`naïf_pixScreen_${$fx.hash}-${$fx.minter}`, 'png');
     noLoop();
+    $fx.preview();
 }
 
 function structbg(g) {
@@ -57,28 +58,14 @@ function structbg(g) {
     if (random() < 0.95) {
     g.push();
     g.noStroke();
-    // g.fill(clr1, clr2, clr3, 190);
-    g.fill(random(colr7));
+    if (random() > 0.15) {
+        g.fill(clr1, clr2, clr3, 190);
+    } else {
+        g.fill(random(colr7));
+    }
     g.rect(0, 0, wisW, wisH);
     g.pop();
     } 
-    // else {
-    //     rows = 9;
-    //     size = wisW / rows;
-    //     g.push();
-    //     for (let y = 0; y < rows; y++) {
-    //         for (let x = 0; x < rows; x++) {
-    //           if ((x + y) % 2 === 0) {
-    //             // g.fill(clr1, clr2, clr3, 190);
-    //             g.fill(random(colr7));
-    //           } else {
-    //             g.fill(0);
-    //           }
-    //           g.rect(x * size, y * size, size, size);
-    //         }
-    //       }
-    //     g.pop();
-    // }
 
     if (random() > 0.99) {
         g.rotate(PI);
@@ -86,6 +73,9 @@ function structbg(g) {
     }
 
     let loops = random(5, 40);
+    let colloopsA = random() > 0.5 ? color(random(col1)) : color(random(col2));
+    let colloopsB = random() > 0.5 ? color(20, 20, 20, 255) : color(235, 235, 235, 255);
+    let colloops = random() > 0.5 ? colloopsA : colloopsB;
     for (let i = 0; i < loops; i++) {
         for (let door of doors) {
             let metrng = random();
@@ -99,47 +89,41 @@ function structbg(g) {
                     g.blendMode(HARD_LIGHT);
                     g.globalAlpha=0.005;
                     g.filter="blur(15px)"
-                    // g.filter="invert(100%)";
-                    door.drawStruct(color(random(col1)), random(10, 60) * m);
+                    door.drawStruct(colloops, random(10, 60) * m);
                     g.pop();
                     g.push();
                     g.blendMode(SOFT_LIGHT);
                     g.globalAlpha=0.005;
                     g.filter="blur(15px)"
-                    // g.filter="gray(50%)";
-                    door.drawDoor(color(random(col1)), random(10, 30) * m);
+                    door.drawDoor(colloops, random(10, 30) * m);
                     g.pop();
-                } else if (metrng > 0.15 && metrng < 0.3) {
+                } else if (metrng >= 0.15 && metrng < 0.3) {
                     g.push();
                     g.blendMode(SOFT_LIGHT);
                     g.globalAlpha=0.005;
                     g.filter="blur(20px)"
-                    // g.filter="gray(50%)";
-                    door.drawStruct(color(random(col1)), random(20, 120) * m);
+                    door.drawStruct(colloops, random(20, 120) * m);
                     g.pop();
                     g.push();
                     g.blendMode(HARD_LIGHT);
                     g.globalAlpha=0.005;
                     g.filter="blur(20px)"
-                    // g.filter="invert(100%)";
-                    door.drawDoor(color(random(col1)), random(20, 40) * m);
+                    door.drawDoor(colloops, random(20, 40) * m);
                     g.pop();
-                } else if (metrng > 0.3 && metrng < 0.45) {
+                } else if (metrng >= 0.3 && metrng < 0.45) {
                     g.push();
                     g.blendMode(HARD_LIGHT);
                     g.globalAlpha=0.005;
                     g.filter="blur(25px)"
-                    // g.filter="invert(100%)";
-                    door.drawStruct(color(random(col1)), random(10, 60) * m);
+                    door.drawStruct(colloops, random(10, 60) * m);
                     g.pop();
                     g.push();
                     g.blendMode(MULTIPLY);
                     g.globalAlpha=0.005;
                     g.filter="blur(25px)"
-                    // g.filter="gray(50%)";
-                    door.drawDoor(color(random(col1)), random(10, 30) * m);
+                    door.drawDoor(colloops, random(10, 30) * m);
                     g.pop();
-                } else if (metrng > 0.45 && metrng < 0.6) {
+                } else if (metrng >= 0.45 && metrng < 0.6) {
                     g.push();
                     if (random() > 0.9) {
                         g.rotate(PI);
@@ -149,17 +133,15 @@ function structbg(g) {
                     g.blendMode(SOFT_LIGHT);
                     g.globalAlpha=0.005;
                     g.filter="blur(10px)"
-                    // g.filter="gray(50%)";
-                    door.drawStruct(color(random(col2)), random(20, 120) * m);
+                    door.drawStruct(colloops, random(20, 120) * m);
                     g.pop();
                     g.push();
                     g.blendMode(OVERLAY);
                     g.globalAlpha=0.005;
                     g.filter="blur(10px)"
-                    // g.filter="invert(100%)";
-                    door.drawStructInv(color(random(col2)), random(20, 40) * m);
+                    door.drawStructInv(colloops, random(20, 40) * m);
                     g.pop();
-                } else if (metrng > 0.6 && metrng < 0.75) {
+                } else if (metrng >= 0.6 && metrng < 0.75) {
                     g.push();
                     if (random() > 0.9) {
                         g.rotate(PI);
@@ -169,16 +151,16 @@ function structbg(g) {
                     g.globalAlpha=0.005;
                     g.filter="blur(5px)"
                     g.filter="invert(100%)";
-                    door.drawStruct(color(random(col2)), random(10, 60) * m);
+                    door.drawStruct(colloops, random(10, 60) * m);
                     g.pop();
                     g.push();
                     g.blendMode(SOFT_LIGHT);
                     g.globalAlpha=0.005;
                     g.filter="blur(5px)"
                     g.filter="gray(100%)";
-                    door.drawDoor(color(random(col2)), random(10, 30) * m);
+                    door.drawDoor(colloops, random(10, 30) * m);
                     g.pop();
-                } else if (metrng > 0.75 && metrng < 0.9) {
+                } else if (metrng >= 0.75 && metrng < 0.9) {
                     g.push();
                     if (random() > 0.9) {
                         g.rotate(PI);
@@ -188,29 +170,29 @@ function structbg(g) {
                     g.globalAlpha=0.005;
                     g.filter="blur(25px)"
                     g.filter="invert(100%)";
-                    door.drawStruct(color(random(col2)), random(10, 60) * m);
+                    door.drawStruct(colloops, random(10, 60) * m);
                     g.pop();
                     g.push();
                     g.blendMode(HARD_LIGHT);
                     g.globalAlpha=0.005;
                     g.filter="blur(25px)"
                     g.filter="gray(100%)";
-                    door.drawStructInv(color(random(col2)), random(10, 30) * m);
+                    door.drawStructInv(colloops, random(10, 30) * m);
                     g.pop();
-                } else if (metrng > 0.9 && metrng < 1) {
+                } else if (metrng >= 0.9 && metrng < 1) {
                     g.push();
                     g.blendMode(BLEND);
                     g.globalAlpha=0.005;
                     g.filter="blur(20px)"
                     g.filter="invert(100%)";
-                    door.drawStruct(color(random(col2)), random(10, 60) * m);
+                    door.drawStruct(colloops, random(10, 60) * m);
                     g.pop();
                     g.push();
                     g.blendMode(BLEND);
                     g.globalAlpha=0.005;
                     g.filter="blur(20px)"
                     g.filter="gray(100%)";
-                    door.drawStructInv(color(random(col1)), random(10, 30) * m);
+                    door.drawStructInv(colloops, random(10, 30) * m);
                     g.pop();
                 }
             }
@@ -224,120 +206,6 @@ function structbg(g) {
         g.rect(0, 0, wisW, wisH);
         g.pop();
         } 
-    // MODELE INTERESSANT, A VERIFIER
-    // for (let i = 0; i < loops; i++) {
-    //     for (let door of doors) {
-    //         if (door instanceof Door || door instanceof MultiDoor) {
-    //             if (random() > 0.5) {
-    //                 // if (isBgColorDark) {
-    //                     g.push();
-    //                     g.blendMode(HARD_LIGHT);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(15px)"
-    //                     // g.filter="invert(100%)";
-    //                     door.drawStruct(color(random(col1)), random(10, 60) * m);
-    //                     g.pop();
-    //                     g.push();
-    //                     g.blendMode(MULTIPLY);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(15px)"
-    //                     // g.filter="gray(50%)";
-    //                     door.drawDoor(color(random(col1)), random(10, 30) * m);
-    //                     g.pop();
-    //                 } else {
-    //                     g.push();
-    //                     g.blendMode(SOFT_LIGHT);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(15px)"
-    //                     // g.filter="gray(50%)";
-    //                     door.drawStruct(color(random(col1)), random(20, 120) * m);
-    //                     g.pop();
-    //                     g.push();
-    //                     g.blendMode(OVERLAY);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(15px)"
-    //                     // g.filter="invert(100%)";
-    //                     door.drawDoor(color(random(col1)), random(20, 40) * m);
-    //                     g.pop();
-    //                 // }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // BEAUTIFUL MOTHER FUCKER
-    // for (let i = 0; i < loops; i++) {
-    //     for (let door of doors) {
-    //         if (door instanceof Door || door instanceof MultiDoor) {
-    //             if (random() > 0.5) {
-    //                 // if (isBgColorDark) {
-    //                     g.push();
-    //                     g.blendMode(SOFT_LIGHT);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(15px)"
-    //                     g.filter="invert(100%)";
-    //                     door.drawStruct(color(random(col1)), random(10, 60) * m);
-    //                     g.pop();
-    //                     g.push();
-    //                     g.blendMode(SOFT_LIGHT);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(15px)"
-    //                     g.filter="gray(100%)";
-    //                     door.drawDoor(color(random(col1)), random(10, 30) * m);
-    //                     g.pop();
-    //                 } else {
-    //                     g.push();
-    //                     g.blendMode(HARD_LIGHT);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(25px)"
-    //                     g.filter="gray(100%)";
-    //                     door.drawStruct(color(random(col1)), random(20, 120) * m);
-    //                     g.pop();
-    //                     g.push();
-    //                     g.blendMode(HARD_LIGHT);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(25px)"
-    //                     g.filter="invert(100%)";
-    //                     door.drawDoor(color(random(col1)), random(20, 40) * m);
-    //                     g.pop();
-    //                 // }
-    //             }
-    //         }
-    //     }
-    // }
-
-    // for (let i = 0; i < loops; i++) {
-    //     for (let door of doors) {
-    //         if (door instanceof Door || door instanceof MultiDoor) {
-    //             if (random() > 0.5) {
-    //                 if (isBgColorDark) {
-    //                     door.drawStruct(color(random(col1)), random(20, 90) * m);
-    //                     g.blendMode(SOFT_LIGHT);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(15px)"
-    //                     g.filter="gray(100%)";
-    //                     door.drawDoor(color(random(col1)), random(20, 50) * m);
-    //                     g.blendMode(DARKEST);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="gray(100%)";
-    //                     // g.filter="GRAY";
-    //                 } else {
-    //                     door.drawStruct(color(random(col1)), random(20, 140) * m);
-    //                     g.blendMode(LIGHTEST);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(25px)"
-    //                     g.filter="gray(100%)";
-    //                     door.drawDoor(color(random(col1)), random(30, 50) * m);
-    //                     g.blendMode(HARD_LIGHT);
-    //                     g.globalAlpha=0.005;
-    //                     g.filter="blur(25px)"
-    //                     g.filter="invert(100%)";
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-    //applyMonochromaticGrain(gS);
 }
 
 function drawBd(btype, g) {
@@ -404,18 +272,18 @@ function drawBd(btype, g) {
     }
 }
 
-function morePoint(grS, floop, nPl, nPh, pSs, pSb, g) {
+function morePoint(grS, floop, nPl, nPh, pSs, pSb, method, gS, gD) {
     let gridSize = grS;
     let f = 0;
 
-    let cellWidth = doorContent.width / gridSize;
-    let cellHeight = doorContent.height / gridSize;
+    let cellWidth = gS.width / gridSize;
+    let cellHeight = gS.height / gridSize;
 
-    g.push();
-    g.noStroke();
-    g.fill(20, 35);
-    g.rect(0, 0, g.width, g.height);
-    g.pop();
+    gS.push();
+    gS.noStroke();
+    gS.fill(20, 35);
+    gS.rect(0, 0, gS.width, gS.height);
+    gS.pop();
 
     while (f < floop) {
         for (let i = 0; i < gridSize; i++) {
@@ -426,30 +294,47 @@ function morePoint(grS, floop, nPl, nPh, pSs, pSb, g) {
                 for (let p = 0; p < numPoints; p++) {
                     let x = i * cellWidth + random(cellWidth);
                     let y = j * cellHeight + random(cellHeight);
-                    let imgX = floor(map(x, 0, wisW, 0, g.width));
-                    let imgY = floor(map(y, 0, wisH, 0, g.height));
-                    let index = 4 * (imgY * g.width + imgX);
-                    let col = [g.pixels[index], g.pixels[index + 1], g.pixels[index + 2], g.pixels[index + 3]];
+                    let imgX = floor(map(x, 0, wisW, 0, gD.width));
+                    let imgY = floor(map(y, 0, wisH, 0, gD.height));
+                    let index = 4 * (imgY * gD.width + imgX);
+                    let col = [gD.pixels[index], gD.pixels[index + 1], gD.pixels[index + 2], gD.pixels[index + 3]];
 
-                    // g.push();
-                    // g.stroke(col);
-                    // g.strokeWeight(random(1, 12));
-                    // g.noFill();
-                    // //g.fill(col);
-                    // if (random() < 0.005) {
-                    //     random() < 0.5 ? g.rect(x, y, pointSize * random(2, 10)) : g.triangle(x + random(10, 40), y + random(10, 40), x + pointSize * random(2, 4), y + pointSize, x + pointSize, y + pointSize * random(2, 4));
-                    // } else {
-                    //     random() < 0.15 ? g.circle(x, y, pointSize * random(2, 10)) : g.line(x, y, x + pointSize * random(12, 20), y + pointSize * random(12, 20));
-                    // }
-                    // g.pop(); 
-
-                    g.push();
-                    g.stroke(col);
-                    g.strokeWeight(random(1, 8));
-                    g.fill(col);
-                    g.line(x, y, x + pointSize * random(6, 20), y + pointSize * random(6, 20));
-                    g.pop(); 
-
+                    if (method == 0) {
+                        gS.push();
+                        col[3] = 40;
+                        gS.stroke(col);
+                        gS.strokeWeight(random(1, 12));
+                        gS.noFill();
+                        //gS.fill(col);
+                        if (random() < 0.005) {
+                            random() < 0.5 ? gS.rect(x, y, pointSize * random(2, 10)) : gS.triangle(x + random(10, 40), y + random(10, 40), x + pointSize * random(2, 4), y + pointSize, x + pointSize, y + pointSize * random(2, 4));
+                        } else {
+                            random() < 0.15 ? gS.circle(x, y, pointSize * random(2, 10)) : gS.line(x, y, x + pointSize * random(12, 20), y + pointSize * random(12, 20));
+                        }
+                        gS.pop(); 
+                    }
+                    if (method == 1) {
+                        gS.push();
+                        col[3] = 80;
+                        gS.stroke(col);
+                        col[3] = 50;
+                        gS.fill(col);
+                        gS.strokeWeight(random(1, 8));
+                        gS.fill(col);
+                        gS.line(x, y, x + pointSize * random(6, 20), y + pointSize * random(6, 20));
+                        gS.pop(); 
+                    }
+                    if (method == 2) {
+                        gS.push();
+                        col[3] = 60;
+                        gS.stroke(col);
+                        col[3] = 60;
+                        gS.fill(col);
+                        gS.strokeWeight(random(1, 12));
+                        gS.fill(col);
+                        gS.rect(x, y, pointSize * random(1, 4), pointSize * random(1, 5));
+                        gS.pop(); 
+                    }
                 }
             }
         }
@@ -457,7 +342,7 @@ function morePoint(grS, floop, nPl, nPh, pSs, pSb, g) {
     }
 }
 
-function createDune(y) {
+function createDune(g, y) {
     let points = [];
     let waveAmp = duneH * random(0.15, 0.55);
     let waveFreq = TWO_PI / wisW;
@@ -476,7 +361,7 @@ function createDune(y) {
     return points;
 }
 
-function createCloud(y) {
+function createCloud(g, y) {
     let points = [];
     for (let x = 0; x < width; x += 7) {
         for (let yOff = 0; yOff < cloudHeight; yOff += 7) {
@@ -487,145 +372,6 @@ function createCloud(y) {
         }
     }
     return points;
-}
-
-function drawPoint() {
-    if (globalPointSize <= minPointSize * 2) {
-        noLoop();
-        return;
-    }
-
-    let cellW = doorContent.width / pointGridSize;
-    let cellH = doorContent.height / pointGridSize;
-
-    let maxDepth = 100;
-    for (let i = 0; i < pointGridSize; i++) { //noprotect
-        for (let j = 0; j < pointGridSize; j++) {
-            let randomX = random(-cellW / 2, cellW / 2);
-            let randomY = random(-cellH / 2, cellH / 2);
-            let centerNode = new makeNode(null, {
-                x: i * cellW + cellW / 2 + randomX,
-                y: j * cellH + cellH / 2 + randomY
-            }, globalPointSize, maxDepth);
-            allNodes.push(centerNode);
-
-            centerNode.grow();
-        }
-    }
-
-    for (let n = 0; n < allNodes.length; n++) {
-        allNodes[n].display();
-    }
-
-    pointSizeDecrement = globalPointSize / 150;
-    if (pointSizeDecrement < 0.01) pointSizeDecrement = 0.001;
-    globalPointSize -= pointSizeDecrement;
-}
-
-
-function makeNode(parentNode, position, radius, depth) {
-
-    this.parentNode = parentNode;
-    this.position = position;
-    this.radius = radius;
-    this.depth = depth;
-    this.id = counter++;
-    this.childrenNodes = [];
-    angleMode(RADIANS);
-
-    this.grow = function () {
-        let newRadius = this.radius * 0.9;
-        if (newRadius < minPointSize * 0.5 || this.depth <= -10) return; 
-
-        let angle = random(TWO_PI);
-        let newX = this.position.x + this.radius * 1.5 * cos(angle); 
-        let newY = this.position.y + this.radius * 1.5 * sin(angle); 
-
-        let newNode = new makeNode(this, { x: newX, y: newY }, newRadius, this.depth - 1);
-        let placeable = true;
-
-        for (let n = 0; n < allNodes.length; n++) {
-            if (newNode.intersects(allNodes[n])) {
-                placeable = false;
-            }
-        }
-
-        if (placeable) {
-            allNodes.push(newNode);
-            this.childrenNodes.push(newNode);
-            newNode.grow();
-        }
-    }
-
-    this.intersects = function (otherNode) {
-        let dist = sqrt(sq(this.position.x - otherNode.position.x) + sq(this.position.y - otherNode.position.y));
-        return (this.id != otherNode.id &&
-            dist < (this.radius + otherNode.radius) * 0.005 &&
-            !this.childrenNodes.includes(otherNode) &&
-            (!this.parentNode || !this.parentNode.childrenNodes.includes(otherNode)));
-    }
-
-    this.display = function () {
-        let doorContentX = floor(map(this.position.x, 0, wisW, 0, doorContent.width));
-        let doorContentY = floor(map(this.position.y, 0, wisH, 0, doorContent.height));
-        let index = 4 * (doorContentY * doorContent.width + doorContentX);
-
-        if (index < 0 || index >= doorContent.pixels.length - 2) return;
-
-        let col = [doorContent.pixels[index], doorContent.pixels[index + 1], doorContent.pixels[index + 2], doorContent.pixels[index + 3]];
-
-        if (col.some(isNaN)) return;
-
-        if (nodeType == 0) {
-            doorContent.push();
-            col[3] = 15;
-            doorContent.fill(col);
-            col[3] = 50;
-            doorContent.stroke(col);
-            doorContent.strokeWeight(0.25 * m);
-            for (let i = 0; i < random(2, 5); i++) {
-                this.radius = Math.pow(1.165, i + 10);
-                doorContent.drawingContext.setLineDash([4 * m, 3 * m, 5 * m, 2 * m]);
-                doorContent.circle(this.position.x, this.position.y, this.radius);
-            }
-            doorContent.pop();
-        }
-        if (nodeType == 1) {
-            doorContent.push();
-            col[3] = 30;
-            doorContent.fill(col);
-            col[3] = 60;
-            doorContent.stroke(col);
-            doorContent.strokeWeight(0.35 * m);
-            doorContent.ellipse(this.position.x, this.position.y, this.radius, this.radius);
-            doorContent.pop();
-        }
-        if (nodeType == 2) {
-            doorContent.push();
-            col[3] = 25;
-            doorContent.fill(col);
-            col[3] = 40;
-            doorContent.stroke(col);
-            doorContent.strokeWeight(0.35 * m);
-            doorContent.rect(this.position.x - this.radius / 2, this.position.y - this.radius / 2, this.radius, this.radius);
-            doorContent.pop();
-        }
-
-        if (this.parentNode) {
-            rndNodLine = random();
-            doorContent.push();
-            if (rndNodLine < 0.6) {
-                doorContent.stroke(col);
-                doorContent.drawingContext.setLineDash([1 * m, 0, 1 * m]);
-                doorContent.line(this.position.x, this.position.y, this.parentNode.position.x, this.parentNode.position.y);
-            } else {
-                doorContent.stroke(col);
-                doorContent.drawingContext.setLineDash([1 * m, 0, 1 * m]);
-                doorContent.curve(this.position.x, this.position.y, this.position.x + random(-5, 5), this.position.y + random(-5, 5), this.parentNode.position.x + random(-5, 5), this.parentNode.position.y + random(-5, 5), this.parentNode.position.x, this.parentNode.position.y);
-            }
-            doorContent.pop();
-        }
-    }
 }
 
 function initStratus() {
@@ -703,11 +449,11 @@ function initStratus() {
     }
   }
   
-  function initRise() {
-    let numOfWaves = int(random(12, 18));
+  function initRise(g, nW) {
+    let numOfWaves = nW;
     for (let i = 0; i < numOfWaves; i++) {
-      let rise = createRise(doorContent, doorContent.height / 2 + i * riseH / 2, i);
-      drawRise(doorContent, rise);
+      let rise = createRise(g, g.height / 2 + i * riseH / 2, i);
+      drawRise(g, rise);
     }
   }
   
@@ -721,10 +467,10 @@ function initStratus() {
 
         let yNoise = noise(x * 0.003, y * 0.005) * riseH;
         let yWave = waveAmp * sin(waveFreq * x);
-        let pt = g.createVector(x, y + yNoise + yWave + perspectiveOffset);
-        doorContent.push();
+        let pt = createVector(x, y + yNoise + yWave + perspectiveOffset);
+        g.push();
         points.push(pt);
-        doorContent.pop();
+        g.pop();
     }
   
     return points;
@@ -739,7 +485,7 @@ function drawRise(g, rise) {
             g.drawingContext.setLineDash([dashLength, dashLength]);
 
             g.push();
-            g.fill(random(col6));
+            // g.fill(random(col6));
             g.noFill();
             g.stroke(random(col6));
             g.strokeWeight(random(0.5, 2.5) * m);
@@ -879,53 +625,6 @@ function drawContinuousLine(x1, y1, x2, y2, numPoints, deviation, g) {
 }
 
 
-// function rndBend(startX, startY, endX, endY, deviation) {
-//     beginShape();
-//     drawContinuousLine(startX, startY, endX, endY, 50, deviation); 
-//     endShape();
-// }
-
-// function rndBendVertex(x1, y1, x2, y2, deviation) {
-//     beginShape();
-//     vertex(x1, y1);
-//     drawContinuousLine(x1, y1, x2, y2, 50, deviation); 
-//     vertex(x2, y2);
-//     endShape();
-// }
-
-// function drawContinuousLine(x1, y1, x2, y2, numPoints, deviation) {
-//     deviation *= m;
-//     for (let i = 0; i <= numPoints; i++) {
-//         let t = i / numPoints;
-//         let x = lerp(x1, x2, t);
-//         let y = lerp(y1, y2, t);
-//         x += random(-deviation, deviation);
-//         y += random(-deviation, deviation);
-//         vertex(x, y);
-//     }
-// }
-
-// function rndBend(startX, startY, endX, endY, deviation) {
-//     deviation *= m;
-//     let midX = (startX + endX) / 2;
-//     let midY = (startY + endY) / 2;
-
-//     midX += random(-deviation, deviation);
-//     midY += random(-deviation, deviation);
-
-//     line(startX, startY, midX, midY);
-//     line(midX, midY, endX, endY);
-// }
-
-// function rndBendVertex(x1, y1, x2, y2, deviation) {
-//     deviation *= m;
-//     let midX = (x1 + x2) / 2 + random(-deviation, deviation);
-//     let midY = (y1 + y2) / 2 + random(-deviation, deviation);
-//     vertex(midX, midY);
-// }
-
-
-
 // GRADIENTS //
 
 function isColorDark(c) {
@@ -1055,18 +754,6 @@ function bgGrad(x, y, w, h, c1, c2, axis) {
 
 
 // UTILS //
-
-// function keyPressed() {
-//     if (key == 'S' || key == 's') {
-//         saveCanvas(`naïf_pixScreen_${$fx.hash}-${$fx.minter}`, 'png');
-//     }
-// }
-
-// function keyTyped() {
-//     if (key === 'l' || key === 'L') {
-//         showLoader = !showLoader;
-//     }
-// }
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));

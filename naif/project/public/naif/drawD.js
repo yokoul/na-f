@@ -2,7 +2,7 @@ async function drawD(g) {
 
     let rdnDrawStr = random();
 
-    let doorC1 = color(random(col2));
+    let doorC1 = color(random(col7));
     doorC1.setAlpha(230);
     let doorC2 = color(random(col1));
     doorC2.setAlpha(210);
@@ -14,12 +14,10 @@ async function drawD(g) {
         gradDoors(doorContent, 4, random(col3), random(col4), random(col3));
     }
 
-    // background(random() < 0.5 ? 20 : 235);
-
     let c1 = color(random(col3));
-    c1.setAlpha(210); //160);
+    c1.setAlpha(210); 
     let c2 = color(random(col4));
-    c2.setAlpha(230); //160);
+    c2.setAlpha(230); 
 
     if (bd > 0) {
         drawBd(2);
@@ -33,11 +31,11 @@ async function drawD(g) {
             isBgColorDark = isColorDark(checkBgColor);
             structbg(bg);
         } else if (backgroundType === "cubik B") {
-            if (random() < 0.5) {
+            if (random() < 0.25) {
                 gradBg(4, random(col4), random(col3), random(col5), random(col4));
             }
             drawCubesB();
-            if (random() < 0.5) {
+            if (random() < 0.85) {
                 let checkBgColor = g.get(g.width/2, g.height/2);
                 isBgColorDark = isColorDark(checkBgColor);
         
@@ -48,17 +46,17 @@ async function drawD(g) {
                 bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
             }
             drawCubesAllB();
-            if (random() < 0.65) {
+            if (random() < 0.85) {
                 let checkBgColor = g.get(g.width/2, g.height/2);
                 isBgColorDark = isColorDark(checkBgColor);
         
                 structbg(bg);
             }
-        } else if (backgroundType === "cubik alea") { //NOT WORKING
+        } else if (backgroundType === "cubik A") {
             if (random() < 0.25) {
                 bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "Y");
             }
-            drawCubesRand();
+            drawCubesA();
             if (random() < 0.75) {
                 let checkBgColor = g.get(g.width/2, g.height/2);
                 isBgColorDark = isColorDark(checkBgColor);
@@ -70,7 +68,7 @@ async function drawD(g) {
                 gradBg(4, random(col4), random(col3), random(col3), random(col4));
             }
             drawCubesAllC();
-            if (random() < 0.5) {
+            if (random() < 0.85) {
                 let checkBgColor = g.get(g.width/2, g.height/2);
                 isBgColorDark = isColorDark(checkBgColor);
         
@@ -107,36 +105,30 @@ async function drawD(g) {
                 bgGrad(0, 0, wisW, wisH, c1, c2, backgroundAxis === "X" ? "X" : "R");
             }
             drawCubesDestructC();
-            if (random() < 0.75) {
+            if (random() < 0.85) {
                 let checkBgColor = g.get(g.width/2, g.height/2);
                 isBgColorDark = isColorDark(checkBgColor);
         
                 structbg(bg);
             }
         } else {
-            background(random() < 0.5 ? 20 : 235);
+            bg.background(random() < 0.5 ? 20 : 235);
         }
-    } else {
-        doorContent.background(random() < 0.5 ? color(20, 20, 20, 135) : color(235, 235, 235, 135));
-
-        let checkBgColor = g.get(g.width/2, g.height/2);
-        isBgColorDark = isColorDark(checkBgColor);
-
-        structbg(bg);
     }
-    
-    if (stratus === true) {
+
+    let checkBgColor = g.get(g.width/2, g.height/2);
+    isBgColorDark = isColorDark(checkBgColor);
+
+    if (stratus === "light") {
         if (random() < 0.65) {
         doorContent.blendMode(SOFT_LIGHT);
         } else {
         doorContent.blendMode(HARD_LIGHT);
         }
-        // doorContent.globalAlpha=random();
-        doorContent.filter="blur(3)"
         drawStratus(doorContent, 13);
-        initRise();
+        initRise(doorContent, int(random(10, 17)));
 
-    } else if (stratus === false) {
+    } else if (stratus === "heavy") {
         for (let cloud of clouds) {
             for (let pt of cloud) {
                 let h = map(pt.y, pt.cloudY, pt.cloudY + cloudHeight, 255, 50);
@@ -145,7 +137,7 @@ async function drawD(g) {
                 cloudC1.setAlpha(h);
                 doorContent.push();
                 doorContent.stroke(cloudC1);
-                doorContent.strokeWeight(random(0.25, 3) * m);
+                doorContent.strokeWeight(random(0.5, 4) * m);
                 doorContent.point(pt.x, pt.y);
                 doorContent.pop();
             }
@@ -157,7 +149,7 @@ async function drawD(g) {
                 duneC1.setAlpha(h);
                 doorContent.push();
                 doorContent.stroke(duneC1);
-                doorContent.strokeWeight(random(0.25, 1.5) * m);
+                doorContent.strokeWeight(random(0.25, 3) * m);
                 doorContent.point(pt.x, pt.y);
                 doorContent.pop();
             }
@@ -177,14 +169,22 @@ async function drawD(g) {
             }
             let content = new DoorContent(door.x, door.y, color(random(col3)), doorContent);
             if (particleThis == true) {
-                content.createParticles(250); //int(random(550, 900)));
+                content.createParticles(250); 
                 content.moreAttractors(random(7, 16));
                 content.moreRepulsors(random(4, 8));
-                content.updateParticles(250); //int(random(300, 500)));
+                content.updateParticles(250); 
                 content.showParticles();  
-                content.updateParticles(250); //int(random(300, 500)));
+                content.updateParticles(250); 
                 content.showParticles();  
             }
+        }
+        if (random() < 0.01) {
+            bg.loadPixels();
+            morePoint(3, 3, 10, 200, 2, 6, 1, doorContent, bg); //grS, floop, nPl, nPh, pSs, pSb, method, gS, gD
+        }
+        if (random() < 0.06) {
+            bg.loadPixels();
+            morePoint(4, 2, 10, 50, 2, 6, 2, doorContent, bg); //grS, floop, nPl, nPh, pSs, pSb, method, gS, gD
         }
     }
 
@@ -201,29 +201,23 @@ async function drawD(g) {
                 content.moreBoom(random(12, 16), random(col3), random(col4), random(10, 30));
             } else if (random() < 0.9 && particleThis == false) {
                 content.moreBadaBoom(random(4, 8), random(col3), random(col4), random(10, 20));
-                // content.moreBoom(random(4, 8), random(col3), random(col4), random(20, 40));
             }
                     
 
             if (random() > 0.93) {
                 content.moreCross(random(5, 25), random(8, 12), random(col3));
             }
+            content.moreCircles(int(random(20, 40)));
             if (random() < 0.15) {
                 content.moreBirdsRemind(int(random(25, 55)), 2, 7);
             } else {
                 content.moreBirdsActual(int(random(15, 25)));
             }
-            content.moreCircles(int(random(20, 40)));
-
 
             if (drawShdw == true && random() < 0.5) {
                 door.drawDoorShdw([180, 70]);
             } else {
                 door.drawDoorShdwInv([180, 90]);
-            }
-            if (random() < 0.01) {
-                doorContent.loadPixels();
-                morePoint(3, 3, 10, 200, 2, 6, doorContent); //grS, floop, nPl, nPh, pSs, pSb
             }
         
             door.copyContent(bg);
@@ -247,17 +241,12 @@ async function drawD(g) {
             }
 
             let rdmctx = random();
-            if (rdmctx >= 0.074 && rdmctx < 0.087) {
+            if (rdmctx >= 0.074 && rdmctx < 0.137) {
                 if (isBgColorDark) {
                     door.drawCtx([240, 150], random(col5), random(2, 4) * m);
                 } else {
                     door.drawCtx([80, 170], random(col5), random(2, 4) * m);
                 }
-            }
-
-            if (nodeThis == true) {
-                doorContent.loadPixels();
-                drawPoint();
             }
 
             if (bd > 0) {
@@ -266,6 +255,6 @@ async function drawD(g) {
         }
     }
     bg.applyMonochromaticGrain(gS);
-    // await sleep(1);
+
     showEvolving = true;
 }

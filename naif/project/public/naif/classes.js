@@ -135,7 +135,7 @@ class Door {
     copyContent(g) {
         this.g = g;
         this.g.push();
-        if (random() < 0.92) {
+        if (random() < 0.85) {
         this.g.blendMode(BLEND);
         } else {
         this.g.blendMode(HARD_LIGHT);
@@ -300,10 +300,10 @@ class MultiDoor {
         this.g.push();
         let doorWb = this.w;
         let doorHb = this.h;
-        if (random() < 0.92) {
+        if (random() < 0.8) {
             this.g.blendMode(BLEND);
             } else {
-            this.g.blendMode(OVERLAY);
+            this.g.blendMode(SCREEN);
             }
         this.g.copy(doorContent, this.x - int(doorWb), int(this.y - doorHb), int(doorWb), int(doorHb), int(this.x - doorWb / 2), int(this.y - doorHb), int(doorWb), int(doorHb));
         this.g.pop();
@@ -342,11 +342,13 @@ class DoorContent {
     moreBirdsRemind(numBirds, minCurve, maxCurve) {
         this.g.push();
         this.g.noFill();
+        this.g.stroke(this.color);
+        // this.g.stroke(255);
+        this.g.strokeWeight(random(0.5, 2) * m);
         for (let i = 0; i < numBirds; i++) {
-            let x = random(100, this.g.wisW - 100) * m;
-            let y = random(100, this.g.wisH - 100) * m;
+            let x = random(200, wisW - 200) * m;
+            let y = random(200, wisH - 200) * m;
             let curve = random(minCurve, maxCurve) * m;
-            this.g.stroke(this.color);
             this.g.beginShape();
             this.g.vertex(x + curve, y + curve);
             this.g.vertex(x, y);
@@ -358,13 +360,15 @@ class DoorContent {
 
     moreBirdsActual(numBirds) {
         this.g.push();
+        this.g.stroke(this.color);
+        // this.g.stroke(255);
+        this.g.strokeWeight(random(0.5, 2) * m);
         for (let i = 0; i < numBirds; i++) {
-            let x = random(100, this.g.wisW - 100) * m;
-            let y = random(100, this.g.wisH - 100) * m;
+            let x = random(200, wisW - 200) * m;
+            let y = random(200, wisH - 200) * m;
             let c = random(4, 7) * m;
             let d = random(2, 4) * m;
             let e = random(2, 6) + (y - x) + (x - y) * m;
-            this.g.stroke(this.color);
             this.g.beginShape(LINES);
             this.g.vertex(x - d, y - d);
             this.g.vertex(x + c, y + c);

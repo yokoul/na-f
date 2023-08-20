@@ -2,7 +2,7 @@
 
 // A FAMILY //
 
-function drawCubes() {
+function drawCubesA() {
     let size = 2;
     let clusterSize = random(3, 5);
     let rwis = (wisW - bd2) / (sizeMod * size);
@@ -365,9 +365,9 @@ function drawCubeB(x, y, size, noiseValue, fillCol) {
     let lmod = 1;
 
     if (noiseValue < 0.475) {
-        lmod = 1 + noiseValue * random(2, 4); // Va de 1 à 3
+        lmod = 1 + noiseValue * random(2, 4);
     } else {
-        rmod = 1 + (noiseValue - 0.475) * random(2, 4); // Va de 1 à 3
+        rmod = 1 + (noiseValue - 0.475) * random(2, 4);
     }
 
     let lsize = size * lmod * sizeMod;
@@ -535,7 +535,7 @@ function drawCubesDestructC() {
 
     for (let i = 0; i < cubesCols; i += clusterSize) {
         for (let j = 0; j < cubesRows - 1; j += clusterSize) {
-            if (Math.random() < 0.75) { 
+            if (Math.random() < 0.6) { 
                 continue;
             }
 
@@ -588,9 +588,8 @@ function drawCubeC(x, y, size, ws, fillCol) {
         noStroke();
     } else if (nosColor == true) {
         stroke(fillCol);
-        fill(random() < 0.5 ? 20 : 235);
+        // fill(random() < 0.5 ? 20 : 235);
     }
-
 
     let cubeVertices = [];
     if (alterLeft) {

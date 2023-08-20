@@ -11,6 +11,7 @@ let showEvolving = false;
 let loopCount = 0;
 let noiseSeedValue = 0;
 let col1, col2, col3, col4, col5, doorContent, rows, cols, skyX, skyY, loader, font, startTime, elapsed, light, heavy;
+
 let cool1 = "https://coolors.co/c2efb3-97abb1-892f65-633d73-4331a0".split("/").pop().split("-").map((a) => "#" + a); //green to brown
 let cool11 = "https://coolors.co/f1fbee-c5d0d3-c9be9d-b2986c-9d8243".split("/").pop().split("-").map((a) => "#" + a); //grey to brown
 let cool12 = "https://coolors.co/palette/f72585-b5179e-7209b7-560bad-480ca8-3a0ca3-3f37c9-4361ee-4895ef-4cc9f0".split("/").pop().split("-").map((a) => "#" + a); //pink to blue
@@ -63,14 +64,6 @@ let rndBendChoose = 0;
 
 let noiseValues = [];
 
-let nodeThis = true;
-let nodeType = 0; //0:hashedCircle, 1:circle, 2:rect
-let pointGridSize = 7; //12 = quasiFull, 10 = bon partiel, 5 et 3 vont bien, 3 est un minimum
-let globalPointSize = 24;
-let minPointSize = 1;
-let pointSizeDecrement = 1.5;
-
-let allNodes = [];
 let counter = 0;
 
 let isBgColorDark = false;
@@ -108,8 +101,11 @@ function preload() {
     exo_light = loadFont('fonts/Exo-Light.ttf');
     exo_medium = loadFont('fonts/Exo-Medium.ttf');
     exo_extra_bold = loadFont('fonts/Exo-ExtraBold.ttf');
+    NotoSansJP_Medium = loadFont('fonts/NotoSansJP-Medium.ttf');
+    NotoSansJP_ExtraLight = loadFont('fonts/NotoSansJP-ExtraLight.ttf');
 }
 let fontPts = [];
+
 
 
 // FUNCTIONS fxFeatures //
@@ -122,7 +118,7 @@ function rngBackgroundType(value) {
     } else if (value >= 0.25 && value < 0.375) {
         return "cubik full B";
     } else if (value >= 0.375 && value < 0.5) {
-        return "cubik alea";
+        return "cubik A";
     } else if (value >= 0.5 && value < 0.625) {
         return "cubik full C";
     } else if (value >= 0.625 && value < 0.75) {
@@ -171,10 +167,8 @@ function rngDeviaType(value) {
 }
 
 $fx.features({
+    // "palettes": selectPalette(fxrand()),
     "land model": $fx.rand() < 0.5 ? "light" : "heavy",
-    "node mode": $fx.rand() < 0.9 ? true : false,
-    "node type": Math.floor($fx.rand() * 3),
-    "node grid size": Math.floor($fx.rand() * 5) + 2,
     "bend mode": $fx.rand(),
     "deviation": rngDeviaType(fxrand()),
     "particle mode": $fx.rand() < 0.01 ? true : false,
@@ -187,7 +181,7 @@ $fx.features({
     "cloud height": Math.floor($fx.rand() * 150) + 190,
     "number of stratus": Math.floor($fx.rand() * 25) + 50,
     "rise height": Math.floor($fx.rand() * 50) + 130,
-    "border size": $fx.rand() < 0.95 ?'0':'20',
+    "border size": $fx.rand() < 0.99 ?'0':'20',
     "sun location": $fx.rand(),
     "moon location": $fx.rand(),
     "cross location": $fx.rand(),
@@ -207,22 +201,16 @@ function setParams(m) {
     padding = padding * m;
     sizeMod = sizeMod * m;
     size = size * m;
-    globalPointSize = globalPointSize * m;
-    minPointSize = minPointSize * m;
-    pointSizeDecrement = pointSizeDecrement * m;
     deviation = deviation * m;
     duneH = duneH * m;
 
     /* valeurs aléatoirisée */
     doorBd = int(random(1, 3) * m);
-    pointGridSize = $fx.getFeature("node grid size"); //floor(random(2, 8));
-    nodeType = $fx.getFeature("node type"); //floor(random(0, 3));
     nos = $fx.getFeature("nos type"); //floor(random(0, 3));
     cloudCount = $fx.getFeature("cloud count"); //int(random(2, 4) * m);
     cloudHeight = $fx.getFeature("cloud height") * m; //int(random(190, 360) * m);
     bd = $fx.getFeature("border size") * m; //(random() < 0.95 ? 0 : 20) * m;
     stratus = $fx.getFeature("land model");
-    nodeThis = $fx.getFeature("node mode");
     numberOfCircles = $fx.getFeature("number of stratus");
     riseH = $fx.getFeature("rise height") * m;
     particleThis = $fx.getFeature("particle mode");
@@ -258,7 +246,7 @@ async function setup() {
 
     angleMode(DEGREES);
     pixelDensity(pD);
-
+    
     p5grain.setup({ random: fxrand });
     setParams(m);
 
@@ -269,13 +257,14 @@ async function setup() {
     doorContent = createGraphics(wisW, wisH, P2D);
 
     rndBendChoose = fxrand();
-
+    
     col1 = random([cool1, cool2, cool3]);
     col2 = random([cool11, cool21, cool31]);
     col3 = random([cool4, cool5, cool6]);
     col4 = random([cool41, cool51, cool61]);
     col5 = random([cool1, cool2, cool5, cool6]);
     col6 = random([cool12, cool32, cool42, cool52, cool62]);
+    col7 = random([cool7, cool8]);
 
     colr1 = random([cool1]);
     colr11 = random([cool11]);
@@ -302,17 +291,17 @@ async function setup() {
     let bgCol = color(random(col3));
     bgCol.setAlpha(220);
 
-    if (stratus === light) {
+    if (stratus === "light") {
         initStratus();
-    } else if (stratus === heavy) {
+    } else if (stratus === "heavy") {
         for (let i = 0; i < cloudCount; i++) {
             let y = map(i, 0, cloudCount, 0, wisH / 2);
-            let cloud = createCloud(y);
+            let cloud = createCloud(doorContent, y);
             clouds.push(cloud);
         }
         for (let i = 0; i < duneCount; i++) {
             let y = map(i, 0, duneCount, wisH / 2, wisH);
-            let dune = createDune(y);
+            let dune = createDune(doorContent, y);
             dunes.push(dune);
         }
     }
@@ -391,7 +380,7 @@ async function draw() {
         drawL(loader);
         if (showLoader) {
             image(loader, 0, 0);
-            if (elapsed > 4000) {
+            if (elapsed > 5000) {
                 currentState = 'original';
                 startTime = millis(); 
             }
@@ -399,7 +388,6 @@ async function draw() {
     } else if (currentState === 'original') {
         drawO(original);
         if (showOriginal) {
-            // image(original, 0, 0);
             let alpha = map(elapsed, 0, 750, 255, 0);
             image(loader, 0, 0);
             tint(255, 255, 255, 255 - alpha);
@@ -411,21 +399,6 @@ async function draw() {
                 startTime = millis(); 
             }
         }
-    // } else if (currentState === 'evolving') {
-    //     drawD(bg);
-    //     if (showEvolving) {
-    //         // image(bg, 0, 0);
-    //         let alpha = map(elapsed, 0, 750, 255, 0);
-    //         image(original, 0, 0);
-    //         tint(255 - alpha, 255 - alpha, 255 - alpha, 255 - alpha);
-    //         image(bg, 0, 0);
-    //         noTint();
-    //         loader.reset();
-    //         if (elapsed > 800) {
-    //             currentState = 'stopping';
-    //             startTime = millis(); 
-    //         }
-    //     }
     } else if (currentState === 'evolving') {
         let drawonetime = false;
         if (drawonetime === false) {
@@ -434,22 +407,20 @@ async function draw() {
         }
 
         if (showEvolving) {
-            // await sleep(1);
             image(bg, 0, 0);
             tint(255, 255, 255, 0);
-
+            
             image(bg, 0, 0);
             noTint();
-            // if (elapsed >= 1000) {
-                currentState = 'stopping';
-                // startTime = millis(); 
-            // }
+            currentState = 'stopping';
         }
     } else if (currentState === 'stopping') {
-        stopping();
+    stopping();
     }
 }
 
-console.log("seed", seed);
+console.log("fxhash: ", fxhash);
+console.log("fxminter: ", fxminter);
 console.log($fx.getFeatures())
-console.log("currentState", currentState);
+// console.log("currentState: ", currentState);
+// console.log("seed: ", seed);
